@@ -1,0 +1,10 @@
+repos:
+  - repo: https://github.com/red-lichtie/sops-pre-commit-hook
+    rev: v1.2.1
+    hooks:
+      - id: sops-pre-commit-hook
+
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks

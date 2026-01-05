@@ -1,0 +1,42 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: speedtest-tracker
+  namespace: extra-tools
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: system-addon
+  hostnames:
+  - ENC[AES256_GCM,data:59W0z+eQpqvruDPlevbN488rjOr2G156w9CdsA==,iv:02PvqzID8FXZa4CO6HBYngPmHLmdtA36dnyq20CqSc8=,tag:TvJGJ8xhUOOYZ5zXmsTffA==,type:str]
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: speedtest-tracker
+      port: 80
+sops:
+  age:
+  - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    enc: '-----BEGIN AGE ENCRYPTED FILE-----
+
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMd29sT3ZyMGtZVjlNbEpm
+
+      ZmY2TlhOQkt1YjV2dlFzZDM4c0txWmNkaGdFCmRXQ3R6ci9QcVNpRzNrN2Rubmc2
+
+      dk5KRjMweVNZZ3BadENwKzhHbHFRSmcKLS0tIDg4d01td01wSUpFZkFHeDY3WWlZ
+
+      aDcwck12dTRRZzhNWHp4RnRqU3RrdkEKulsOCAKfYNTrIuGErkBcsl4u+FqgNcXU
+
+      sJ3P02xzbcGJdmq+j8yXFwGOxWbKDzbanzE0dEloGDoJ3CWVAfaZ4Q==
+
+      -----END AGE ENCRYPTED FILE-----
+
+      '
+  lastmodified: '2025-12-30T20:57:42Z'
+  mac: ENC[AES256_GCM,data:+t+q8qX17DIdmRnoW5d8CUHK1tU0i1z3jMP4NKe1/eY2n8t6NrLjL40vzVKitlLQzDxQI5TodJI9k+Ph8CgFVopWEPKz77FTqfTtyWZfb1TQKIb9WLOjNb9sCY55QAnj2ePJnWJzCj2ktQLYUtDuLNGkSFv5nOriKuQVdZP7+FI=,iv:lfoCCo1BMMcL6NfJFogoD8F4+L83mnGDzki/Hcq5kjQ=,tag:vUBPW+wiItvrFgtibS+GtQ==,type:str]
+  encrypted_regex: hostnames|0
+  version: 3.11.0

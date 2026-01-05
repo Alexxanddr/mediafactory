@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: bazarr
+  name: bazarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bazarr
+  template:
+    metadata:
+      labels:
+        app: bazarr
+    spec:
+      containers:
+      - name: bazarr
+        image: linuxserver/bazarr
+        ports:
+        - containerPort: 6767
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        volumeMounts:
+        - mountPath: /config
+          name: bazarr-config
+        - mountPath: /data
+          name: bazarr-data
+      volumes:
+      - name: bazarr-config
+        persistentVolumeClaim:
+          claimName: bazarr-config
+      - name: bazarr-data
+        persistentVolumeClaim:
+          claimName: bazarr-data

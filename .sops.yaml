@@ -1,0 +1,13 @@
+creation_rules:
+  - path_regex: .*\.enc\.ya?ml$
+    encrypted_regex: '^(data|stringData)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+  - path_regex: .*httproute.*\.enc\.yaml$
+    encrypted_regex: 'hostnames|0'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+  - path_regex: .*\.enc\.ya?ml$
+    encrypted_regex: '^(email)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+  - path_regex: .*\.enc\.ya?ml$
+    encrypted_regex: '^(hostname)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a

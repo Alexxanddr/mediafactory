@@ -1,0 +1,42 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+    name: traefik-gateway
+    namespace: system-addon
+spec:
+    gatewayClassName: traefik
+    listeners:
+        - allowedRoutes:
+            namespaces:
+                from: Same
+          name: http
+          port: 8000
+          protocol: HTTP
+        - allowedRoutes:
+            namespaces:
+                from: All
+          hostname: ENC[AES256_GCM,data:om/u9Pu9O70GvcJ2twPnBq2UUc7dOjg=,iv:fLq+AXR9mwXjb9ULOTErm3wxilXmFrLw3D3ccSPN8Wo=,tag:VJ01ogtNVp/UErQNbExfXg==,type:str]
+          name: https
+          port: 8443
+          protocol: HTTPS
+          tls:
+            certificateRefs:
+                - group: ""
+                  kind: Secret
+                  name: wildcard-certificate
+            mode: Terminate
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxcnJFL1ZXMHhEbVliQnNu
+            dThhY0o2cGUwUU1pdkRlLzQ2ZlNDbFpYYmtvCjk0a3hpODRYK3hDdnRlQ1NiWkNM
+            L3R1S1FZWVJURmdyc0lJN2xGaVpLSE0KLS0tIDJ0MEdkU2RGQ1FIblJNWlFaV1RU
+            alJZNFVNZEh5YW8vVzFsLzBYaDZUZUUKlJMpIEwPk3LUHBcNQwMEwPm+YfVumYFn
+            8R72bDT+cO5DVE2sDyqJ5Ly2/57wyWEyOBqbUr4EJ4d3Et79J2+WcA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-02T10:42:40Z"
+    mac: ENC[AES256_GCM,data:WKtGlL7+soRRsZApeZknYnsNVF1winfSd1/DgwUFmGYGHqPbKNtIUgOxNhK77rhCmpZh9msxdAl6qPp0WEdkwZyS0B+Z4wKqBfGa9WhXZDIyWY2yH3+dKfbfqEEfFkiBf4+PRB5XPJvaKwR0k/YjrI4oR9SVdqNvGypZ2PsRNGY=,iv:8mkzrZX38g3Ytx8AIJRQS5c8goHkvn5bSvyKV//DWlg=,tag:ddToSEKfX04tHQFxQh0FIA==,type:str]
+    encrypted_regex: ^(hostname)$
+    version: 3.11.0

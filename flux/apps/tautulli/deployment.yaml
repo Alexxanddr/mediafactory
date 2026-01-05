@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: tautulli
+  name: tautulli
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tautulli
+  template:
+    metadata:
+      labels:
+        app: tautulli
+    spec:
+      containers:
+      - name: tautulli
+        image: ghcr.io/tautulli/tautulli
+        ports:
+        - containerPort: 8181
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        volumeMounts:
+        - mountPath: /config
+          name: tautulli-config
+      volumes:
+      - name: tautulli-config
+        persistentVolumeClaim:
+          claimName: tautulli-config

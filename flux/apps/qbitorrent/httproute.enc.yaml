@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: qbittorrent
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:emQLrt1V5a+fi8NOFDjlieGiT8nJp1s/vqUeo9KCe4X0,iv:5hc/3Y3dN0I9W28KG7gvldazkmxu1O6WlumORpyh+jk=,tag:HlGvpu/FL8XY9Vqbk3vahA==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: qbittorrent
+              port: 8080
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxTUVXRGhnaFZHaVR6OWJy
+            Q2lpYWErZTVPUy83dTV4NHlQVGx2UGV1U2lFClhGb3l1L09FdDQvZFJkNUxVdndX
+            OHJzbHZSbEp1VTJFL3JHSkNaN1QxaW8KLS0tIE15d2FMa29KaEJWV09xY2lXMk1Z
+            cjQ4SkRJVUVvTVZ3aStBaEJXVzVrcUEKNY8vz8LUH4uSo3xQGjzhQZK81eMBkwES
+            bKB1aXM9Ry/ymyAgsuPmJziG2rGLZG4SxHh7omfa3XT2hfweiNm39A==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-02T12:00:44Z"
+    mac: ENC[AES256_GCM,data:OMhmSTMyHKxMkfgkI0yJJCmIN6iiglcGRWMbI1s4ME9IkAm9HgUF5Iyrvzvd/juomBgtCCgHlgeXamktKF5os9jozZ5gD4ZXUDqEmC1RBPWV0AK34QBHy0VtZhnolDTwcBzKTesh4yvq3Pi6i2h+kalfm8FeGU61aFkx+IWAgQg=,iv:S4abzNcZSjeikuz5US5O9019ndt4Ss3roVEx2oIbI0M=,tag:U2mIndBymNsRzFrH7egltw==,type:str]
+    encrypted_regex: ^(hostnames)$
+    version: 3.11.0

@@ -1,0 +1,28 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: plex-to-trakt
+  namespace: multimedia-factory
+spec:
+  schedule: 0 0 * * *
+  jobTemplate:
+    spec:
+      suspend: false
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: plex-to-trakt
+            image: ghcr.io/taxel/plextraktsync
+            tty: true
+            command:
+            - plextraktsync
+            - sync
+            volumeMounts:
+            - mountPath: /app/config/
+              name: config-volume
+          volumes:
+          - name: config-volume
+            persistentVolumeClaim:
+              claimName: plex-to-trakt-pvc

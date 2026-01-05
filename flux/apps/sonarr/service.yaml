@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sonarr
+  namespace: multimedia-factory
+spec:
+  ports:
+  - port: 8989
+    protocol: TCP
+    targetPort: 8989
+  selector:
+    app: sonarr

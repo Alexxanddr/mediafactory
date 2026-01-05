@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: animeworld
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:UTHiEsQv0gU3UB+Okvra9iUmLIvX5Iz/CtGtlMGRM+U=,iv:Hy37p9lPhEy8inCj+QDrm9FNYYjea4q2s+Gfd65ZaGw=,tag:AlJdznc+/+SN/u0qCu5Pow==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: animeworld
+              port: 5000
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAzZ2VZTFhhdnZYZ2dIc2Zn
+            Vkh0Y0w3RWcyOGswVi9QaDNHNVJzTFpVWHlrCkdxdHRKbDEwVlRTY01nQk9CdFUx
+            ZVV1SkttSVdZUUVwRTg5QmptaWxqaG8KLS0tIFMvM1FJbmROV0E4V3RXNnk2MUJa
+            SllpMDMxbzZUcnpmSUd5a1NTeFFqSkEKa1Phns6zeykck2hIaFs8CjWzf63Uz4on
+            k/MkKi2HeoitnGmf3mvtxLz8CnZYEgOW4LLHq+RB+xHgmYYzeH61Gg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-12-30T09:41:13Z"
+    mac: ENC[AES256_GCM,data:8XL3By0HgxAZ/SxrSU+sKK3zOt84ZtWdrINuy20qCnKL12rE7zYErnSipZHmj5kbOQ04gT7dqjC5dFE+OQV88AcwTzeUjggQsh/BXT/m/45jlE37ratU1yCJOh21RbRnuRqBlSQJOb6ojOwM5YS9Yr8BOSlWAk+Y8n4A0VFpt0I=,iv:hbvAcNFA9tJ0X2dmX4mgLFgkdaZuXkUfzBsmYWlDfVU=,tag:AKXFcodGS+CQlx/xBFDhzw==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.11.0

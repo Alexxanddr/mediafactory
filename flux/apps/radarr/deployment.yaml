@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: radarr
+  name: radarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: radarr
+  template:
+    metadata:
+      labels:
+        app: radarr
+    spec:
+      containers:
+      - env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        image: ghcr.io/hotio/radarr
+        name: radarr
+        ports:
+        - containerPort: 7878
+        volumeMounts:
+        - mountPath: /config
+          name: radarr-config
+        - mountPath: /data
+          name: radarr-data
+      volumes:
+      - name: radarr-data
+        persistentVolumeClaim:
+          claimName: radarr-data
+      - name: radarr-config
+        persistentVolumeClaim:
+          claimName: radarr-config

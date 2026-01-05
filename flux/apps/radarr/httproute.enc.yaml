@@ -1,0 +1,42 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: radarr
+  namespace: multimedia-factory
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: system-addon
+  hostnames:
+  - ENC[AES256_GCM,data:W1yKr3bngkttCs19LZaRXuTtnc87DMSMBvmJlA==,iv:CP8uEUvhgEMc6KTgiBsO9+i/wtIXAEenIk4sAWnyXko=,tag:VYCo4Sb7QCxFmlojSZr0YQ==,type:str]
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: radarr
+      port: 7878
+sops:
+  age:
+  - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    enc: '-----BEGIN AGE ENCRYPTED FILE-----
+
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBRM0l0dmJscUtISlN0eW9v
+
+      VkpRbTFUbW5zdGQvekUvaXcwcmd2ZzFIbm5vCjJDdkpRb0JLckUvaEpoYnhDcVVN
+
+      VDh6SWUrcFgwT0xFSmdoUkxhQVBwbmcKLS0tIFZDNTVQeDh1bDRUdURta2JQcStm
+
+      SVVSK3Z4eWNjNjcxUm1HWEwycWZMRmcKdj4bQHIlJwM7YgWfD14mo2PTAgEw0Sha
+
+      ZrUyfrUNfe/YkJYJslAoW/faRtTg10nhsq+83s6SC0jDVAqQ2Ys83A==
+
+      -----END AGE ENCRYPTED FILE-----
+
+      '
+  lastmodified: '2025-12-30T09:52:49Z'
+  mac: ENC[AES256_GCM,data:/kHCrEFl5ivMmPWW9qpzUPBiX3c6KGyXbPZW9xb17mgsUi0PFOcq7GHJ2AJDGFUf924FWZA0eGtDBHCHhCSm5FF0ALyZMqn17vkPPjSU6BzgOGYeoyfmdkh6t+kGAtair4eVZe0SPnlRZDe8aj7wN6Mxji8+tjQEXzmwnFG9jPw=,iv:K9x5w28smpbkXm36A9FYknKfM2Qlm5akr7x5NKJUbT8=,tag:56zveB5LQw5dj/cu1lrC1Q==,type:str]
+  encrypted_regex: hostnames|0
+  version: 3.11.0

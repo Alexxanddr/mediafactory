@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: fileflows
+  name: fileflows
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fileflows
+  template:
+    metadata:
+      labels:
+        app: fileflows
+    spec:
+      containers:
+      - name: fileflows
+        image: revenz/fileflows
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        - name: FFNODE
+          value: "0"
+        volumeMounts:
+        - mountPath: /app/common
+          name: fileflows-common
+        - mountPath: /app/Data
+          name: fileflows-data
+        - mountPath: /media
+          name: fileflows-media
+      volumes:
+      - name: fileflows-common
+        persistentVolumeClaim:
+          claimName: fileflows-common
+      - name: fileflows-data
+        persistentVolumeClaim:
+          claimName: fileflows-data
+      - name: fileflows-media
+        persistentVolumeClaim:
+          claimName: fileflows-media

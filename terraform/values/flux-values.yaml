@@ -1,0 +1,27 @@
+nameOverride: ""
+fullnameOverride: "flux"
+
+instance:
+  components: # @schema item: string; uniqueItems: true; itemEnum: [source-controller,kustomize-controller,helm-controller,notification-controller,image-reflector-controller,image-automation-controller,source-watcher]
+    - source-controller
+    - kustomize-controller
+    - helm-controller
+    - notification-controller
+    - image-reflector-controller
+    - image-automation-controller
+  # -- Cluster https://fluxoperator.dev/docs/crd/fluxinstance/#cluster-configuration
+  cluster: # @schema required: true
+    type: kubernetes # @schema enum:[kubernetes,openshift,aws,azure,gcp]
+    size: "" # @schema enum:['',small,medium,large]
+    domain: "cluster.local"
+    networkPolicy: true
+    multitenant: false
+    tenantDefaultServiceAccount: "default"
+  sync: # @schema required: false
+    interval: 1m
+    kind: "GitRepository" # @schema enum:[GitRepository,OCIRepository,Bucket]
+    url: "https://github.com/Alexxanddr/mediafactory-infra"
+    ref: "refs/heads/master"
+    path: "flux/clusters/home/"
+    provider: "github"
+    pullSecret: "flux-system"

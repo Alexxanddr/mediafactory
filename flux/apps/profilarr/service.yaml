@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: profilarr
+  namespace: multimedia-factory
+spec:
+  type: ClusterIP
+  selector:
+    app: profilarr
+  ports:
+  - name: profilarr
+    port: 6868
+    targetPort: 6868
+    protocol: TCP

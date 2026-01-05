@@ -1,0 +1,42 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: homepage
+  namespace: multimedia-factory
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: system-addon
+  hostnames:
+  - ENC[AES256_GCM,data:afYc4ddHJ5SpjKOFMrehtKqJ8GzuuMDA6HhYIb7C,iv:uWGjhDHCbevtkdYnCmF7R0rDKFa8YmpU4xPgwDasuPo=,tag:BOgXkmozgQP2VdxBpp8IyQ==,type:str]
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: homepage
+      port: 3000
+sops:
+  age:
+  - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    enc: '-----BEGIN AGE ENCRYPTED FILE-----
+
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzMEppcS8ycXV6dTFTSTVn
+
+      b0lMLzNuM1NMQmh2bmF5Q25NN3Vrd2pQZjFjClZ4L1lUK2dXVGF6MzlNMHhTMjk2
+
+      ZTRLVm5QQnhObXp4S2Q3WVloOStvV2cKLS0tIFVXNWtpVWZqSDZNWFdHcnpONEJl
+
+      VG9XNXZLaVg4TmJKSWVxYmVLbm52dzgKqq6aM+9wzATCVp3KASxI+1OLHzu5q5yU
+
+      AEoLC/X1Mo4RFAqNsR8YdvM14Mbr9fcluYHdwG6GHdxab0ODxMtP1w==
+
+      -----END AGE ENCRYPTED FILE-----
+
+      '
+  lastmodified: '2025-12-30T20:58:57Z'
+  mac: ENC[AES256_GCM,data:j0RQCo4YrJwcP7ZAAgvoZydQ4gBO2Grb2nuyGUDZPU76yULJVbsc57X2Yo2Wp4Jf8BvGVBOnQQHgkTFbGwmYmSt3z+ZbQQyn9KRekyWWwwjUTZPj+ZMGuVutc6Qtvr7tnI9Fc4d86azsxeCazapqz8YV17CVUp/MQDUen46qpY4=,iv:1TROxjBjPm/71azCN8VbJw389KbVhnIYeJb4lb+m8BA=,tag:ua/8FN70IJCwEYeOPNplfw==,type:str]
+  encrypted_regex: hostnames|0
+  version: 3.11.0

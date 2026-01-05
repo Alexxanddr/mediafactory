@@ -1,0 +1,13 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: radarr
+  namespace: multimedia-factory
+spec:
+  ports:
+  - port: 7878
+    protocol: TCP
+    targetPort: 7878
+  selector:
+    app: radarr

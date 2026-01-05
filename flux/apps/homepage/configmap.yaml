@@ -1,0 +1,330 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: homepage
+  namespace: multimedia-factory
+  labels:
+    app.kubernetes.io/name: homepage
+data:
+  kubernetes.yaml: |
+    mode: cluster
+  settings.yaml: |
+    # providers:
+    #   openweathermap: openweathermapapikey
+    quicklaunch:
+      searchDescriptions: true
+      hideInternetSearch: true
+      showSearchSuggestions: true
+      hideVisitURL: true
+      provider: google # google, duckduckgo, bing, baidu, brave or custom
+
+    cardBlur: sm
+    useEqualHeights: true
+    hideErrors: falses
+    disableCollapse: true
+    hideVersion: false
+    showStats: true
+    headerStyle: boxed
+    disableUpdateCheck: false
+
+    layout:
+      Arr Stack:
+        header: true
+        style: row
+        columns: 5
+      Media Stack:
+        style: row
+        columns: 4
+      Home Automation:
+        style: column
+        columns: 1
+      Infra Stack:
+        style: row
+        columns: 4
+        Other:
+          header: false
+          style: row
+          columns: 3
+
+      Tools:
+        style: column
+        columns: 1
+
+  custom.css: ""
+  custom.js: ""
+  # docker.yaml: ""
+  bookmarks.yaml: ""
+  services.yaml: |
+    - Arr Stack:
+        - Radarr:
+            icon: radarr.png
+            href: https://radarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            description: Movies, Docs all 1080
+            showStats: true
+            namespace: multimedia-factory
+            siteMonitor:  http://radarr.multimedia-factory.svc:7878
+            app: radarr
+            podSelector: app in ( radarr )
+            widget:
+              type: radarr
+              url: http://radarr.multimedia-factory.svc:7878
+              key: {{HOMEPAGE_VAR_RADARR_API}}
+              enableQueue: false
+        - Sonarr:
+            icon: sonarr.png
+            href: https://sonarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            description: Series management
+            showStats: true
+            siteMonitor: http://sonarr.multimedia-factory.svc:8989
+            app: sonarr
+            namespace: multimedia-factory
+            podSelector: app in ( sonarr )
+            widget:
+              type: sonarr
+              url: http://sonarr.multimedia-factory.svc:8989
+              key: {{HOMEPAGE_VAR_SONARR_API}}
+              enableQueue: false
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://prowlarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            description: Movies, Docs all 1080
+            showStats: true
+            siteMonitor: http://prowlarr.multimedia-factory.svc:9696
+            app: prowlarr
+            namespace: multimedia-factory
+            podSelector: app in ( prowlarr )
+            widget:
+              type: prowlarr
+              url: http://prowlarr.multimedia-factory.svc:9696
+              key: {{HOMEPAGE_VAR_PROWLARR_API}}
+              enableQueue: true
+        - Bazarr:
+            icon: bazarr.png
+            href: https://bazarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://bazarr.multimedia-factory.svc:6767
+            description: Series management
+            showStats: true
+            app: bazarr
+            namespace: multimedia-factory
+            podSelector: app in ( bazarr )
+            widget:
+              type: bazarr
+              url: http://bazarr.multimedia-factory.svc:6767
+              key: {{HOMEPAGE_VAR_BAZARR_API}}
+              enableQueue: true
+        - Profilarr:
+            icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
+            href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://profilarr.multimedia-factory.svc:6868
+            description: Profilarr
+            showStats: true
+            app: profilarr
+            namespace: multimedia-factory
+            podSelector: app in ( profilarr )
+    - Media Stack:
+        - Plex:
+            icon: plex.svg
+            href: https://plex.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: https://plex-media-server.multimedia-factory.svc:32400
+            showStats: true
+            app: plex-media-server
+            namespace: multimedia-factory
+            podSelector: app in ( plex-media-server )
+            widget:
+                type: plex
+                url: https://plex-media-server.multimedia-factory.svc:32400
+                key: {{HOMEPAGE_VAR_PLEX_API}}
+                fields: [ "movies", "tv"]
+        - qbittorrent:
+            icon: qbittorrent.svg
+            href: https://qbittorrent.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://qbittorrent.multimedia-factory.svc:8080
+            showStats: true
+            app: qbittorrent
+            namespace: multimedia-factory
+            podSelector: app in ( qbittorrent )
+            widget:
+              type: qbittorrent
+              url: http://qbittorrent.multimedia-factory.svc:8080
+              username: {{HOMEPAGE_VAR_QBITTORRENT_USER}}
+              password: {{HOMEPAGE_VAR_QBITTORRENT_PASS}}
+              enableLeechProgress: true
+              enableLeechSize: true
+              fields: ["leech", "download", "seed", "upload"]
+        - Jellyseerr:
+            icon: jellyseerr.svg
+            href: https://jellyseerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://jellyseerr.multimedia-factory.svc:5055
+            showStats: true
+            app: jellyseerr
+            namespace: multimedia-factory
+            podSelector: app in ( jellyseerr )
+            widget:
+              type: jellyseerr
+              url: http://jellyseerr.multimedia-factory.svc:5055
+              key: {{HOMEPAGE_VAR_JELLYSEERR_API}}
+              fields: ["pending", "approved", "available", "issues"]
+        - Tautulli:
+            icon: tautulli.svg
+            href: https://tautulli.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://tautulli.multimedia-factory.svc:8181
+            showStats: true
+            app: tautulli
+            namespace: multimedia-factory
+            podSelector: app in ( tautulli )
+            widget:
+              type: tautulli
+              url: http://tautulli.multimedia-factory.svc:8181
+              key: {{HOMEPAGE_VAR_TAUTULLI_API}}
+              enableUser: true # optional, defaults to false
+              showEpisodeNumber: true # optional, defaults to false
+              expandOneStreamToTwoRows: false # optional, defaults to true
+        - FileFlows:
+            icon: fileflows.svg
+            href: https://fileflows.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://fileflows.multimedia-factory.svc:5000
+            showStats: true
+            app: fileflows
+            namespace: multimedia-factory
+            podSelector: app in ( fileflows )
+            widget:
+              type: fileflows
+              url: http://fileflows.multimedia-factory.svc:5000
+              fields: ["queue", "processing", "processed", "time"]
+        - AnimeWorld Sonarr:
+            icon: https://www.svgrepo.com/show/514661/animeworld.svg
+            href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://animeworld.multimedia-factory.svc:5000
+            showStats: true
+            app: animeworld
+            namespace: multimedia-factory
+            podSelector: app in ( animeworld )
+    - Home Automation:
+        - HomeBridge:
+            icon: homebridge.svg
+            href: https://homebridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://homebridge.home-automation.svc:8581
+            showStats: true
+            app: homebridge
+            namespace: home-automation
+            podSelector: app in ( homebridge )
+            widget:
+              type: homebridge
+              url: http://homebridge.home-automation.svc:8581
+              username: {{HOMEPAGE_VAR_HOMEBRIDGE_USER}}
+              password: {{HOMEPAGE_VAR_HOMEBRIDGE_PASS}}
+              fields: ["updates", "child_bridges"]
+    - Infra Stack:
+        - FritzBox! Center:
+            icon: fritzbox.svg
+            href: {{HOMEPAGE_VAR_FRITZBOX_CENTER_HREF}}
+            widget:
+              type: fritzbox
+              url: {{HOMEPAGE_VAR_FRITZBOX_CENTER_HREF}}
+        - FritzBox! South:
+            icon: fritzbox.svg
+            href: {{HOMEPAGE_VAR_FRITZBOX_SOUTH_HREF}}
+            widget:
+              type: fritzbox
+              url: {{HOMEPAGE_VAR_FRITZBOX_SOUTH_HREF}}
+        - Duplicati:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
+            href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://duplicati.system-addon.svc:8200
+            showStats: true
+            app: duplicati
+            namespace: system-addon
+            podSelector: app in ( duplicati )
+        - Duplicati.com:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
+            href: https://app.duplicati.com/app/dashboard
+        - SpeedTest:
+            icon: speedtest-tracker.png
+            href: https://speedy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://speedtest-tracker.extra-tools.svc:80
+            showStats: true
+            app: speedtest-tracker
+            namespace: extra-tools
+            podSelector: app in ( speedtest-tracker )
+            widget:
+              type: speedtest
+              url: http://speedtest-tracker.extra-tools.svc:80
+              version: 1 # optional, default is 1
+              key: {{HOMEPAGE_VAR_SPEEDTEST_API}} # required for version 2
+              bitratePrecision: 3 # optional, default is 0
+        - Traefik:
+            icon: traefik.png
+            href: https://traefik.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://traefik-dashboard.system-addon.svc:8080/dashboard
+            showStats: true
+            app: traefik
+            namespace: system-addon
+            podSelector: app.kubernetes.io/name in ( traefik )
+            widget:
+              type: traefik
+              url: http://traefik-dashboard.system-addon:8080
+              fields: ["routers", "services", "middleware"]
+        - Uptime Kuma:
+            icon: https://uptimekuma.org/wp-content/uploads/2025/01/Uptime-Kuma-Logo.png
+            href: https://uptime-kuma.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://uptime-kuma.extra-tools.svc:3001
+            showStats: true
+            app: uptime-kuma
+            namespace: extra-tools
+            podSelector: app in ( uptime-kuma )
+            widget:
+              type: uptimekuma
+              url: http://uptime-kuma.extra-tools.svc:3001
+              slug: k8s
+              fields: ["up", "down", "uptime", "incident"]
+        - CloudFlare Tunnel:
+            icon: https://upload.wikimedia.org/wikipedia/commons/4/4b/Cloudflare_Logo.svg
+            href: https://one.dash.cloudflare.com
+            showStats: true
+            app: cloudflared
+            namespace: system-addon
+            podSelector: app in ( cloudflared )
+            widget:
+              type: cloudflared
+              accountid: {{HOMEPAGE_VAR_CLOUDFLARED_ACCOUNT_ID}}
+              tunnelid: {{HOMEPAGE_VAR_CLOUDFLARED_TUNNEL_ID}}
+              key: {{HOMEPAGE_VAR_CLOUDFLARED_API_KEY}}
+        - Other:
+          - Metoro:
+              icon: https://metoro.io/static/images/Metoro_16_9.svg
+              href: https://us-east.metoro.io/
+    - Tools:
+        - Spotify Stats:
+            icon: https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg
+            href: https://spotify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://your-spotify-server.extra-tools.svc:8080
+            showStats: true
+            app: your-spotify-server
+            namespace: extra-tools
+            podSelector: app in ( your-spotify-server )
+            widget:
+              type: yourspotify
+              url: http://your-spotify-server.extra-tools.svc:8080
+              key: {{HOMEPAGE_VAR_SPOTIFY_API}}
+              fields: ["songs", "time", "artists"]
+              interval: month # optional, defaults to week
+  widgets.yaml: |
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+    - resources:
+        backend: resources
+        expanded: true
+        cpu: true
+        memory: true
+        network: default
+---

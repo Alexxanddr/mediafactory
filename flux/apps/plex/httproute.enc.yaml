@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: plex
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:QKooclRJQ1wt5Kp5KXADFkqCi3c32bZ3yWI=,iv:sEM4KQsZuufVB4f2/1DRSr4/xU1JU7knkpDwNzRv/eo=,tag:jfvpdZZu61TZY7NO44Z15A==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: plex-media-server
+              port: 32400
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1aDMwTjh6dXMrWnBwbWVr
+            SC9mdThzczVCaVZFUW12d3ZFSHBKL1FsQ25JCncxZHhyTTFOcVlCbU5FWGFkd1gv
+            clBOWXRRaDdkeUlxdTh4dHZ4NmpuVUEKLS0tIDBKUlUxMTJqRVE0ckpMdlFyNFFo
+            aUdQcUhOZ2xJUElyV1pYMjZWY3IzRlEKYFuAkUtiirAU+hdSC1nUYxjP2EQtc9El
+            SXOTxqLwwo1okgigb9QOTs9mdJ12Zn+MkOEecgJHLUVEi1SK4tqWhQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-02T11:30:45Z"
+    mac: ENC[AES256_GCM,data:TrnnVOJ8Cgcta5X0Q4Y9aeYFyZ1O/qS4iKqxeng0PVlYtXp/k+AEmHbQRt4zkL6m5OadMYmRUX/GuiDOaFDma7X3bn2VB1BG0swhBB66LgkYGCZnbesVfOROhybUlGHb5cjfV6GvvNCTVCnXS3GWJfsMAy7dOy08DmgpBedVTsc=,iv:3pnr9W9207yY+VHYAsVSTPKOfAUg5P9V2fJaRt3xG38=,tag:cZXUvf7XqLzPDZEuMePagg==,type:str]
+    encrypted_regex: ^(hostnames)$
+    version: 3.11.0

@@ -1,0 +1,60 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileflows-node-common
+  namespace: multimedia-factory
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: fileflows-node-common
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileflows-node-data
+  namespace: multimedia-factory
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: fileflows-node-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileflows-node-media
+  namespace: multimedia-factory
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: fileflows-node-media
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: fileflows-node-temp
+  namespace: multimedia-factory
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: fileflows-node-temp

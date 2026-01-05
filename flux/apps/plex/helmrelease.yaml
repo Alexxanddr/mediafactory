@@ -1,0 +1,38 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plex-media-server
+  namespace: multimedia-factory
+spec:
+  releaseName: plex-media-server
+  interval: 5m
+  chart:
+    spec:
+      chart: plex-media-server
+      sourceRef:
+        kind: HelmRepository
+        name: plex-media-server
+        namespace: flux-system
+  values:
+    image:
+      registry: index.docker.io
+      repository: plexinc/pms-docker
+      tag: latest
+      pullPolicy: Always
+    ingress:
+      enabled: false
+    pms:
+      configExistingClaim: plex-config
+    service:
+      type: NodePort
+      port: 32400
+      nodePort: 32400
+      externalTrafficPolicy: Local
+    extraVolumeMounts:
+    - name: plex-media
+      mountPath: /mnt/md0/MediaFactory
+    extraVolumes:
+    - name: plex-media
+      persistentVolumeClaim:
+        claimName: plex-media

@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: duplicati
+  name: duplicati
+  namespace: system-addon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: duplicati
+  template:
+    metadata:
+      labels:
+        app: duplicati
+    spec:
+      containers:
+      - name: duplicati
+        image: linuxserver/duplicati
+        ports:
+        - containerPort: 8200
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        - name: SETTINGS_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: duplicati-encryption-key
+              key: SETTINGS_ENCRYPTION_KEY
+        - name: DUPLICATI__WEBSERVICE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: duplicati-encryption-key
+              key: DUPLICATI__WEBSERVICE_PASSWORD
+        volumeMounts:
+        - mountPath: /config
+          name: duplicati-config
+        - mountPath: /data
+          name: duplicati-data
+      volumes:
+      - name: duplicati-config
+        persistentVolumeClaim:
+          claimName: duplicati-config
+      - name: duplicati-data
+        persistentVolumeClaim:
+          claimName: duplicati-data

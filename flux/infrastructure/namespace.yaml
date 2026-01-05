@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: system-addon
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: multimedia-factory
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: home-automation
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cert-manager
+---

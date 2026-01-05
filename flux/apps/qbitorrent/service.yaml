@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qbittorrent
+  namespace: multimedia-factory
+spec:
+  type: ClusterIP
+  selector:
+    app: qbittorrent
+  ports:
+    - name: webui
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+    - name: torrent-tcp
+      port: 31682
+      protocol: TCP
+      targetPort: 31682
+    - name: torrent-udp
+      port: 31682
+      protocol: UDP
+      targetPort: 31682
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: qbittorrent-nodeport
+#   namespace: multimedia-factory
+# spec:
+#   type: NodePort
+#   selector:
+#     app: transmission
+#   ports:
+#   - name: torrent-tcp-nodeport
+#     port: 31682
+#     targetPort: 31682
+#     protocol: TCP
+#     nodePort: 31682
+#   - name: torrent-udp-nodeport
+#     port: 31682
+#     targetPort: 31682
+#     protocol: UDP
+#     nodePort: 31682

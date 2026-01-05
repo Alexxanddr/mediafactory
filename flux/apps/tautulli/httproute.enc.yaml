@@ -1,0 +1,42 @@
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: tautulli
+  namespace: multimedia-factory
+spec:
+  parentRefs:
+  - name: traefik-gateway
+    namespace: system-addon
+  hostnames:
+  - ENC[AES256_GCM,data:zf5nSdE34qPQD4c9dk5XKG33d6zwYQdwLyJv5Vrg,iv:K2BbDg8k0QozqDJrnDc624en1VC/UcNWpfqYv6qBv0k=,tag:DKVciyW8yXTJ9NBuKayhKg==,type:str]
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: tautulli
+      port: 8181
+sops:
+  age:
+  - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    enc: '-----BEGIN AGE ENCRYPTED FILE-----
+
+      YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBsdDJBamRabmhMd0s2MmVX
+
+      QmVmT3hQMkFlbHo3RGdPaDdEemRrTFhoUFFRCnA5Zis2dUN3eUZIQjRUMjJjSWtJ
+
+      Vll2V1hzZVNNTFZHcWtNbTZsZEN4RXMKLS0tIDBQTHVJQXVyQ3Brem91TGtBbDRx
+
+      VmpUV2VldHlvUTZZOFNjd2tHU1ZaeVEKBDm2++8SFRTK/znvnSTxF763e1obT5mT
+
+      ldFrjG2q65hLLOkp8z4JjUStMBzZUuUhbBYXFVFloKvl5jt9PfamPQ==
+
+      -----END AGE ENCRYPTED FILE-----
+
+      '
+  lastmodified: '2025-12-30T09:33:24Z'
+  mac: ENC[AES256_GCM,data:k84rfOoeVUXY2mfLRfjrHFKjg+HqHpzLd7gRP+2ipUnin4mOFK3h+scNF8y4db8lTdF5tWOn5pBfTbiMJvY1bdeQBvYTlypPu0dnB7/E+NOUrH1yy0GzfrJEdecUlmi5DjVIom0PstD5rCTVST1W06Zk+3GKJRqYSeZjyOYnsno=,iv:1DdHdpmBFdo8Qmq2J2uMyMbtBDnv5Jra6FoKzTv/CMc=,tag:UvIv1eKLpXgDntwefd41/w==,type:str]
+  encrypted_regex: hostnames|0
+  version: 3.11.0

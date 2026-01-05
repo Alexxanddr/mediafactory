@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jellyseerr
+  name: jellyseerr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyseerr
+  template:
+    metadata:
+      labels:
+        app: jellyseerr
+    spec:
+      containers:
+      - name: jellyseerr
+        image: fallenbagel/jellyseerr:latest
+        ports:
+        - containerPort: 5055
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        volumeMounts:
+        - mountPath: /app/config
+          name: jellyseerr-config
+      volumes:
+      - name: jellyseerr-config
+        persistentVolumeClaim:
+          claimName: jellyseerr-config

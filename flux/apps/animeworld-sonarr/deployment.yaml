@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: animeworld
+  name: animeworld
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: animeworld
+  template:
+    metadata:
+      labels:
+        app: animeworld
+    spec:
+      containers:
+        - name: animeworld
+          image: alexxanddr/test-downloader-an:latest
+          # ports:
+          #   - containerPort: 5000
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: Europe/Rome
+            - name: SONARR_URL
+              value: http://sonarr.multimedia-factory.svc:8989
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: animeworld-secret
+                  key: API_KEY
+          volumeMounts:
+            - mountPath: /src/database
+              subPath: database
+              name: animeworld-database
+            - mountPath: /src/script
+              subPath: script
+              name: animeworld-script
+            - mountPath: /data
+              name: animeworld-data
+            - mountPath: /downloads
+              name: animeworld-downloads
+      volumes:
+        - name: animeworld-database
+          persistentVolumeClaim:
+            claimName: animeworld-database
+        - name: animeworld-script
+          persistentVolumeClaim:
+            claimName: animeworld-script
+        - name: animeworld-data
+          persistentVolumeClaim:
+            claimName: animeworld-data
+        - name: animeworld-downloads
+          persistentVolumeClaim:
+            claimName: animeworld-downloads

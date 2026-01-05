@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: traefik-dashboard
+    namespace: system-addon
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:zULHwWzZEO7Br6AU0535CDA0aW1QgvqXrXSOJR8=,iv:vi0KWPOu9wOu4SP2SpXxueIzWdb0+1OQo8qT1wf9BYc=,tag:HzBhnFEB4FyB0FI3d9VPdQ==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: traefik-dashboard
+              port: 8080
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBnZUtXdHdDTVFPand5eHNF
+            MlJQd1JlZkM1S2NoWDVSUkt0bnBxODBDb1VRCkxlYUhkekhXUGZSRmV3aDdZS1B5
+            VCtMZWkwZEllSGozbSt0MlliT01yU0UKLS0tIGFMeHFWOTNUelQ5MDZveEdITXh5
+            endWUFRJQWRWVExHQ1RJZWh5cmpDdGcKnQheDhEPlgZrft0j8rr9kPX2SNwAxkNX
+            ESrwB4hkjzizJ+F2cLrlwZvLP7J8qcShBMo1lS7EnnqwuFhbcNVhGQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-04T01:18:23Z"
+    mac: ENC[AES256_GCM,data:5SfaNEo40iJZYF9SfKRgSU+xi9bJ2F0ljVy4ZD0AqNn8vgSJy+0tcPgyrWewdZnyq3LngPqJAtJvpOXSalTGORWwZw/FId3jMqB8kI8OlPFiGrZ1uFc1HwP7UNtd9D+gaqYnJCKgDcqGOfhy6Kx4kwhk/isT4gVBaVD2y0XZYyE=,iv:2Ylf6d3W3EVEdaXLnPBJUC6V8fVD98pmwN5lMxh0FY4=,tag:KUXEoMsCj6fLLyhf0pZ+ww==,type:str]
+    encrypted_regex: ^(hostnames)$
+    version: 3.11.0

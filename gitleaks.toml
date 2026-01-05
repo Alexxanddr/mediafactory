@@ -1,0 +1,10 @@
+title = "gitleaks config"
+
+[[rules]]
+description = "SOPS encrypted data"
+regex = '''sops:\s*encrypted_regex'''
+tags = ["encrypted", "sops"]
+
+[[rules]]
+description = "Potential API Key"
+regex = '''(?i)(apikey|api_key|secret)[\s]*[:=][\s]*['"]?[a-z0-9]{32,45}['"]?'''

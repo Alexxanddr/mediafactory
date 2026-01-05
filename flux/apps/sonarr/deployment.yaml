@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sonarr
+  name: sonarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sonarr
+  template:
+    metadata:
+      labels:
+        app: sonarr
+    spec:
+      containers:
+      - name: sonarr
+        image: ghcr.io/hotio/sonarr
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        ports:
+        - containerPort: 8989
+        volumeMounts:
+        - mountPath: /config
+          name: sonarr-config
+        - mountPath: /data
+          name: sonarr-data
+      volumes:
+      - name: sonarr-data
+        persistentVolumeClaim:
+          claimName: sonarr-data
+      - name: sonarr-config
+        persistentVolumeClaim:
+          claimName: sonarr-config

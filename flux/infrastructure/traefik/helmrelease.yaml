@@ -1,0 +1,40 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: traefik
+    namespace: system-addon
+spec:
+    releaseName: traefik
+    interval: 5m
+    chart:
+        spec:
+            chart: traefik
+            sourceRef:
+                kind: HelmRepository
+                name: traefik
+                namespace: flux-system
+    values:
+        service:
+            type: LoadBalancer
+            annotations:
+                metallb.io/ip-allocated-from-pool: generic-cluster-pool
+                metallb.universe.tf/address-pool: generic-cluster-pool
+        ingressRoute:
+            dashboard:
+                enabled: true
+        additionalArguments:
+            - --log.level=INFO
+            - --providers.kubernetesingress=false
+        providers:
+            kubernetesGateway:
+                enabled: true
+            docker:
+              exposedByDefault: false
+        gateway:
+            namespacePolicy: All
+        web:
+          redirections:
+            entryPoint:
+              to: websecure
+              scheme: https
+              permanent: true

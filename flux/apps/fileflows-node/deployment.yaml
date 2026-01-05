@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: fileflows-node
+  namespace: multimedia-factory
+  labels:
+    app: fileflows-node
+spec:
+  serviceName: fileflows-node
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fileflows-node
+  template:
+    metadata:
+      labels:
+        app: fileflows-node
+    spec:
+      containers:
+      - name: fileflows-node
+        image: revenz/fileflows
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: UMASK
+          value: "002"
+        - name: TZ
+          value: Etc/UTC
+        - name: ServerUrl
+          value: http://fileflows.multimedia-factory.svc:5000
+        - name: FFNODE
+          value: "1"
+        volumeMounts:
+        - name: fileflows-node-common
+          mountPath: /app/common
+        - name: fileflows-node-data
+          mountPath: /app/Data
+        - name: fileflows-node-media
+          mountPath: /media
+        - name: fileflows-node-temp
+          mountPath: /temp
+        - name: dri
+          mountPath: /dev/dri
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+      volumes:
+      - name: fileflows-node-common
+        persistentVolumeClaim:
+          claimName: fileflows-node-common
+      - name: fileflows-node-data
+        persistentVolumeClaim:
+          claimName: fileflows-node-data
+      - name: fileflows-node-media
+        persistentVolumeClaim:
+          claimName: fileflows-node-media
+      - name: fileflows-node-temp
+        persistentVolumeClaim:
+          claimName: fileflows-node-temp
+      - name: dri
+        hostPath:
+          path: /dev/dri

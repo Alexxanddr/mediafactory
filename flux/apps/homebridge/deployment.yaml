@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homebridge
+  namespace: home-automation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homebridge
+  template:
+    metadata:
+      labels:
+        app: homebridge
+    spec:
+      hostNetwork: true
+      containers:
+      - name: homebridge
+        image: homebridge/homebridge:latest
+        ports:
+        - containerPort: 8581
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8581
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8581
+          initialDelaySeconds: 30
+          periodSeconds: 15
+        volumeMounts:
+        - mountPath: /homebridge
+          name: homebridge-pvc
+      volumes:
+      - name: homebridge-pvc
+        persistentVolumeClaim:
+          claimName: homebridge-pvc

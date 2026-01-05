@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: animeworld-database
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: animeworld-database
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: animeworld-data
+  namespace: multimedia-factory
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: animeworld-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: animeworld-downloads
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: animeworld-downloads
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: animeworld-script
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: animeworld-script

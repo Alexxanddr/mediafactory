@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: your-spotify-server
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: your-spotify-server
+  template:
+    metadata:
+      labels:
+        app: your-spotify-server
+    spec:
+      containers:
+      - name: server
+        image: yooooomi/your_spotify_server
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_NO_ADMIN_RIGHTS
+          value: 'true'
+        - name: SPOTIFY_PUBLIC
+          valueFrom:
+            secretKeyRef:
+              name: spotify-secret
+              key: SPOTIFY_PUBLIC
+        - name: SPOTIFY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: spotify-secret
+              key: SPOTIFY_SECRET
+        envFrom:
+        - secretRef:
+            name: mongodb-secret
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: your-spotify-web
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: your-spotify-web
+  template:
+    metadata:
+      labels:
+        app: your-spotify-web
+    spec:
+      containers:
+      - name: web
+        image: yooooomi/your_spotify_client
+        ports:
+        - containerPort: 3000
+        env:
+        - name: API_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: mongodb-secret
+              key: API_ENDPOINT

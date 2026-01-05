@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared
+  namespace: system-addon
+data:
+  config.yaml: 'tunnel: k8s
+
+    credentials-file: /etc/cloudflared/creds/credentials.json
+
+    metrics: 0.0.0.0:2000
+
+    no-autoupdate: true
+
+    loglevel: debug
+
+    prop-loglevel: debug'
