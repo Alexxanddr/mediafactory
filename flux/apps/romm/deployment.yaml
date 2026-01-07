@@ -82,6 +82,8 @@ spec:
               mountPath: /romm/library
             - name: romm-assets
               mountPath: /romm/assets
+            - name: romm-config
+              mountPath: /romm/config
       volumes:
         - name: romm-resources
           persistentVolumeClaim:
@@ -95,6 +97,9 @@ spec:
         - name: romm-assets
           persistentVolumeClaim:
             claimName: romm-assets
+        - name: romm-config
+          persistentVolumeClaim:
+            claimName: romm-config
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
