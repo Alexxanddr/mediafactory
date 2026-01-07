@@ -1,0 +1,101 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: romm-db
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: romm-db
+  template:
+    metadata:
+      labels:
+        app: romm-db
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          envFrom:
+          - secretRef:
+              name: romm-db-secret
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - healthcheck.sh
+                - --connect
+                - --innodb_initialized
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - healthcheck.sh
+                - --connect
+                - --innodb_initialized
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: romm-mysql-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: romm
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: romm
+  template:
+    metadata:
+      labels:
+        app: romm
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: romm
+          image: rommapp/romm:latest
+          envFrom:
+          - secretRef:
+              name: romm-db-secret
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: romm-resources
+              mountPath: /romm/resources
+            - name: romm-redis-data
+              mountPath: /redis-data
+            - name: romm-library
+              mountPath: /romm/library
+            - name: romm-assets
+              mountPath: /romm/assets
+      volumes:
+        - name: romm-resources
+          persistentVolumeClaim:
+            claimName: romm-resources
+        - name: romm-redis-data
+          persistentVolumeClaim:
+            claimName: romm-redis-data
+        - name: romm-library
+          persistentVolumeClaim:
+            claimName: romm-library
+        - name: romm-assets
+          persistentVolumeClaim:
+            claimName: romm-assets
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z romm-db 3306; do echo waiting for db; sleep 2; done;']

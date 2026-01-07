@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: romm
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:ytfl8TUbrCtYE5KojEiixO1lEUe/BWMK42k=,iv:vMPFMjyxd4DIHquxPaTdqiyQXG06pgxhZb2IPOkX2ww=,tag:8IjLAttBOOP8WQV0GpWiHA==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: romm
+              port: 8080
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBxdmNiNXl3MVl0R0lrMnJ2
+            bW0zRTg2MWhGeTJFZ0JZeWJNbnp6M25GS0hrCm5hckpBRG1wS2htZTRROW1ZQUhm
+            V1l3YXdzaTZIVVhoVjllcm9Obm1yK1UKLS0tIExadmFDL2JEcmQyQVJicFNoR01n
+            eTB3Y3NESjRRdlRnYmFOTnRVcHRGWmcK5B3uJpmvGW2gHPy+tWqPFoVBpkqLvJH9
+            1lqeTgCVvv7BZcPvCBoROaqxHrY8k5XPV4GEAT2xoO88DwQWxZetGg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-01-07T14:48:18Z"
+    mac: ENC[AES256_GCM,data:11DJuCLej+opOo67EL3VGzWGEjI7CS19/cDuFBsA33ZOh2Tvd6rxbl+y/kDRMvLORiXzlohxkHhuHS925UYCSvo/uCUBy+CuCTgRfAo5SDZIJDNz9M1Y0IszCfqs37SuHzZnYZ9aLvAFyb5UTag3hAKwuT2MtCarMLXw5DPdFxY=,iv:7cYftIwE7vyqDrDl/xgIwz5l9y9bKwFP5jvfmLlQFvA=,tag:9WoLmJbjTfFqJ9x3uBVuag==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.11.0

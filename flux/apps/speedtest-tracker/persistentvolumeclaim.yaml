@@ -26,3 +26,5 @@ spec:
     requests:
       storage: 50Gi
   storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: speedtest-tracker-postgresql
