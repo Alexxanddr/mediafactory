@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: romm-db
-  namespace: extra-tools
+  namespace: gaming
 spec:
   replicas: 1
   selector:
@@ -53,7 +53,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: romm
-  namespace: extra-tools
+  namespace: gaming
 spec:
   replicas: 1
   selector:

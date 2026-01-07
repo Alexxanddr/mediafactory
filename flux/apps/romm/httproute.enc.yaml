@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
     name: romm
-    namespace: extra-tools
+    namespace: gaming
 spec:
     parentRefs:
         - name: traefik-gateway
@@ -28,7 +28,7 @@ sops:
             eTB3Y3NESjRRdlRnYmFOTnRVcHRGWmcK5B3uJpmvGW2gHPy+tWqPFoVBpkqLvJH9
             1lqeTgCVvv7BZcPvCBoROaqxHrY8k5XPV4GEAT2xoO88DwQWxZetGg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-07T14:48:18Z"
-    mac: ENC[AES256_GCM,data:11DJuCLej+opOo67EL3VGzWGEjI7CS19/cDuFBsA33ZOh2Tvd6rxbl+y/kDRMvLORiXzlohxkHhuHS925UYCSvo/uCUBy+CuCTgRfAo5SDZIJDNz9M1Y0IszCfqs37SuHzZnYZ9aLvAFyb5UTag3hAKwuT2MtCarMLXw5DPdFxY=,iv:7cYftIwE7vyqDrDl/xgIwz5l9y9bKwFP5jvfmLlQFvA=,tag:9WoLmJbjTfFqJ9x3uBVuag==,type:str]
+    lastmodified: "2026-01-07T20:05:52Z"
+    mac: ENC[AES256_GCM,data:AAPNjqGvKjZueJPJvsvILsNz5fHcdrswNfiLB6TI7YByOvsGBv6qsFf4u7AGaDZ2ZIx51PqkGr1ki1266jFY2L1GFQVmgMVP4tbs/7KuZaW2tRcqhCKckewDvqxiyTlEKGa3EfI2gxNIRCF+3u8vtQLf1KRkGyxEjJ1YwFLfMIY=,iv:Hts2MnqdaQrrN+yK4yRMxVNcpd0NQOoj1Toa4r1rImk=,tag:uEQCFLiyNEMXPt5ZgqaMrQ==,type:str]
     encrypted_regex: hostnames|0
     version: 3.11.0

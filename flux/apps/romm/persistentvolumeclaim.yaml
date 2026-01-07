@@ -3,7 +3,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-mysql-data
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany
@@ -19,7 +19,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-resources
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany
@@ -35,7 +35,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-redis-data
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany
@@ -51,7 +51,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-library
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany
@@ -67,7 +67,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-assets
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany
@@ -83,7 +83,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: romm-config
-  namespace: extra-tools
+  namespace: gaming
 spec:
   accessModes:
     - ReadWriteMany

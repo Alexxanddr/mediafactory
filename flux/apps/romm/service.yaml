@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: romm-db
-  namespace: extra-tools
+  namespace: gaming
 spec:
   selector:
     app: romm-db
@@ -18,7 +18,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: romm
-  namespace: extra-tools
+  namespace: gaming
 spec:
   selector:
     app: romm
