@@ -11,7 +11,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /mnt/md0/k3s-storage/bazarr/config
+    path: /var/lib/rancher/k3s/storage/bazarr/config
   nodeAffinity:
     required:
       nodeSelectorTerms:

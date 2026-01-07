@@ -11,7 +11,7 @@ spec:
   capacity:
     storage: 10Gi
   local:
-    path: /mnt/md0/k3s-storage/plex-to-trakt-pv/config
+    path: /var/lib/rancher/k3s/storage/plex-to-trakt-pv/config
   nodeAffinity:
     required:
       nodeSelectorTerms:

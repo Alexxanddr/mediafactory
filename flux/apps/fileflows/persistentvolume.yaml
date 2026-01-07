@@ -11,7 +11,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /mnt/md0/k3s-storage/fileflows/common
+    path: /var/lib/rancher/k3s/storage/fileflows/common
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -36,7 +36,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /mnt/md0/k3s-storage/fileflows/data/
+    path: /var/lib/rancher/k3s/storage/fileflows/data/
   nodeAffinity:
     required:
       nodeSelectorTerms:
