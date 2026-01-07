@@ -308,6 +308,18 @@ data:
               key: {{HOMEPAGE_VAR_SPOTIFY_API}}
               fields: ["songs", "time", "artists"]
               interval: month # optional, defaults to week
+        - RomM:
+            icon: romm.png
+            href: https://romm.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://romm.gaming.svc:8080
+            showStats: true
+            app: romm
+            namespace: gaming
+            podSelector: app in ( romm )
+            widget:
+              type: romm
+              url: http://romm.gaming.svc:8080
+              fields: ["platforms", "totalRoms", "saves", "states"]
   widgets.yaml: |
     - kubernetes:
         cluster:
