@@ -20,7 +20,7 @@ instance:
   sync: # @schema required: false
     interval: 1m
     kind: "GitRepository" # @schema enum:[GitRepository,OCIRepository,Bucket]
-    url: "https://github.com/Alexxanddr/mediafactory-infra"
+    url: "https://github.com/Alexxanddr/mediafactory"
     ref: "refs/heads/master"
     path: "flux/clusters/home/"
     provider: "github"
