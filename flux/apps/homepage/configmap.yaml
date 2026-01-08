@@ -166,7 +166,7 @@ data:
               fields: ["pending", "approved", "available", "issues"]
         - Tautulli:
             icon: tautulli.svg
-            href: https://tautulli.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            href: https://tautulli.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/home
             siteMonitor: http://tautulli.multimedia-factory.svc:8181
             showStats: true
             app: tautulli
