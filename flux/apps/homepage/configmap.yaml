@@ -48,7 +48,7 @@ data:
 
       Tools:
         style: column
-        columns: 1
+        columns: 2
 
   custom.css: ""
   custom.js: ""
