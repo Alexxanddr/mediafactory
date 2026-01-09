@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: playerr
+  namespace: gaming
+spec:
+  selector:
+    app: playerr
+  ports:
+    - protocol: TCP
+      port: 2727
+      targetPort: 2727
+  type: ClusterIP

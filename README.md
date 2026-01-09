@@ -57,6 +57,11 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 - <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr - animeworld"> **[sonarr-animeworld](https://github.com/MainKronos/Sonarr-AnimeDownloader)**: TV series collection manager specific for anime
 - <img src="https://tautulli.com/images/logo.png" width="16" height="16" alt="tautulli"> **[tautulli](https://tautulli.com/)**: Plex analytics and monitoring
 
+## Gaming
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg" width="16" height="16" alt="RomM"> **[RomM](https://romm.app)**: Rom Manager and Player 
+- <img src="https://github.com/Maikboarder/Playerr/blob/master/frontend/public/favicon.png?raw=true" width="16" height="16" alt="Playerr"> **[Playerr](https://github.com/Maikboarder/Playerr)**: Arr Stack for gaming
+
+
 ## Utilities
 
 - 🐇 **[speedtest-tracker](https://github.com/alexjustesen/speedtest-tracker)**: Network speed monitoring and tracking

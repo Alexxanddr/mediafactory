@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: playerr
+  namespace: gaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: playerr
+  template:
+    metadata:
+      labels:
+        app: playerr
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: playerr
+          image: maikboarder/playerr:latest
+          ports:
+            - containerPort: 2727
+          volumeMounts:
+            - name: playerr-config
+              mountPath: /app/config
+            - name: playerr-media
+              mountPath: /media
+            - name: playerr-downloads
+              mountPath: /downloads
+      volumes:
+        - name: playerr-config
+          persistentVolumeClaim:
+            claimName: playerr-config
+        - name: playerr-media
+          persistentVolumeClaim:
+            claimName: playerr-media
+        - name: playerr-downloads
+          persistentVolumeClaim:
+            claimName: playerr-downloads
