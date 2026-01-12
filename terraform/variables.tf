@@ -69,18 +69,3 @@ variable "whitelist_email" {
   description = "whitelist of email for idp provider"
   type        = map(string)
 }
-
-variable "mongodb_atlas_api_key" {
-  type        = map(string)
-  description = "api key for mongodb atlas organization"
-}
-
-variable "mongodb_org_id" {
-  type        = string
-  description = "organization id for mongodb atlas"
-}
-
-variable "mongodb_user" {
-  description = "mongodb user to access to database"
-  type        = map(string)
-}

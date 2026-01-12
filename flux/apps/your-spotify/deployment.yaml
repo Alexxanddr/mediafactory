@@ -19,22 +19,9 @@ spec:
         image: yooooomi/your_spotify_server
         ports:
         - containerPort: 8080
-        env:
-        - name: MONGO_NO_ADMIN_RIGHTS
-          value: 'true'
-        - name: SPOTIFY_PUBLIC
-          valueFrom:
-            secretKeyRef:
-              name: spotify-secret
-              key: SPOTIFY_PUBLIC
-        - name: SPOTIFY_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: spotify-secret
-              key: SPOTIFY_SECRET
         envFrom:
         - secretRef:
-            name: mongodb-secret
+            name: spotify-secret
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -60,5 +47,33 @@ spec:
         - name: API_ENDPOINT
           valueFrom:
             secretKeyRef:
-              name: mongodb-secret
+              name: spotify-secret
               key: API_ENDPOINT
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:6
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - mountPath: /data/db
+              name: mongo-storage
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim:
+            claimName: spotify-mongo
