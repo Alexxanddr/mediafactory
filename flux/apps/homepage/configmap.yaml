@@ -215,18 +215,14 @@ data:
               password: {{HOMEPAGE_VAR_HOMEBRIDGE_PASS}}
               fields: ["updates", "child_bridges"]
     - Infra Stack:
-        - FritzBox! Center:
-            icon: fritzbox.svg
-            href: {{HOMEPAGE_VAR_FRITZBOX_CENTER_HREF}}
+        - Ubiquiti:
+            icon: unifi.svg
+            href: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
             widget:
-              type: fritzbox
-              url: {{HOMEPAGE_VAR_FRITZBOX_CENTER_HREF}}
-        - FritzBox! South:
-            icon: fritzbox.svg
-            href: {{HOMEPAGE_VAR_FRITZBOX_SOUTH_HREF}}
-            widget:
-              type: fritzbox
-              url: {{HOMEPAGE_VAR_FRITZBOX_SOUTH_HREF}}
+              type: unifi
+              url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
+              username: {{HOMEPAGE_VAR_UBIQUITI_USER}}
+              password: {{HOMEPAGE_VAR_UBIQUITI_PASSWORD}}
         - Duplicati:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
             href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -321,6 +317,18 @@ data:
               url: http://romm.gaming.svc:8080
               fields: ["platforms", "totalRoms", "saves", "states"]
   widgets.yaml: |
+    - greeting:
+        text_size: xl
+        text: Alexxanddr's HomeLab
+    - openmeteo:
+        label: Rome
+        latitude: 41.86094060191091, 
+        longitude: 12.558304332495656
+        timezone: Europe/Berlin # optional
+        units: metric # or imperial
+        cache: 5 # Time in minutes to cache API responses, to stay within limits
+        format: # optional, Intl.NumberFormat options
+          maximumFractionDigits: 1
     - kubernetes:
         cluster:
           show: true
@@ -339,4 +347,8 @@ data:
         cpu: true
         memory: true
         network: default
+    - unifi_console:
+        url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
+        username: {{HOMEPAGE_VAR_UBIQUITI_USER}}
+        password: {{HOMEPAGE_VAR_UBIQUITI_PASSWORD}}
 ---
