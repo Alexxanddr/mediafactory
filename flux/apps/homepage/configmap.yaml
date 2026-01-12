@@ -48,7 +48,7 @@ data:
 
       Tools:
         style: row
-        columns: 2
+        columns: 3
 
   custom.css: ""
   custom.js: ""
@@ -316,6 +316,14 @@ data:
               type: romm
               url: http://romm.gaming.svc:8080
               fields: ["platforms", "totalRoms", "saves", "states"]
+        - Playerr:
+            icon: https://github.com/Maikboarder/Playerr/blob/master/frontend/src/assets/app_logo.png?raw=true
+            href: https://playerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://playerr.gaming.svc:2727
+            showStats: true
+            app: playerr
+            namespace: gaming
+            podSelector: app in ( playerr )
   widgets.yaml: |
     - greeting:
         text_size: xl
