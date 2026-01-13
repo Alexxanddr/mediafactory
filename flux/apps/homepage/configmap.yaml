@@ -35,9 +35,6 @@ data:
       Media Stack:
         style: row
         columns: 4
-      Home Automation:
-        style: column
-        columns: 1
       Infra Stack:
         style: row
         columns: 4
@@ -48,7 +45,7 @@ data:
 
       Tools:
         style: row
-        columns: 3
+        columns: 4
 
   custom.css: ""
   custom.js: ""
@@ -199,21 +196,6 @@ data:
             app: animeworld
             namespace: multimedia-factory
             podSelector: app in ( animeworld )
-    - Home Automation:
-        - HomeBridge:
-            icon: homebridge.svg
-            href: https://homebridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://homebridge.home-automation.svc:8581
-            showStats: true
-            app: homebridge
-            namespace: home-automation
-            podSelector: app in ( homebridge )
-            widget:
-              type: homebridge
-              url: http://homebridge.home-automation.svc:8581
-              username: {{HOMEPAGE_VAR_HOMEBRIDGE_USER}}
-              password: {{HOMEPAGE_VAR_HOMEBRIDGE_PASS}}
-              fields: ["updates", "child_bridges"]
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg
@@ -290,6 +272,20 @@ data:
               icon: https://metoro.io/static/images/Metoro_16_9.svg
               href: https://us-east.metoro.io/
     - Tools:
+        - HomeBridge:
+            icon: homebridge.svg
+            href: https://homebridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://homebridge.home-automation.svc:8581
+            showStats: true
+            app: homebridge
+            namespace: home-automation
+            podSelector: app in ( homebridge )
+            widget:
+              type: homebridge
+              url: http://homebridge.home-automation.svc:8581
+              username: {{HOMEPAGE_VAR_HOMEBRIDGE_USER}}
+              password: {{HOMEPAGE_VAR_HOMEBRIDGE_PASS}}
+              fields: ["updates", "child_bridges"]
         - Spotify Stats:
             icon: https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg
             href: https://spotify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
