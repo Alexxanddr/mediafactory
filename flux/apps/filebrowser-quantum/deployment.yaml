@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: filebrowser
+  name: filebrowser
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: filebrowser
+  template:
+    metadata:
+      labels:
+        app: filebrowser
+    spec:
+      containers:
+        - name: filebrowser
+          image: ghcr.io/gtsteffaniak/filebrowser:stable
+          envFrom:
+          - secretRef:
+              name: filebrowser-secret
+          ports:
+          - containerPort: 80
+          env:
+            - name: UID
+              value: "1000"
+            - name: GID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: Europe/Rome
+            - name: FILEBROWSER_CONFIG
+              value: /home/filebrowser/data/config.yaml
+            - name: FILEBROWSER_DATABASE
+              value: /home/filebrowser/data/database.db
+          volumeMounts:
+            - mountPath: /home/filebrowser/data
+              name: filebrowser-config
+            - mountPath: /mnt/media
+              name: filebrowser-media
+            - mountPath: /mnt/documents
+              name: filebrowser-documents
+            - mountPath: /mnt/k3s-config
+              name: filebrowser-data
+      volumes:
+        - name: filebrowser-config
+          persistentVolumeClaim:
+            claimName: filebrowser-config
+        - name: filebrowser-media
+          persistentVolumeClaim:
+            claimName: filebrowser-media
+        - name: filebrowser-documents
+          persistentVolumeClaim:
+            claimName: filebrowser-documents
+        - name: filebrowser-data
+          persistentVolumeClaim:
+            claimName: filebrowser-data

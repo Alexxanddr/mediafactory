@@ -66,6 +66,8 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 
 - 🐇 **[speedtest-tracker](https://github.com/alexjustesen/speedtest-tracker)**: Network speed monitoring and tracking
 - <img src="https://img.icons8.com/ios_filled/512/spotify.png" width="16" height="16" alt="your_spotify"> **[Your Spotify](https://github.com/Yooooomi/your_spotify)**: Self hosted Spotify tracking dashboard
+- <img src="https://filebrowserquantum.com/logo.svg" width="16" height="16" alt="FileBrowser Quantum"> **[FileBrowser Quantum](https://filebrowserquantum.com/en/)**: File Browser
+
 ## 📋 Key Features
 
 ### Infrastructure as Code
