@@ -23,7 +23,7 @@ data:
     hideErrors: falses
     disableCollapse: true
     hideVersion: false
-    showStats: false
+    showStats: true
     headerStyle: boxed
     disableUpdateCheck: false
 
