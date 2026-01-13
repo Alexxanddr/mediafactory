@@ -324,6 +324,19 @@ data:
             app: playerr
             namespace: gaming
             podSelector: app in ( playerr )
+        - File Browser Quantum:
+            icon: filebrowser.png
+            href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://filebrowser.extra-tools.svc:80
+            showStats: true
+            app: filebrowser
+            namespace: extra-tools
+            podSelector: app in ( filebrowser )
+            widget:
+              type: filebrowser
+              url: http://filebrowser.extra-tools.svc:80
+              username: {{HOMEPAGE_VAR_FILEBROWSER_USER}}
+              password: {{HOMEPAGE_VAR_FILEBROWSER_PASSWORD}}
   widgets.yaml: |
     - greeting:
         text_size: xl
