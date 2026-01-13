@@ -268,6 +268,9 @@ data:
           - Metoro:
               icon: https://metoro.io/static/images/Metoro_16_9.svg
               href: https://us-east.metoro.io/
+          - Duplicati.com:
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
+              href: https://app.duplicati.com/app/dashboard
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
