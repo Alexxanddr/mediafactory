@@ -23,7 +23,7 @@ data:
     hideErrors: falses
     disableCollapse: true
     hideVersion: false
-    showStats: true
+    showStats: false
     headerStyle: boxed
     disableUpdateCheck: false
 
@@ -57,7 +57,7 @@ data:
             icon: radarr.png
             href: https://radarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             description: Movies, Docs all 1080
-            showStats: true
+            showStats: false
             namespace: multimedia-factory
             siteMonitor:  http://radarr.multimedia-factory.svc:7878
             app: radarr
@@ -71,7 +71,7 @@ data:
             icon: sonarr.png
             href: https://sonarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             description: Series management
-            showStats: true
+            showStats: false
             siteMonitor: http://sonarr.multimedia-factory.svc:8989
             app: sonarr
             namespace: multimedia-factory
@@ -85,7 +85,7 @@ data:
             icon: prowlarr.png
             href: https://prowlarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             description: Movies, Docs all 1080
-            showStats: true
+            showStats: false
             siteMonitor: http://prowlarr.multimedia-factory.svc:9696
             app: prowlarr
             namespace: multimedia-factory
@@ -100,7 +100,7 @@ data:
             href: https://bazarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://bazarr.multimedia-factory.svc:6767
             description: Series management
-            showStats: true
+            showStats: false
             app: bazarr
             namespace: multimedia-factory
             podSelector: app in ( bazarr )
@@ -114,7 +114,7 @@ data:
             href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://profilarr.multimedia-factory.svc:6868
             description: Profilarr
-            showStats: true
+            showStats: false
             app: profilarr
             namespace: multimedia-factory
             podSelector: app in ( profilarr )
@@ -123,7 +123,7 @@ data:
             icon: plex.svg
             href: https://plex.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: https://plex-media-server.multimedia-factory.svc:32400
-            showStats: true
+            showStats: false
             app: plex-media-server
             namespace: multimedia-factory
             podSelector: app in ( plex-media-server )
@@ -136,7 +136,7 @@ data:
             icon: qbittorrent.svg
             href: https://qbittorrent.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://qbittorrent.multimedia-factory.svc:8080
-            showStats: true
+            showStats: false
             app: qbittorrent
             namespace: multimedia-factory
             podSelector: app in ( qbittorrent )
@@ -152,7 +152,7 @@ data:
             icon: jellyseerr.svg
             href: https://jellyseerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://jellyseerr.multimedia-factory.svc:5055
-            showStats: true
+            showStats: false
             app: jellyseerr
             namespace: multimedia-factory
             podSelector: app in ( jellyseerr )
@@ -165,7 +165,7 @@ data:
             icon: tautulli.svg
             href: https://tautulli.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/home
             siteMonitor: http://tautulli.multimedia-factory.svc:8181
-            showStats: true
+            showStats: false
             app: tautulli
             namespace: multimedia-factory
             podSelector: app in ( tautulli )
@@ -180,7 +180,7 @@ data:
             icon: fileflows.svg
             href: https://fileflows.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://fileflows.multimedia-factory.svc:5000
-            showStats: true
+            showStats: false
             app: fileflows
             namespace: multimedia-factory
             podSelector: app in ( fileflows )
@@ -192,7 +192,7 @@ data:
             icon: https://www.svgrepo.com/show/514661/animeworld.svg
             href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://animeworld.multimedia-factory.svc:5000
-            showStats: true
+            showStats: false
             app: animeworld
             namespace: multimedia-factory
             podSelector: app in ( animeworld )
@@ -209,7 +209,7 @@ data:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
             href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://duplicati.system-addon.svc:8200
-            showStats: true
+            showStats: false
             app: duplicati
             namespace: system-addon
             podSelector: app in ( duplicati )
@@ -217,7 +217,7 @@ data:
             icon: speedtest-tracker.png
             href: https://speedy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://speedtest-tracker.extra-tools.svc:80
-            showStats: true
+            showStats: false
             app: speedtest-tracker
             namespace: extra-tools
             podSelector: app in ( speedtest-tracker )
@@ -231,7 +231,7 @@ data:
             icon: traefik.png
             href: https://traefik.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://traefik-dashboard.system-addon.svc:8080/dashboard
-            showStats: true
+            showStats: false
             app: traefik
             namespace: system-addon
             podSelector: app.kubernetes.io/name in ( traefik )
@@ -243,7 +243,7 @@ data:
             icon: https://uptimekuma.org/wp-content/uploads/2025/01/Uptime-Kuma-Logo.png
             href: https://uptime-kuma.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://uptime-kuma.extra-tools.svc:3001
-            showStats: true
+            showStats: false
             app: uptime-kuma
             namespace: extra-tools
             podSelector: app in ( uptime-kuma )
@@ -255,7 +255,7 @@ data:
         - CloudFlare Tunnel:
             icon: https://upload.wikimedia.org/wikipedia/commons/4/4b/Cloudflare_Logo.svg
             href: https://one.dash.cloudflare.com
-            showStats: true
+            showStats: false
             app: cloudflared
             namespace: system-addon
             podSelector: app in ( cloudflared )
@@ -276,7 +276,7 @@ data:
             icon: homebridge.svg
             href: https://homebridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://homebridge.home-automation.svc:8581
-            showStats: true
+            showStats: false
             app: homebridge
             namespace: home-automation
             podSelector: app in ( homebridge )
@@ -290,7 +290,7 @@ data:
             icon: https://upload.wikimedia.org/wikipedia/commons/8/84/Spotify_icon.svg
             href: https://spotify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://your-spotify-server.extra-tools.svc:8080
-            showStats: true
+            showStats: false
             app: your-spotify-server
             namespace: extra-tools
             podSelector: app in ( your-spotify-server )
@@ -304,7 +304,7 @@ data:
             icon: romm.png
             href: https://romm.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://romm.gaming.svc:8080
-            showStats: true
+            showStats: false
             app: romm
             namespace: gaming
             podSelector: app in ( romm )
@@ -316,7 +316,7 @@ data:
             icon: https://github.com/Maikboarder/Playerr/blob/master/frontend/src/assets/app_logo.png?raw=true
             href: https://playerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://playerr.gaming.svc:2727
-            showStats: true
+            showStats: false
             app: playerr
             namespace: gaming
             podSelector: app in ( playerr )
@@ -324,7 +324,7 @@ data:
             icon: filebrowser.png
             href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
             siteMonitor: http://filebrowser.extra-tools.svc:80
-            showStats: true
+            showStats: false
             app: filebrowser
             namespace: extra-tools
             podSelector: app in ( filebrowser )
