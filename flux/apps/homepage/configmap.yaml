@@ -328,11 +328,6 @@ data:
             app: filebrowser
             namespace: extra-tools
             podSelector: app in ( filebrowser )
-            widget:
-              type: filebrowser
-              url: http://filebrowser.extra-tools.svc:80
-              username: {{HOMEPAGE_VAR_FILEBROWSER_USER}}
-              password: {{HOMEPAGE_VAR_FILEBROWSER_PASSWORD}}
   widgets.yaml: |
     - greeting:
         text_size: xl
