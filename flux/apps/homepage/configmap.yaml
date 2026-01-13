@@ -213,9 +213,6 @@ data:
             app: duplicati
             namespace: system-addon
             podSelector: app in ( duplicati )
-        - Duplicati.com:
-            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
-            href: https://app.duplicati.com/app/dashboard
         - SpeedTest:
             icon: speedtest-tracker.png
             href: https://speedy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
