@@ -31,7 +31,11 @@ data:
       Arr Stack:
         header: true
         style: row
-        columns: 5
+        columns: 4
+        OtherMedia:
+          header: false
+          style: row
+          columns: 2
       Media Stack:
         style: row
         columns: 4
@@ -109,15 +113,25 @@ data:
               url: http://bazarr.multimedia-factory.svc:6767
               key: {{HOMEPAGE_VAR_BAZARR_API}}
               enableQueue: true
-        - Profilarr:
-            icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
-            href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://profilarr.multimedia-factory.svc:6868
-            description: Profilarr
-            showStats: false
-            app: profilarr
-            namespace: multimedia-factory
-            podSelector: app in ( profilarr )
+        - OtherMedia:
+          - Profilarr:
+              icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
+              href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+              siteMonitor: http://profilarr.multimedia-factory.svc:6868
+              description: Profilarr
+              showStats: false
+              app: profilarr
+              namespace: multimedia-factory
+              podSelector: app in ( profilarr )
+          - Maintainerr:
+              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png
+              href: https://maintainerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+              siteMonitor: http://maintainerr.multimedia-factory.svc:6246
+              description: Maintainerr
+              showStats: false
+              app: maintainerr
+              namespace: multimedia-factory
+              podSelector: app in ( maintainerr )
     - Media Stack:
         - Plex:
             icon: plex.svg

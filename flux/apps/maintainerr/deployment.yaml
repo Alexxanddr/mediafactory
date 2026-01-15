@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: maintainerr
+  name: maintainerr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: maintainerr
+  template:
+    metadata:
+      labels:
+        app: maintainerr
+    spec:
+      containers:
+      - name: maintainerr
+        image:  ghcr.io/maintainerr/maintainerr
+        ports:
+        - containerPort: 6246
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        volumeMounts:
+        - mountPath: /opt/data
+          name: maintainerr-config
+      volumes:
+      - name: maintainerr-config
+        persistentVolumeClaim:
+          claimName: maintainerr-config
