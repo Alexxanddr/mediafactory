@@ -23,6 +23,10 @@ spec:
     dnsHostPort:
       enabled: true
       port: 53
+    serviceDns:
+      mixedService: false
+      type: NodePort
+      port: 53
       nodePort: 53
     admin:
       enabled: true
@@ -35,4 +39,3 @@ spec:
     persistentVolumeClaim:
       enabled: true
       existingClaim: pihole-config
-
