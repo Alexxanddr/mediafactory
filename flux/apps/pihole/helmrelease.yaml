@@ -21,7 +21,7 @@ spec:
     serviceDhcp:
       enabled: false
     dnsHostPort:
-      enabled: false
+      enabled: true
       port: 53
     admin:
       enabled: true
@@ -34,10 +34,4 @@ spec:
     persistentVolumeClaim:
       enabled: true
       existingClaim: pihole-config
-    serviceDns:
-      type: LoadBalancer
-      externalTrafficPolicy: Cluster
-      annotations:
-        metallb.io/ip-allocated-from-pool: generic-cluster-pool
-        metallb.universe.tf/address-pool: generic-cluster-pool
 
