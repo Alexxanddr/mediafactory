@@ -14,6 +14,8 @@ spec:
         name: traefik
         namespace: flux-system
   values:
+    image:
+      pullPolicy: Always
     service:
       type: LoadBalancer
       annotations:
