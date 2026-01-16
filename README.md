@@ -39,6 +39,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg" width="16" height="16" alt="duplicati"> **[duplicati](https://www.duplicati.com/)**: Encrypted backup solution
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/metallb.svg" width="32" height="16" alt="metallb"> **[metallb](https://metallb.universe.tf/)**: Load balancer for bare metal Kubernetes
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg" width="32" height="16" alt="traefik"> **[traefik](https://traefik.io/)**: Cloud-native reverse proxy and load balancer
+- <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png" width="32" height="16" alt="pihole"> **[pihole](https://pi-hole.net)**: Network AD Blocker
 
 ## Media Management
 
@@ -53,6 +54,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg" width="16" height="16" alt="prowlarr"> **[prowlarr](https://prowlarr.com/)**: Indexer manager for *arr applications
 - <img src="https://raw.githubusercontent.com/qbittorrent/qBittorrent/master/src/icons/qbittorrent-tray.svg" width="16" height="16" alt="qbittorrent"> **[qbittorrent](https://www.qbittorrent.org/)**: BitTorrent client
 - <img src="https://radarr.video/img/logo.png" width="16" height="16" alt="radarr"> **[radarr](https://radarr.video/)**: Movie collection manager
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png" width="16" height="16" alt="maintainerr"> **[maintainerr](https://maintainerr.info)**: Media collection maintainer
 - <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr"> **[sonarr](https://sonarr.tv/)**: TV series collection manager
 - <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr - animeworld"> **[sonarr-animeworld](https://github.com/MainKronos/Sonarr-AnimeDownloader)**: TV series collection manager specific for anime
 - <img src="https://tautulli.com/images/logo.png" width="16" height="16" alt="tautulli"> **[tautulli](https://tautulli.com/)**: Plex analytics and monitoring
