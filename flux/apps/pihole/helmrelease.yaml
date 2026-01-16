@@ -15,29 +15,23 @@ spec:
                 namespace: flux-system
     values:
         ingress:
-        enabled: false
-
+            enabled: false
         serviceWeb:
-        type: ClusterIP
-
+            type: ClusterIP
         serviceDhcp:
-        enabled: false
-
+            enabled: false
         dnsHostPort:
-        enabled: true
-        port: 53
-
+            enabled: true
+            port: 53
         admin:
-        enabled: true
-        existingSecret: "pihole-credentials"
-        
+            enabled: true
+            existingSecret: "pihole-credentials"
         doh:
-        enabled: true
-        pullPolicy: Always
-        envVars: {
+            enabled: true
+            pullPolicy: Always
+            envVars: {
             DOH_UPSTREAM: "https://1.1.1.1/dns-query"
-        }
-        
+            }
         persistentVolumeClaim:
-        enabled: true
-        existingClaim: "pihole-config"
+            enabled: true
+            existingClaim: "pihole-config"
