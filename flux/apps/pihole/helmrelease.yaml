@@ -35,7 +35,7 @@ spec:
       enabled: true
       existingClaim: pihole-config
     serviceDns:
-      type: NodePort
+      type: LoadBalancer
       externalTrafficPolicy: Cluster
       annotations:
         metallb.io/ip-allocated-from-pool: generic-cluster-pool
