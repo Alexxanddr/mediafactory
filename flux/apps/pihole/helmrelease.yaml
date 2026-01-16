@@ -34,11 +34,10 @@ spec:
     persistentVolumeClaim:
       enabled: true
       existingClaim: pihole-config
-    serviceTCP:
+    serviceDns:
+      type: NodePort
+      externalTrafficPolicy: Cluster
       annotations:
         metallb.io/ip-allocated-from-pool: generic-cluster-pool
         metallb.universe.tf/address-pool: generic-cluster-pool
-    serviceUDP:
-      annotations:
-        metallb.io/ip-allocated-from-pool: generic-cluster-pool
-        metallb.universe.tf/address-pool: generic-cluster-pool
+

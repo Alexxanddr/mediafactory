@@ -35,11 +35,7 @@ data:
         OtherMedia:
           header: false
           style: row
-          columns: 2
-        OtherMedia2:
-          header: false
-          style: row
-          columns: 2
+          columns: 3
       Media Stack:
         style: row
         columns: 4
@@ -136,7 +132,6 @@ data:
               app: maintainerr
               namespace: multimedia-factory
               podSelector: app in ( maintainerr )
-        - OtherMedia2:
           - AnimeWorld Sonarr:
               icon: https://www.svgrepo.com/show/514661/animeworld.svg
               href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
