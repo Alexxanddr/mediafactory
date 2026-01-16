@@ -280,7 +280,7 @@ data:
               key: {{HOMEPAGE_VAR_CLOUDFLARED_API_KEY}}
         - PiHole:
             icon: pihole.svg
-            href: https://pihole.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            href: https://pihole.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/admin
             showStats: false
             app: pihole
             namespace: extra-tools
