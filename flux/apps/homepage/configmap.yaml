@@ -32,25 +32,28 @@ data:
         header: true
         style: row
         columns: 4
-        OtherMedia:
-          header: false
-          style: row
-          columns: 3
+      OtherMedia:
+        header: false
+        style: row
+        columns: 3
       Media Stack:
         style: row
-        columns: 4
+        columns: 5
       Infra Stack:
         style: row
         columns: 4
-        Other:
-          header: false
-          style: row
-          columns: 3
+      OtherInfra:
+        header: false
+        style: row
+        columns: 3
 
       Tools:
         style: row
-        columns: 4
-
+        columns: 3
+      OtherTools:
+        header: false
+        style: row
+        columns: 2
   custom.css: ""
   custom.js: ""
   # docker.yaml: ""
@@ -113,33 +116,33 @@ data:
               url: http://bazarr.multimedia-factory.svc:6767
               key: {{HOMEPAGE_VAR_BAZARR_API}}
               enableQueue: true
-        - OtherMedia:
-          - Profilarr:
-              icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
-              href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-              siteMonitor: http://profilarr.multimedia-factory.svc:6868
-              description: Profilarr
-              showStats: false
-              app: profilarr
-              namespace: multimedia-factory
-              podSelector: app in ( profilarr )
-          - Maintainerr:
-              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png
-              href: https://maintainerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-              siteMonitor: http://maintainerr.multimedia-factory.svc:6246
-              description: Maintainerr
-              showStats: false
-              app: maintainerr
-              namespace: multimedia-factory
-              podSelector: app in ( maintainerr )
-          - AnimeWorld Sonarr:
-              icon: https://www.svgrepo.com/show/514661/animeworld.svg
-              href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-              siteMonitor: http://animeworld.multimedia-factory.svc:5000
-              showStats: false
-              app: animeworld
-              namespace: multimedia-factory
-              podSelector: app in ( animeworld )
+    - OtherMedia:
+      - Profilarr:
+          icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
+          href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://profilarr.multimedia-factory.svc:6868
+          description: Profilarr
+          showStats: false
+          app: profilarr
+          namespace: multimedia-factory
+          podSelector: app in ( profilarr )
+      - Maintainerr:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png
+          href: https://maintainerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://maintainerr.multimedia-factory.svc:6246
+          description: Maintainerr
+          showStats: false
+          app: maintainerr
+          namespace: multimedia-factory
+          podSelector: app in ( maintainerr )
+      - AnimeWorld Sonarr:
+          icon: https://www.svgrepo.com/show/514661/animeworld.svg
+          href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://animeworld.multimedia-factory.svc:5000
+          showStats: false
+          app: animeworld
+          namespace: multimedia-factory
+          podSelector: app in ( animeworld )
     - Media Stack:
         - Plex:
             icon: plex.svg
@@ -219,14 +222,6 @@ data:
               url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
               username: {{HOMEPAGE_VAR_UBIQUITI_USER}}
               password: {{HOMEPAGE_VAR_UBIQUITI_PASSWORD}}
-        - Duplicati:
-            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
-            href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://duplicati.system-addon.svc:8200
-            showStats: false
-            app: duplicati
-            namespace: system-addon
-            podSelector: app in ( duplicati )
         - SpeedTest:
             icon: speedtest-tracker.png
             href: https://speedy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -290,13 +285,21 @@ data:
               url: http://pihole-web.extra-tools.svc
               version: 6
               key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
-        - Other:
-          - Metoro:
-              icon: https://metoro.io/static/images/Metoro_16_9.svg
-              href: https://us-east.metoro.io/
-          - Duplicati.com:
-              icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
-              href: https://app.duplicati.com/app/dashboard
+    - OtherInfra:
+      - Metoro:
+          icon: https://metoro.io/static/images/Metoro_16_9.svg
+          href: https://us-east.metoro.io/
+      - Duplicati.com:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
+          href: https://app.duplicati.com/app/dashboard
+      - Duplicati:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
+          href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://duplicati.system-addon.svc:8200
+          showStats: false
+          app: duplicati
+          namespace: system-addon
+          podSelector: app in ( duplicati )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
@@ -338,22 +341,23 @@ data:
               type: romm
               url: http://romm.gaming.svc:8080
               fields: ["platforms", "totalRoms", "saves", "states"]
-        - Playerr:
-            icon: https://github.com/Maikboarder/Playerr/blob/master/frontend/src/assets/app_logo.png?raw=true
-            href: https://playerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://playerr.gaming.svc:2727
-            showStats: false
-            app: playerr
-            namespace: gaming
-            podSelector: app in ( playerr )
-        - File Browser Quantum:
-            icon: filebrowser.png
-            href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://filebrowser.extra-tools.svc:80
-            showStats: false
-            app: filebrowser
-            namespace: extra-tools
-            podSelector: app in ( filebrowser )
+    - OtherTools:
+      - Playerr:
+          icon: https://github.com/Maikboarder/Playerr/blob/master/frontend/src/assets/app_logo.png?raw=true
+          href: https://playerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://playerr.gaming.svc:2727
+          showStats: false
+          app: playerr
+          namespace: gaming
+          podSelector: app in ( playerr )
+      - File Browser Quantum:
+          icon: filebrowser.png
+          href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://filebrowser.extra-tools.svc:80
+          showStats: false
+          app: filebrowser
+          namespace: extra-tools
+          podSelector: app in ( filebrowser )
   widgets.yaml: |
     - greeting:
         text_size: xl

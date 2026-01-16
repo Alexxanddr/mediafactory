@@ -36,3 +36,6 @@ spec:
               to: websecure
               scheme: https
               permanent: true
+        api:
+            dashboard: true
+            insecure: false
