@@ -1,37 +1,44 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: pihole
-    namespace: extra-tools
+  name: pihole
+  namespace: extra-tools
 spec:
-    releaseName: pihole
-    interval: 5m
-    chart:
-        spec:
-            chart: pihole
-            sourceRef:
-                kind: HelmRepository
-                name: pihole
-                namespace: flux-system
-    values:
-        ingress:
-            enabled: false
-        serviceWeb:
-            type: ClusterIP
-        serviceDhcp:
-            enabled: false
-        dnsHostPort:
-            enabled: true
-            port: 53
-        admin:
-            enabled: true
-            existingSecret: "pihole-credentials"
-        doh:
-            enabled: true
-            pullPolicy: Always
-            envVars: {
-            DOH_UPSTREAM: "https://1.1.1.1/dns-query"
-            }
-        persistentVolumeClaim:
-            enabled: true
-            existingClaim: "pihole-config"
+  releaseName: pihole
+  interval: 5m
+  chart:
+    spec:
+      chart: pihole
+      sourceRef:
+        kind: HelmRepository
+        name: pihole
+        namespace: flux-system
+  values:
+    ingress:
+      enabled: false
+    serviceWeb:
+      type: ClusterIP
+    serviceDhcp:
+      enabled: false
+    dnsHostPort:
+      enabled: false
+      port: 53
+    admin:
+      enabled: true
+      existingSecret: pihole-credentials
+    doh:
+      enabled: true
+      pullPolicy: Always
+      envVars:
+        DOH_UPSTREAM: 'https://1.1.1.1/dns-query'
+    persistentVolumeClaim:
+      enabled: true
+      existingClaim: pihole-config
+    serviceTCP:
+      annotations:
+        metallb.io/ip-allocated-from-pool: generic-cluster-pool
+        metallb.universe.tf/address-pool: generic-cluster-pool
+    serviceUDP:
+      annotations:
+        metallb.io/ip-allocated-from-pool: generic-cluster-pool
+        metallb.universe.tf/address-pool: generic-cluster-pool

@@ -28,8 +28,6 @@ spec:
         providers:
             kubernetesGateway:
                 enabled: true
-            docker:
-              exposedByDefault: false
         gateway:
             namespacePolicy: All
         web:
