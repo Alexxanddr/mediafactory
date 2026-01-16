@@ -45,7 +45,7 @@ data:
       OtherInfra:
         header: false
         style: row
-        columns: 4
+        columns: 3
 
       Tools:
         style: row
@@ -300,14 +300,6 @@ data:
           app: duplicati
           namespace: system-addon
           podSelector: app in ( duplicati )
-      - Capacitor:
-          icon: https://fluxcd.io/img/logos/flux-stacked-color.png
-          href: https://capacitor.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://capacitor.flux-system.svc:9000
-          showStats: false
-          app: capacitor
-          namespace: flux-system
-          podSelector: app.kubernetes.io/instance in ( capacitor )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
