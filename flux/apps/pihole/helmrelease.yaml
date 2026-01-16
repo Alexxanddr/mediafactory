@@ -24,7 +24,7 @@ spec:
       enabled: true
       port: 53
     serviceDns:
-      mixedService: false
+      mixedService: true
       type: NodePort
       port: 53
       nodePort: 53
