@@ -23,6 +23,7 @@ spec:
     dnsHostPort:
       enabled: true
       port: 53
+      nodePort: 53
     admin:
       enabled: true
       existingSecret: pihole-credentials
