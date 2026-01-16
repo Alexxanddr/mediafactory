@@ -279,7 +279,7 @@ data:
               tunnelid: {{HOMEPAGE_VAR_CLOUDFLARED_TUNNEL_ID}}
               key: {{HOMEPAGE_VAR_CLOUDFLARED_API_KEY}}
         - PiHole:
-            icon: pihole.svg
+            icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
             href: https://pihole.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/admin
             showStats: false
             app: pihole
@@ -289,7 +289,7 @@ data:
               type: pihole
               url: http://pihole-web.extra-tools.svc
               version: 6
-              password: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
+              key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
         - Other:
           - Metoro:
               icon: https://metoro.io/static/images/Metoro_16_9.svg
