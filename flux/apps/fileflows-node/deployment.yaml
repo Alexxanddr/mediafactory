@@ -16,6 +16,7 @@ spec:
       labels:
         app: fileflows-node
     spec:
+      runtimeClassName: nvidia
       containers:
       - name: fileflows-node
         image: revenz/fileflows
@@ -34,6 +35,10 @@ spec:
           value: http://fileflows.multimedia-factory.svc:5000
         - name: FFNODE
           value: "1"
+        - name: NVIDIA_DRIVER_CAPABILITIES
+          value: "compute,video,utility"
+        - name: NVIDIA_VISIBLE_DEVICES
+          value: "all"
         volumeMounts:
         - name: fileflows-node-common
           mountPath: /app/common
@@ -49,9 +54,11 @@ spec:
           requests:
             cpu: "500m"
             memory: "1Gi"
+            nvidia.com/gpu: "1"
           limits:
             cpu: "2"
             memory: "4Gi"
+            nvidia.com/gpu: "1"
       volumes:
       - name: fileflows-node-common
         persistentVolumeClaim:
