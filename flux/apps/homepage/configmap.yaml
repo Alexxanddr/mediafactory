@@ -173,18 +173,18 @@ data:
               enableLeechProgress: true
               enableLeechSize: true
               fields: ["leech", "download", "seed", "upload"]
-        - Jellyseerr:
+        - Seerr:
             icon: jellyseerr.svg
-            href: https://jellyseerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://jellyseerr.multimedia-factory.svc:5055
+            href: https://seerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://seerr.multimedia-factory.svc:5055
             showStats: false
-            app: jellyseerr
+            app: seerr
             namespace: multimedia-factory
-            podSelector: app in ( jellyseerr )
+            podSelector: app in ( seerr )
             widget:
               type: jellyseerr
-              url: http://jellyseerr.multimedia-factory.svc:5055
-              key: {{HOMEPAGE_VAR_JELLYSEERR_API}}
+              url: http://seerr.multimedia-factory.svc:5055
+              key: {{HOMEPAGE_VAR_SEERR_API}}
               fields: ["pending", "approved", "available", "issues"]
         - Tautulli:
             icon: tautulli.svg
