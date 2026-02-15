@@ -1,39 +1,53 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: jellyseerr
-  name: jellyseerr
+    app: seerr
+  name: seerr
   namespace: multimedia-factory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jellyseerr
+      app: seerr
   template:
     metadata:
       labels:
-        app: jellyseerr
+        app: seerr
     spec:
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
       containers:
-      - name: jellyseerr
-        image: fallenbagel/jellyseerr:latest
+      - name: seerr
+        image: ghcr.io/seerr-team/seerr:latest
         ports:
         - containerPort: 5055
         env:
         - name: PUID
-          value: '1000'
+          value: "1000"
         - name: PGID
-          value: '1000'
+          value: "1000"
         - name: UMASK
-          value: '002'
+          value: "002"
         - name: TZ
           value: Etc/UTC
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+              - ALL
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          privileged: false
+          runAsUser: 1000
+          runAsGroup: 1000
+          seccompProfile:
+            type: RuntimeDefault
         volumeMounts:
         - mountPath: /app/config
-          name: jellyseerr-config
+          name: seerr-config
       volumes:
-      - name: jellyseerr-config
+      - name: seerr-config
         persistentVolumeClaim:
-          claimName: jellyseerr-config
+          claimName: seerr-config
