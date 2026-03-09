@@ -14,6 +14,8 @@ spec:
         name: pihole
         namespace: flux-system
   values:
+    image:
+      tag: "latest"
     ingress:
       enabled: false
     serviceWeb:
