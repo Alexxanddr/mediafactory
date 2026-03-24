@@ -6,7 +6,7 @@ module "k3s" {
   cluster_domain = "cluster.local"
   drain_timeout  = "30s"
   managed_fields = ["label", "taint"]
-  global_flags   = ["--kubelet-arg=allowed-unsafe-sysctls=net.core.rmem_max", "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.ip_forward", "--kubelet-arg=allowed-unsafe-sysctls=net.core.wmem_max", "--kubelet-arg=allowed-unsafe-sysctls=net.core.rmem_max","--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark","--kubelet-arg=allowed-unsafe-sysctls=net.ipv6.conf.all.disable_ipv6"]
+  global_flags   = ["--kubelet-arg=allowed-unsafe-sysctls=net.core.rmem_max", "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.ip_forward", "--kubelet-arg=allowed-unsafe-sysctls=net.core.wmem_max", "--kubelet-arg=allowed-unsafe-sysctls=net.core.rmem_max", "--kubelet-arg=allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark", "--kubelet-arg=allowed-unsafe-sysctls=net.ipv6.conf.all.disable_ipv6"]
   servers = {
     k3s-server = {
       ip = var.master_server_list[0] // internal node IP

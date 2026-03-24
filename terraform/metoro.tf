@@ -14,7 +14,7 @@ resource "helm_release" "metoro_exporter" {
 
   repository = "https://metoro-io.github.io/metoro-helm-charts/"
   chart      = "metoro-exporter"
-  version    = "0.469.0"
+  version    = "0.470.0"
 
   set_sensitive {
     name  = "exporter.secret.bearerToken"

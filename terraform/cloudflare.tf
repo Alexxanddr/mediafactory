@@ -36,7 +36,7 @@ resource "cloudflare_zero_trust_access_policy" "policy_geo" {
   name     = "geo-policy"
   decision = "allow"
 
-include = [
+  include = [
     {
       geo = {
         country_code = "IT"
