@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qbittorrent-wg
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qbittorrent-wg
+  template:
+    metadata:
+      labels:
+        app: qbittorrent-wg
+    spec:
+      dnsPolicy: None
+      dnsConfig:
+        nameservers:
+          - 9.9.9.9
+          - 1.1.1.1
+      securityContext:
+        sysctls:
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "0"
+      containers:
+        - name: qbittorrent-wg
+          image: trigus42/qbittorrent-wgvpn
+          ports:
+            - containerPort: 8080
+          env:
+            - name: VPN_TYPE
+              value: "wireguard"
+            - name: VPN_ENABLED
+              value: "yes"
+            - name: WEBUI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: qbittorrent-wg-secret
+                  key: WEBUI_PASSWORD
+            - name: WEBUI_ALLOWED_NETWORKS
+              value: "192.168.0.0/16,10.0.0.0/8,172.16.0.0/16,127.0.0.0/8"
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          volumeMounts:
+          - mountPath: /config
+            name: qbittorrent-wg-config
+          - mountPath: /data
+            name: qbittorrent-wg-data
+          - name: wireguard-config
+            mountPath: /config/wireguard
+            readOnly: true
+      volumes:
+        - name: wireguard-config
+          secret:
+            secretName: qbittorrent-wg-wireguard-conf
+        - name: qbittorrent-wg-data
+          persistentVolumeClaim:
+            claimName: qbittorrent-wg-data
+        - name: qbittorrent-wg-config
+          persistentVolumeClaim:
+            claimName: qbittorrent-wg-config
