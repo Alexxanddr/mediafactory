@@ -159,15 +159,15 @@ data:
                 fields: [ "movies", "tv"]
         - qbittorrent:
             icon: qbittorrent.svg
-            href: https://qbittorrent.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://qbittorrent.multimedia-factory.svc:8080
+            href: https://qbittorrent-wg.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://qbittorrent-wg.multimedia-factory.svc:8080
             showStats: false
-            app: qbittorrent
+            app: qbittorrent-wg
             namespace: multimedia-factory
-            podSelector: app in ( qbittorrent )
+            podSelector: app in ( qbittorrent-wg )
             widget:
               type: qbittorrent
-              url: http://qbittorrent.multimedia-factory.svc:8080
+              url: http://qbittorrent-wg.multimedia-factory.svc:8080
               username: {{HOMEPAGE_VAR_QBITTORRENT_USER}}
               password: {{HOMEPAGE_VAR_QBITTORRENT_PASS}}
               enableLeechProgress: true
