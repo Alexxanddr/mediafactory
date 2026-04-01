@@ -7,7 +7,7 @@ spec:
         email: sottile.alessandro10@gmail.com
         privateKeySecretRef:
             name: letsencrypt-apigateway-production
-        server: https://acme-v02.api.letsencrypt.org./directory
+        server: https://acme-v02.api.letsencrypt.org/directory
         solvers:
             - dns01:
                 cloudflare:
@@ -25,7 +25,7 @@ sops:
             Qy9MRWRtblR6NzVkb1ZhMU5hTHQ5WncK9Lnhf2ytvjgBEUGgRGZV8ZcUCdDOziiX
             VYNUv4r0y+cyAFCEpx8zCXR2Ke5n7usMYq9mkgWcGtdDOa6tGa8Mrw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-02T10:13:30Z"
-    mac: ENC[AES256_GCM,data:QFgutIOsBv0nZxPTdzNIzdXQafSggBESO7g7qsqdDGb1wVCwHJv2CtH2h+Bb6cZgXCvoUREEVaDjuScFZCEapSs7iQp8V92NWDG/2nphEw4+tF7bDPaPpzgXqdbc1PjzG0lmALi+/YdaNKI9XqlFkPtcQHNp6cR+F4AoXSPk+ac=,iv:cr7fA6ptVT1lqMw67dN49CvZiI0skUAsG6FOEvQe+lo=,tag:Ud3276seSjZk3T/cZc3cKA==,type:str]
+    lastmodified: "2026-04-01T09:53:47Z"
+    mac: ENC[AES256_GCM,data:z+tydWxmuI53hxtEt0i1FxXxhq3geuvoAR99v063GCoJdJKfCn6FWKJ4mmfKs5FWWiPgJOw4rZgyiVehbqOBe/ql7OWcb/M45MZljWlXp8AxhVLG69T9gKo94fqQIKA6Y7cN5KXrsRqVGwmdZmb7Q1j4KhyIWyX8u9ONaM11iCM=,iv:k0Sry6z5s7BhPgJKV1hz49NoZTuhA8Rtzv0gSxwWRUs=,tag:txx6iRUvP/A4t2/RA0uDZQ==,type:str]
     encrypted_regex: ^(data|stringData)$
-    version: 3.11.0
+    version: 3.12.2
