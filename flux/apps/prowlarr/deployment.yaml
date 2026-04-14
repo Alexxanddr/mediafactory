@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: multimedia-vpn-stack
+  name: prowlarr
   namespace: multimedia-factory
   labels:
-    app: multimedia-vpn-stack
+    app: prowlarr
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: multimedia-vpn-stack
+      app: prowlarr
   template:
     metadata:
       labels:
-        app: multimedia-vpn-stack
+        app: prowlarr
     spec:
       containers:
 
