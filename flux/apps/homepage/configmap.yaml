@@ -186,18 +186,19 @@ data:
               url: http://seerr.multimedia-factory.svc:5055
               key: {{HOMEPAGE_VAR_SEERR_API}}
               fields: ["pending", "approved", "available", "issues"]
-        - Tautulli:
-            icon: tautulli.svg
-            href: https://tautulli.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/home
-            siteMonitor: http://tautulli.multimedia-factory.svc:8181
+        - Tracearr:
+            icon: tracearr.svg
+            href: https://tracearr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
+            siteMonitor: http://tracearr.multimedia-factory.svc:3000
             showStats: false
-            app: tautulli
+            app: tracearr
             namespace: multimedia-factory
-            podSelector: app in ( tautulli )
+            podSelector: app in ( tracearr )
             widget:
-              type: tautulli
-              url: http://tautulli.multimedia-factory.svc:8181
-              key: {{HOMEPAGE_VAR_TAUTULLI_API}}
+              type: tracearr
+              url: http://tracearr.multimedia-factory.svc:3000
+              key: {{HOMEPAGE_VAR_TRACEARR_API}}
+              view: both # optional, "summary", "details", or "both", defaults to "details"
               enableUser: true # optional, defaults to false
               showEpisodeNumber: true # optional, defaults to false
               expandOneStreamToTwoRows: false # optional, defaults to true
