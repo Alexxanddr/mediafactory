@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tracearr-timescale
+  namespace: multimedia-factory
 spec:
   ports:
     - port: 5432
@@ -14,6 +15,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tracearr-redis
+  namespace: multimedia-factory
 spec:
   ports:
     - port: 6379
@@ -25,6 +27,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: tracearr
+  namespace: multimedia-factory
 spec:
   ports:
     - port: 3000
