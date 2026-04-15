@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: tracearr
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:H53bpl0A1FpjYEDPR1lJUk16wQYj27Z8R13CuWaw,iv:sTLrp8M3XbjA7qiEk8DdU/nsWFPmNdA4kENwUTeIaNI=,tag:MWkC5z6Anvwv67of14KlTA==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: tracearr
+              port: 3000
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBXUjdsUlE0aGxnTmxKS0U5
+            Q3F6QWtzc3h4bDdjWWg3NDAwWVdWMEtUaWdBCmNHQSthR25FOGRwRkdLbHkwZHVI
+            Q2VjK29KZVhBSG1EcEhWdHNGZ2RSbTgKLS0tIC9TNkhiOWdZdGwvaWJwaTBnNk5Z
+            T1pjM2o5L3J5VnZzNnQyd1U4dUhkQkkKE9ayiSMFyrLHzJqNhCeAgykYslK+reHt
+            yRO+F+7ZVtGyBY8dl7DE/3OCoQrRnf5fQOgOlW5DsnjsB6fL/1HpVQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-15T08:30:54Z"
+    mac: ENC[AES256_GCM,data:M+k/MK7oRNhlA9LCL6zmc87PgtQA6HOouketiUwVO7D6fdIqV/fbTf+D6QmCmYU45/wUtIB8R0cs+pRnK82d81FNIOdCRne/13Ywtn0jKqM6kFL7MYT1NqLmsvqK1X6qJ0dkx0De/HtRhkrDKeGb9671F7bfM1pSRrbAHe780Ls=,iv:20zALrvU+GsPb3Awhz0yxFnKX67R/meqf66hdgdtpQo=,tag:sMGqo2uSlXWv5eaYvkrOmA==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
