@@ -45,6 +45,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 
 - <img src="https://raw.githubusercontent.com/morpheus65535/bazarr/master/frontend/public/images/logo128.png" width="16" height="16" alt="bazarr"> **[bazarr](https://www.bazarr.media/)**: Subtitle management for Sonarr and Radarr
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/fileflows.svg" width="16" height="16" alt="fileflows"> **[fileflows](https://fileflows.com/)**: File processing and automation workflows
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nvidia.svg" width="16" height="16" alt="nvidia"> **[nvidia](https://github.com/nvidia/gpu-operator)**: Nvidia GPU Operator
 - <img src="https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/master/resources/flaresolverr_logo.svg" width="16" height="16" alt="flaresolverr"> **[flaresolverr](https://github.com/FlareSolverr/FlareSolverr)**: Proxy server to bypass Cloudflare protection
 - <img src="https://avatars.githubusercontent.com/u/122929872?v=4" width="16" height="16" alt="homepage"> **[homepage](https://gethomepage.dev/)**: Customizable application dashboard
 - <img src="https://raw.githubusercontent.com/seerr-team/seerr/develop/public/logo_full.svg" width="32" height="16" alt="seerr"> **[seerr](https://github.com/seerr-team/seerr)**: Media request management for Jellyfin/Plex
@@ -57,7 +58,8 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png" width="16" height="16" alt="maintainerr"> **[maintainerr](https://maintainerr.info)**: Media collection maintainer
 - <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr"> **[sonarr](https://sonarr.tv/)**: TV series collection manager
 - <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr - animeworld"> **[sonarr-animeworld](https://github.com/MainKronos/Sonarr-AnimeDownloader)**: TV series collection manager specific for anime
-- <img src="https://tautulli.com/images/logo.png" width="16" height="16" alt="tautulli"> **[tautulli](https://tautulli.com/)**: Plex analytics and monitoring
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tracearr.svg" width="16" height="16" alt="tracearr"> **[tracearr](https://github.com/connorgallopo/Tracearr/tree/main)**: Plex analytics and monitoring
+- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/gluetun.svg" width="16" height="16" alt="gluetun"> **[gluetun](https://github.com/qdm12/gluetun)**: VPN Client
 
 ## Gaming
 - <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg" width="16" height="16" alt="RomM"> **[RomM](https://romm.app)**: Rom Manager and Player 
