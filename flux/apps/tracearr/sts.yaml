@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tracearr-timescale
+  namespace: multimedia-factory
+spec:
+  serviceName: tracearr-timescale
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tracearr-timescale
+  template:
+    metadata:
+      labels:
+        app: tracearr-timescale
+    spec:
+      containers:
+        - name: timescale
+          image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+          args:
+            - postgres
+            - -c
+            - timescaledb.license=timescale
+            - -c
+            - timescaledb.max_tuples_decompressed_per_dml_transaction=0
+            - -c
+            - max_locks_per_transaction=4096
+            - -c
+            - timescaledb.telemetry_level=off
+          env:
+            - name: POSTGRES_USER
+              value: tracearr
+            - name: POSTGRES_DB
+              value: tracearr
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: tracearr-secret
+                  key: DB_PASSWORD
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: data
+              mountPath: /home/postgres/pgdata/data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: tracearr-timescale-config
