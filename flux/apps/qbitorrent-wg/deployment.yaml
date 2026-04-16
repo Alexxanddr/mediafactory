@@ -29,16 +29,14 @@ spec:
           image: trigus42/qbittorrentvpn
           ports:
             - containerPort: 8080
+          envFrom:
+          - secretRef:
+              name: wireguard-config
           env:
             - name: VPN_TYPE
               value: "wireguard"
             - name: VPN_ENABLED
               value: "yes"
-            - name: WEBUI_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: qbittorrent-wg-secret
-                  key: WEBUI_PASSWORD
             - name: WEBUI_ALLOWED_NETWORKS
               value: "192.168.0.0/16,10.0.0.0/8,172.16.0.0/16,127.0.0.0/8"
           securityContext:
@@ -53,6 +51,26 @@ spec:
           - name: wireguard-config
             mountPath: /config/wireguard
             readOnly: true
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
+            initialDelaySeconds: 5
+            periodSeconds: 3
+            timeoutSeconds: 2
+            failureThreshold: 3
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 2
+            failureThreshold: 3
       volumes:
         - name: wireguard-config
           secret:
