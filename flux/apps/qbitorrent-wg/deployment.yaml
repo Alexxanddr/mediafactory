@@ -31,7 +31,7 @@ spec:
             - containerPort: 8080
           envFrom:
           - secretRef:
-              name: wireguard-config
+              name: qbittorrent-wg-secret
           env:
             - name: VPN_TYPE
               value: "wireguard"
