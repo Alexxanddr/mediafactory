@@ -28,49 +28,59 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 
 ## Infrastructure & Networking
 
-- <img src="https://artifacthub.io/image/77a66245-d325-4c09-815f-75344b3eb82c@3x" width="16" height="16" alt="cert-manager"> **[cert-manager](https://cert-manager.io/)**: X.509 certificate management for Kubernetes
-- <img src="https://uptime.kuma.pet/img/icon.svg" width="16" height="16" alt="uptime-kuma"> **[uptime-kuma](https://github.com/louislam/uptime-kuma)**: Self-hosted uptime monitoring tool
-- <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Flux_color_logo.png" width="16" height="16" alt="flux"> **[flux](https://fluxcd.io/)**: GitOps continuous delivery for Kubernetes
-- <img src="https://github.com/homebridge/branding/raw/latest/logos/homebridge-color-round.svg" width="16" height="16" alt="homebridge"> **[homebridge](https://homebridge.io/)**: HomeKit support for smart home devices
-- <img src="https://www.miamammausalinux.org/wp-content/uploads/2019/11/logo_coredns-1.png" width="16" height="16" alt="coredns"> **[coredns](https://coredns.io)**:  Core DNS service
-- <img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg" width="16" height="16" alt="metrics-server"> **[metrics-server](https://github.com/kubernetes-sigs/metrics-server)**: Kubernetes resource metrics aggregator
-- <img src="https://metoro.io/static/images/Metoro_16_9.svg" width="16" height="16" alt="metoro">  **[metoro-exporter](https://metoro.io/)**: Platform for Observability
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/cloudflare.svg" width="16" height="16" alt="cloudflared"> **[cloudflared](https://github.com/cloudflare/cloudflared)**: Cloudflare Tunnel client
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg" width="16" height="16" alt="duplicati"> **[duplicati](https://www.duplicati.com/)**: Encrypted backup solution
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/metallb.svg" width="32" height="16" alt="metallb"> **[metallb](https://metallb.universe.tf/)**: Load balancer for bare metal Kubernetes
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg" width="32" height="16" alt="traefik"> **[traefik](https://traefik.io/)**: Cloud-native reverse proxy and load balancer
-- <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png" width="32" height="16" alt="pihole"> **[pihole](https://pi-hole.net)**: Network AD Blocker
+<table>
+<tr><td><img src="https://artifacthub.io/image/77a66245-d325-4c09-815f-75344b3eb82c@3x" width="16"></td><td><b><a href="https://cert-manager.io/">cert-manager</a></b></td><td>X.509 certificate management for Kubernetes</td></tr>
+<tr><td><img src="https://uptime.kuma.pet/img/icon.svg" width="16"></td><td><b><a href="https://github.com/louislam/uptime-kuma">uptime-kuma</a></b></td><td>Self-hosted uptime monitoring tool</td></tr>
+<tr><td><img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Flux_color_logo.png" width="16"></td><td><b><a href="https://fluxcd.io/">flux</a></b></td><td>GitOps continuous delivery for Kubernetes</td></tr>
+<tr><td><img src="https://github.com/homebridge/branding/raw/latest/logos/homebridge-color-round.svg" width="16"></td><td><b><a href="https://homebridge.io/">homebridge</a></b></td><td>HomeKit support for smart home devices</td></tr>
+<tr><td><img src="https://www.miamammausalinux.org/wp-content/uploads/2019/11/logo_coredns-1.png" width="16"></td><td><b><a href="https://coredns.io">coredns</a></b></td><td>Core DNS service</td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/kubernetes/kubernetes/master/logo/logo.svg" width="16"></td><td><b><a href="https://github.com/kubernetes-sigs/metrics-server">metrics-server</a></b></td><td>Kubernetes resource metrics aggregator</td></tr>
+<tr><td><img src="https://metoro.io/static/images/Metoro_16_9.svg" width="16"></td><td><b><a href="https://metoro.io/">metoro-exporter</a></b></td><td>Platform for Observability</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/cloudflare.svg" width="16"></td><td><b><a href="https://github.com/cloudflare/cloudflared">cloudflared</a></b></td><td>Cloudflare Tunnel client</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg" width="16"></td><td><b><a href="https://www.duplicati.com/">duplicati</a></b></td><td>Encrypted backup solution</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/metallb.svg" width="32"></td><td><b><a href="https://metallb.universe.tf/">metallb</a></b></td><td>Load balancer for bare metal Kubernetes</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg" width="32"></td><td><b><a href="https://traefik.io/">traefik</a></b></td><td>Cloud-native reverse proxy and load balancer</td></tr>
+<tr><td><img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png" width="32"></td><td><b><a href="https://pi-hole.net">pihole</a></b></td><td>Network AD Blocker</td></tr>
+</table>
 
 ## Media Management
 
-- <img src="https://raw.githubusercontent.com/morpheus65535/bazarr/master/frontend/public/images/logo128.png" width="16" height="16" alt="bazarr"> **[bazarr](https://www.bazarr.media/)**: Subtitle management for Sonarr and Radarr
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/fileflows.svg" width="16" height="16" alt="fileflows"> **[fileflows](https://fileflows.com/)**: File processing and automation workflows
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nvidia.svg" width="16" height="16" alt="nvidia"> **[nvidia](https://github.com/nvidia/gpu-operator)**: Nvidia GPU Operator
-- <img src="https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/master/resources/flaresolverr_logo.svg" width="16" height="16" alt="flaresolverr"> **[flaresolverr](https://github.com/FlareSolverr/FlareSolverr)**: Proxy server to bypass Cloudflare protection
-- <img src="https://avatars.githubusercontent.com/u/122929872?v=4" width="16" height="16" alt="homepage"> **[homepage](https://gethomepage.dev/)**: Customizable application dashboard
-- <img src="https://raw.githubusercontent.com/seerr-team/seerr/develop/public/logo_full.svg" width="32" height="16" alt="seerr"> **[seerr](https://github.com/seerr-team/seerr)**: Media request management for Jellyfin/Plex
-- <img src="https://play-lh.googleusercontent.com/QO403y5ms9nf7AS8n1rAc8K2k1dXqYjUBOyAaJMvR33a71vH6IYplZPdcJGw2YRRmo8" width="16" height="16" alt="plex"> **[PlexTraktSync](https://github.com/Taxel/PlexTraktSync)**: Sync Plex views to Trakt.tv
-- <img src="https://images.seeklogo.com/logo-png/45/2/plex-tv-logo-png_seeklogo-450440.png" width="16" height="16" alt="plex"> **[plex-media-server](https://www.plex.tv/)**: Media server and streaming platform
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/profilarr.svg" width="16" height="16" alt="plex"> **[profilarr](https://github.com/Dictionarry-Hub/profilarr)**: Profile management for Sonarr/Radarr
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg" width="16" height="16" alt="prowlarr"> **[prowlarr](https://prowlarr.com/)**: Indexer manager for *arr applications
-- <img src="https://raw.githubusercontent.com/qbittorrent/qBittorrent/master/src/icons/qbittorrent-tray.svg" width="16" height="16" alt="qbittorrent"> **[qbittorrent](https://www.qbittorrent.org/)**: BitTorrent client
-- <img src="https://radarr.video/img/logo.png" width="16" height="16" alt="radarr"> **[radarr](https://radarr.video/)**: Movie collection manager
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png" width="16" height="16" alt="maintainerr"> **[maintainerr](https://maintainerr.info)**: Media collection maintainer
-- <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr"> **[sonarr](https://sonarr.tv/)**: TV series collection manager
-- <img src="https://sonarr.tv/img/logo.png" width="16" height="16" alt="sonarr - animeworld"> **[sonarr-animeworld](https://github.com/MainKronos/Sonarr-AnimeDownloader)**: TV series collection manager specific for anime
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tracearr.svg" width="16" height="16" alt="tracearr"> **[tracearr](https://github.com/connorgallopo/Tracearr/tree/main)**: Plex analytics and monitoring
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/gluetun.svg" width="16" height="16" alt="gluetun"> **[gluetun](https://github.com/qdm12/gluetun)**: VPN Client
+<table>
+<tr><td><img src="https://raw.githubusercontent.com/morpheus65535/bazarr/master/frontend/public/images/logo128.png" width="16"></td><td><b><a href="https://www.bazarr.media/">bazarr</a></b></td><td>Subtitle management for Sonarr and Radarr</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/fileflows.svg" width="16"></td><td><b><a href="https://fileflows.com/">fileflows</a></b></td><td>File processing and automation workflows</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/nvidia.svg" width="16"></td><td><b><a href="https://github.com/nvidia/gpu-operator">nvidia</a></b></td><td>Nvidia GPU Operator</td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/master/resources/flaresolverr_logo.svg" width="16"></td><td><b><a href="https://github.com/FlareSolverr/FlareSolverr">flaresolverr</a></b></td><td>Proxy server to bypass Cloudflare protection</td></tr>
+<tr><td><img src="https://avatars.githubusercontent.com/u/122929872?v=4" width="16"></td><td><b><a href="https://gethomepage.dev/">homepage</a></b></td><td>Customizable application dashboard</td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/seerr-team/seerr/develop/public/logo_full.svg" width="32"></td><td><b><a href="https://github.com/seerr-team/seerr">seerr</a></b></td><td>Media request management for Jellyfin/Plex</td></tr>
+<tr><td><img src="https://play-lh.googleusercontent.com/QO403y5ms9nf7AS8n1rAc8K2k1dXqYjUBOyAaJMvR33a71vH6IYplZPdcJGw2YRRmo8" width="16"></td><td><b><a href="https://github.com/Taxel/PlexTraktSync">PlexTraktSync</a></b></td><td>Sync Plex views to Trakt.tv</td></tr>
+<tr><td><img src="https://images.seeklogo.com/logo-png/45/2/plex-tv-logo-png_seeklogo-450440.png" width="16"></td><td><b><a href="https://www.plex.tv/">plex-media-server</a></b></td><td>Media server and streaming platform</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/profilarr.svg" width="16"></td><td><b><a href="https://github.com/Dictionarry-Hub/profilarr">profilarr</a></b></td><td>Profile management for Sonarr/Radarr</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/prowlarr.svg" width="16"></td><td><b><a href="https://prowlarr.com/">prowlarr</a></b></td><td>Indexer manager for *arr applications</td></tr>
+<tr><td><img src="https://raw.githubusercontent.com/qbittorrent/qBittorrent/master/src/icons/qbittorrent-tray.svg" width="16"></td><td><b><a href="https://www.qbittorrent.org/">qbittorrent</a></b></td><td>BitTorrent client</td></tr>
+<tr><td><img src="https://radarr.video/img/logo.png" width="16"></td><td><b><a href="https://radarr.video/">radarr</a></b></td><td>Movie collection manager</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/maintainerr.png" width="16"></td><td><b><a href="https://maintainerr.info">maintainerr</a></b></td><td>Media collection maintainer</td></tr>
+<tr><td><img src="https://sonarr.tv/img/logo.png" width="16"></td><td><b><a href="https://sonarr.tv/">sonarr</a></b></td><td>TV series collection manager</td></tr>
+<tr><td><img src="https://sonarr.tv/img/logo.png" width="16"></td><td><b><a href="https://github.com/MainKronos/Sonarr-AnimeDownloader">sonarr-animeworld</a></b></td><td>TV series collection manager specific for anime</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tracearr.svg" width="16"></td><td><b><a href="https://github.com/connorgallopo/Tracearr/tree/main">tracearr</a></b></td><td>Plex analytics and monitoring</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/gluetun.svg" width="16"></td><td><b><a href="https://github.com/qdm12/gluetun">gluetun</a></b></td><td>VPN Client</td></tr>
+</table>
 
 ## Gaming
-- <img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg" width="16" height="16" alt="RomM"> **[RomM](https://romm.app)**: Rom Manager and Player 
-- <img src="https://github.com/Maikboarder/Playerr/blob/master/frontend/public/favicon.png?raw=true" width="16" height="16" alt="Playerr"> **[Playerr](https://github.com/Maikboarder/Playerr)**: Arr Stack for gaming
+
+<table>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg" width="16" height="16" alt="RomM"></td><td><b><a href="https://romm.app">bazarr</a></b></td><td>Rom Manager and Player </td></tr>
+<tr><td><img src="https://github.com/Maikboarder/Playerr/blob/master/frontend/public/favicon.png?raw=true" width="16"></td><td><b><a href="https://github.com/Maikboarder/Playerr">Playerr</a></b></td><td>Arr Stack for gaming</td></tr>
+</table>
+
 
 
 ## Utilities
 
-- 🐇 **[speedtest-tracker](https://github.com/alexjustesen/speedtest-tracker)**: Network speed monitoring and tracking
-- <img src="https://img.icons8.com/ios_filled/512/spotify.png" width="16" height="16" alt="your_spotify"> **[Your Spotify](https://github.com/Yooooomi/your_spotify)**: Self hosted Spotify tracking dashboard
-- <img src="https://filebrowserquantum.com/logo.svg" width="16" height="16" alt="FileBrowser Quantum"> **[FileBrowser Quantum](https://filebrowserquantum.com/en/)**: File Browser
+<table>
+<tr><td>🐇</td><td><b><a href="https://github.com/alexjustesen/speedtest-tracker">speedtest-tracker</a></b></td><td>Network speed monitoring and tracking</td></tr>
+<tr><td><img src="https://img.icons8.com/ios_filled/512/spotify.png" width="16" height="16" alt="RomM"></td><td><b><a href="https://github.com/Yooooomi/your_spotify">Your Spotify</a></b></td><td>Self hosted Spotify tracking dashboard</td></tr>
+<tr><td><img src="https://filebrowserquantum.com/logo.svg" width="16"></td><td><b><a href="https://filebrowserquantum.com/en/">FileBrowser Quantum</a></b></td><td>File Browser</td></tr>
+</table>
 
 ## 📋 Key Features
 
