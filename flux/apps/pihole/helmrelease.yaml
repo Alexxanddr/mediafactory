@@ -16,6 +16,7 @@ spec:
   values:
     image:
       tag: "latest"
+      pullPolicy: Always
     ingress:
       enabled: false
     serviceWeb:
