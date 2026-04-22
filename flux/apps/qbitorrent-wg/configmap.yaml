@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qbittorrent-wg-custom-s6
+  namespace: multimedia-factory
+data:
+  setup-custom-s6.sh: |
+    #!/usr/bin/with-contenv sh
+    echo "[custom-s6] Cleaning up wg0 if exists..."
+    wg-quick down /config/wireguard/wg0.conf 2>/dev/null || true
+    ip link delete wg0 2>/dev/null || true
