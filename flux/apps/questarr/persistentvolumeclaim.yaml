@@ -1,0 +1,15 @@
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: questarr-data
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: questarr-data

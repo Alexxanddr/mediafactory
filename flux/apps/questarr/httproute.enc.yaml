@@ -1,22 +1,22 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-    name: playerr
+    name: questarr
     namespace: gaming
 spec:
     parentRefs:
         - name: traefik-gateway
           namespace: system-addon
     hostnames:
-        - ENC[AES256_GCM,data:0y88vaX6/Y2vOYfgpzyKIUbAuR2dUNVfzXWFaT0=,iv:ziM+xhNpWU0ZlGBBrvp6iE4xLypPXgMncABDPWDgvuY=,tag:NsPVjW5379llq/yyvcXbOw==,type:str]
+        - ENC[AES256_GCM,data:SSMAq03XXoVOkQq8hJEw99kTbFBYnZcMQJxWMJI4,iv:RRYiMlicmP+3CgKK53iCfVSgJuhhLaxkkIwjlNylsss=,tag:5gUHglsCBB00xL7pesr/ng==,type:str]
     rules:
         - matches:
             - path:
                 type: PathPrefix
                 value: /
           backendRefs:
-            - name: playerr
-              port: 2727
+            - name: questarr
+              port: 5000
 sops:
     age:
         - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
@@ -28,7 +28,7 @@ sops:
             cldVMy9GMjVPUklSdXA2TGVtMTRRL2cKlO2BWrRefKWNSiWgpkWwZw9JP2qI6kII
             OC1HlcixWCVEPAdqr5DgtIUg4jzsUUdlCPAmIQZivJAUrVxKHoozlQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-09T20:32:09Z"
-    mac: ENC[AES256_GCM,data:/RibZHKPaQYae6VzM2+9+tdVa8mn2daD1Y3TzHvRoGf+7dfBa7/jtKg513/a2FXehga9EOfPTgDXYBRbmIyfAUvD9sVoFRbowzr+VF5HfoRmHfpN9vZFNkOlyH/Dilm7O7gc/fpxj/ynKUHrbfgqyVHKP2YCEtnvFIzWmEKgDwQ=,iv:nxkw9142QOvDU27OP5uGRhRcIx3xDUonwna6qS3l+z0=,tag:ohbP2HcPC1PWr4LlxuJB2A==,type:str]
+    lastmodified: "2026-04-22T16:22:46Z"
+    mac: ENC[AES256_GCM,data:dBbxe8bey8LH5JF+IP0HQbLVyMlIAuNOgOhVqVMlzJ6eH6pyxCkK7imkMTNns1prsuJ88I3AoRgaZ9u7Gu5b2EWrvKG01u3cyhcjsrCBzyfr3ekAdlhrfYru7tUrE82wHE2/mtGktIPwoku6YqdU4CwZYwDA8nQ8GrfgHs7kW0A=,iv:RJuf1mzAbhLIaizJO78fSVk/xzj1RpPisH3yHkt+xoE=,tag:Pjzv2OS5ALaQuNASYxugOw==,type:str]
     encrypted_regex: hostnames|0
-    version: 3.11.0
+    version: 3.12.2
