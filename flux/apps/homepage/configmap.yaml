@@ -343,14 +343,14 @@ data:
               url: http://romm.gaming.svc:8080
               fields: ["platforms", "totalRoms", "saves", "states"]
     - OtherTools:
-      - Playerr:
-          icon: https://github.com/Maikboarder/Playerr/blob/master/frontend/src/assets/app_logo.png?raw=true
-          href: https://playerr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://playerr.gaming.svc:2727
+      - Questarr:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/questarr.png
+          href: https://questarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://questarr.gaming.svc:5000
           showStats: false
-          app: playerr
+          app: questarr
           namespace: gaming
-          podSelector: app in ( playerr )
+          podSelector: app in ( questarr )
       - File Browser Quantum:
           icon: filebrowser.png
           href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
