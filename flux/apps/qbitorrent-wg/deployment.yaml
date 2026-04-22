@@ -55,9 +55,9 @@ spec:
             - name: wireguard-config
               mountPath: /config/wireguard
               readOnly: true
-            - name: custom-s6
-              mountPath: /scripts/helper/setup-custom-s6.sh
-              subPath: setup-custom-s6.sh
+            - name: custom-init
+              mountPath: /custom-init/00-wg-cleanup/run
+              subPath: run
 
           readinessProbe:
             exec:
@@ -91,7 +91,7 @@ spec:
         - name: qbittorrent-wg-config
           persistentVolumeClaim:
             claimName: qbittorrent-wg-config
-        - name: custom-s6
+        - name: custom-init
           configMap:
-            name: qbittorrent-wg-custom-s6
+            name: qbittorrent-wg-custom-init
             defaultMode: 0755
