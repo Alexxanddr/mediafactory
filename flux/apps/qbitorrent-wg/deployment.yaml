@@ -6,7 +6,7 @@ metadata:
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: qbittorrent-wg
@@ -26,6 +26,20 @@ spec:
             value: "1"
           - name: net.ipv6.conf.all.disable_ipv6
             value: "0"
+      initContainers:
+        - name: cleanup-wg
+          image: busybox
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+          command:
+            - sh
+            - -c
+            - |
+              echo "[init] Cleaning up existing wg0 interface if present..."
+              ip link delete wg0 2>/dev/null || true
+              wg-quick down wg0 2>/dev/null || true
       containers:
         - name: qbittorrent-wg
           image: trigus42/qbittorrentvpn
