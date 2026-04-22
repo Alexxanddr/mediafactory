@@ -4,21 +4,23 @@ metadata:
   name: qbittorrent-wg-custom-init
   namespace: multimedia-factory
 data:
-  run: |
+  type: |
+    oneshot
+
+  up: |
     #!/usr/bin/with-contenv sh
 
     echo "[custom-init] Starting WireGuard cleanup..."
 
-    # Se wg0 esiste, prova a tirarlo giù
     if ip link show wg0 >/dev/null 2>&1; then
-      echo "[custom-init] wg0 interface found, cleaning up..."
+      echo "[custom-init] wg0 found, cleaning..."
 
       wg-quick down /config/wireguard/wg0.conf 2>/dev/null || true
       ip link delete wg0 2>/dev/null || true
 
       echo "[custom-init] wg0 cleaned"
     else
-      echo "[custom-init] wg0 not present, nothing to do"
+      echo "[custom-init] wg0 not present"
     fi
 
     echo "[custom-init] Done"
