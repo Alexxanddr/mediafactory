@@ -30,6 +30,15 @@ spec:
       containers:
         - name: qbittorrent-wg
           image: trigus42/qbittorrentvpn
+          command:
+            - sh
+            - -c
+            - |
+              if ip link show wg0 >/dev/null 2>&1; then
+                echo "[pre-start] Removing stale wg0..."
+                ip link delete wg0 2>/dev/null || true
+              fi
+              exec /init
           ports:
             - containerPort: 8080
           envFrom:
@@ -55,8 +64,6 @@ spec:
             - name: wireguard-config
               mountPath: /config/wireguard
               readOnly: true
-            - name: custom-init
-              mountPath: /custom-init/00-wg-cleanup
 
           readinessProbe:
             exec:
@@ -90,7 +97,3 @@ spec:
         - name: qbittorrent-wg-config
           persistentVolumeClaim:
             claimName: qbittorrent-wg-config
-        - name: custom-init
-          configMap:
-            name: qbittorrent-wg-custom-init
-            defaultMode: 0755
