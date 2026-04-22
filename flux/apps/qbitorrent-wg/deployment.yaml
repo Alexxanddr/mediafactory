@@ -73,19 +73,19 @@ spec:
                 - sh
                 - -c
                 - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 2
-            failureThreshold: 3
+            failureThreshold: 5
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
                 - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 2
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 3
             failureThreshold: 3
       volumes:
         - name: wireguard-config
