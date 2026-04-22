@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: playerr
+  name: questarr
   namespace: gaming
 spec:
   selector:
-    app: playerr
+    app: questarr
   ports:
     - protocol: TCP
-      port: 2727
-      targetPort: 2727
+      port: 5000
+      targetPort: 5000
   type: ClusterIP

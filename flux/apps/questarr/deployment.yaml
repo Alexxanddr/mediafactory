@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: questarr
+  namespace: gaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: questarr
+  template:
+    metadata:
+      labels:
+        app: questarr
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: questarr
+          image: ghcr.io/doezer/questarr:latest
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: questarr-data
+              mountPath: /app/data
+          env:
+          - name: SQLITE_DB_PATH
+            value: "/app/data/sqlite.db"
+      volumes:
+        - name: questarr-data
+          persistentVolumeClaim:
+            claimName: questarr-data
