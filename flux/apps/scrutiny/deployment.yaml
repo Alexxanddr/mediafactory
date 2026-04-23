@@ -23,7 +23,7 @@ spec:
         - containerPort: 8080
         env:
         - name: SCRUTINY_WEB_INFLUXDB_HOST
-          value: influxdb
+          value: scrutiny-influxdb
         volumeMounts:
         - mountPath: /opt/scrutiny/config
           name: scrutiny-config
