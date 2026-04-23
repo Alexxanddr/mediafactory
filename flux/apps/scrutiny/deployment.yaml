@@ -80,6 +80,7 @@ spec:
           capabilities:
             add:
             - SYS_RAWIO
+            - SYS_ADMIN
         volumeMounts:
         - mountPath: /run/udev
           name: udev
