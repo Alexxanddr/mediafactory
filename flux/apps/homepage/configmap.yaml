@@ -53,7 +53,7 @@ data:
       OtherTools:
         header: false
         style: row
-        columns: 2
+        columns: 3
   custom.css: ""
   custom.js: ""
   # docker.yaml: ""
@@ -359,6 +359,14 @@ data:
           app: filebrowser
           namespace: extra-tools
           podSelector: app in ( filebrowser )
+      - Scrutiny:
+          icon: https://github.com/AnalogJ/scrutiny/raw/master/webapp/frontend/src/assets/images/logo/scrutiny-logo-dark.png
+          href: https://scrutiny.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://scrutiny-web.extra-tools.svc:8080
+          showStats: false
+          app: scrutiny-web
+          namespace: extra-tools
+          podSelector: app in ( scrutiny-web )
   widgets.yaml: |
     - greeting:
         text_size: xl
