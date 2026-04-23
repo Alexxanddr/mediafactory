@@ -72,7 +72,7 @@ spec:
         - name: COLLECTOR_API_ENDPOINT
           value: http://scrutiny-web:8080
         - name: COLLECTOR_HOST_ID
-          value: scrutiny-collector-hostname
+          value: scrutiny
         - name: COLLECTOR_RUN_STARTUP
           value: 'false'
         securityContext:
