@@ -41,6 +41,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/metallb.svg" width="32"></td><td><b><a href="https://metallb.universe.tf/">metallb</a></b></td><td>Load balancer for bare metal Kubernetes</td></tr>
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg" width="32"></td><td><b><a href="https://traefik.io/">traefik</a></b></td><td>Cloud-native reverse proxy and load balancer</td></tr>
 <tr><td><img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png" width="32"></td><td><b><a href="https://pi-hole.net">pihole</a></b></td><td>Network AD Blocker</td></tr>
+<tr><td><img src="https://github.com/AnalogJ/scrutiny/raw/master/webapp/frontend/src/assets/images/logo/scrutiny-logo-dark.png" width="32"></td><td><b><a href="https://github.com/AnalogJ/scrutiny">Scrutiny</a></b></td><td>Hard Drive Check Tools</td></tr>
 </table>
 
 ## Media Management
@@ -69,7 +70,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 
 <table>
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/romm.svg" width="16" height="16" alt="RomM"></td><td><b><a href="https://romm.app">bazarr</a></b></td><td>Rom Manager and Player </td></tr>
-<tr><td><img src="https://github.com/Maikboarder/Playerr/blob/master/frontend/public/favicon.png?raw=true" width="16"></td><td><b><a href="https://github.com/Maikboarder/Playerr">Playerr</a></b></td><td>Arr Stack for gaming</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/questarr.png" width="16"></td><td><b><a href="https://github.com/Doezer/Questarr">QuestArr</a></b></td><td>Arr Stack for gaming</td></tr>
 </table>
 
 
