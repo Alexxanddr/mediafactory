@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: scrutiny-web
-        image: ghcr.io/analogj/scrutiny:nightly-web
+        image: ghcr.io/analogj/scrutiny:latest-web
         ports:
         - containerPort: 8080
         env:
@@ -67,7 +67,7 @@ spec:
     spec:
       containers:
       - name: scrutiny-collector
-        image: ghcr.io/analogj/scrutiny:nightly-collector
+        image: ghcr.io/analogj/scrutiny:latest-collector
         env:
         - name: COLLECTOR_API_ENDPOINT
           value: http://scrutiny-web:8080
