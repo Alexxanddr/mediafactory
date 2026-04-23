@@ -111,18 +111,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: influxdb
-  name: influxdb
+    app: scrutiny-influxdb
+  name: scrutiny-influxdb
   namespace: extra-tools
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: influxdb
+      app: scrutiny-influxdb
   template:
     metadata:
       labels:
-        app: influxdb
+        app: scrutiny-influxdb
     spec:
       containers:
       - name: influxdb
@@ -131,7 +131,7 @@ spec:
         - containerPort: 8086
         volumeMounts:
         - mountPath: /var/lib/influxdb2
-          name: influxdb-data
+          name: scrutiny-influxdb-data
         livenessProbe:
           httpGet:
             path: /health
@@ -149,7 +149,7 @@ spec:
           timeoutSeconds: 10
           failureThreshold: 20
       volumes:
-      - name: influxdb-data
+      - name: scrutiny-influxdb-data
         persistentVolumeClaim:
-          claimName: influxdb-data
+          claimName: scrutiny-influxdb-data
 

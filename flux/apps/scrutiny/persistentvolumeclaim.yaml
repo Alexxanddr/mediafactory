@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: influxdb-data
+  name: scrutiny-influxdb-data
   namespace: extra-tools
 spec:
   accessModes:
@@ -12,7 +12,7 @@ spec:
       storage: 50Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: influxdb-data
+  volumeName: scrutinyinfluxdb-data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
