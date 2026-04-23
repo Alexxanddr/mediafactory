@@ -1,0 +1,155 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: scrutiny-web
+  name: scrutiny-web
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-web
+  template:
+    metadata:
+      labels:
+        app: scrutiny-web
+    spec:
+      containers:
+      - name: scrutiny-web
+        image: ghcr.io/analogj/scrutiny:nightly-web
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SCRUTINY_WEB_INFLUXDB_HOST
+          value: influxdb
+        volumeMounts:
+        - mountPath: /opt/scrutiny/config
+          name: scrutiny-config
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 10
+          failureThreshold: 20
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 10
+          failureThreshold: 20
+      volumes:
+      - name: scrutiny-config
+        persistentVolumeClaim:
+          claimName: scrutiny-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: scrutiny-collector
+  name: scrutiny-collector
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scrutiny-collector
+  template:
+    metadata:
+      labels:
+        app: scrutiny-collector
+    spec:
+      containers:
+      - name: scrutiny-collector
+        image: ghcr.io/analogj/scrutiny:nightly-collector
+        env:
+        - name: COLLECTOR_API_ENDPOINT
+          value: http://scrutiny-web:8080
+        - name: COLLECTOR_HOST_ID
+          value: scrutiny-collector-hostname
+        - name: COLLECTOR_RUN_STARTUP
+          value: 'false'
+        securityContext:
+          privileged: true
+          capabilities:
+            add:
+            - SYS_RAWIO
+        volumeMounts:
+        - mountPath: /run/udev
+          name: udev
+          readOnly: true
+        - mountPath: /dev/sda
+          name: dev-sda
+        - mountPath: /dev/sdb
+          name: dev-sdb
+        - mountPath: /dev/nvme0n1
+          name: dev-nvme0n1
+      volumes:
+      - name: udev
+        hostPath:
+          path: /run/udev
+      - name: dev-sda
+        hostPath:
+          path: /dev/sda
+          type: BlockDevice
+      - name: dev-sdb
+        hostPath:
+          path: /dev/sdb
+          type: BlockDevice
+      - name: dev-nvme0n1
+        hostPath:
+          path: /dev/nvme0n1
+          type: BlockDevice
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:2.8
+        ports:
+        - containerPort: 8086
+        volumeMounts:
+        - mountPath: /var/lib/influxdb2
+          name: influxdb-data
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8086
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 10
+          failureThreshold: 20
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8086
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 10
+          failureThreshold: 20
+      volumes:
+      - name: influxdb-data
+        persistentVolumeClaim:
+          claimName: influxdb-data
+

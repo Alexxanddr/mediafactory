@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: scrutiny-web
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:H+YiG2SXhCgRCkF65nDHkYozvxKQCvSfmBNuRGQe,iv:X3V6kjQUHGRH6H9qXXY22GIgdHQeXKsBm7b3iVtSVIQ=,tag:h/oHczveHI3X2kiHfKyz6g==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: scrutiny-web
+              port: 8080
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB6MHF2T1B3Q0hVTkJrMWpJ
+            TytQb3RUUFBOenNqVkRaZ1paNStNRGxzOUhFCkV5WmR0NDBWYTI5b2piei9tbWZa
+            WGU2dGcwR3p6b1JFQU5BeHN0eEUxM3cKLS0tIHZhZytDTlV3OUZjTjhLbHRtZy80
+            aTl4NUhpMWpka1FVeklSZUphbjQ5ZGMK85RmRQS6gVTgZw7ZWDTbf8WhRt3OIFrl
+            OI2Dk4ttfIdHVd0y07EpGM+lZhfS2EQRoe1/Ji9WkWV5NQf8Gc1l3Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-23T08:57:32Z"
+    mac: ENC[AES256_GCM,data:5AqX/vS75Ms4YeY9wml2lsqbE49rLEgOn+YRiz1sNFmYUoorl+XGz5LwJghxM6dVUQzILg6uPSBnmszZbU/JwzYGGQVY9k3Lx9CavAxbb0I1Ye2mEdEtNU7zRNdGCF3PzQMvEXOVVr+awLPFHfyT3GN8YmHfT9qJCdMEAv6dLXc=,iv:z3UzhnWnwxMnLZgtQYJLfUVtUKNq2MPGHbuN5XDxaKM=,tag:riKNS1BcvGn5hOq6x7V6Lw==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
