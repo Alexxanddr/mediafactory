@@ -1,0 +1,30 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-data
+  namespace: extra-tools
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: influxdb-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: scrutiny-config
+  namespace: extra-tools
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: scrutiny-config

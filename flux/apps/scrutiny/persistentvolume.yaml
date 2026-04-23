@@ -1,0 +1,50 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: influxdb-data
+  finalizers:
+  - kubernetes.io/pv-protection
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 50Gi
+  local:
+    path: /var/lib/rancher/k3s/storage/scrutiny/influxdb
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k3s-server
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: scrutiny-config
+  finalizers:
+  - kubernetes.io/pv-protection
+spec:
+  accessModes:
+  - ReadWriteMany
+  capacity:
+    storage: 1Gi
+  local:
+    path: /var/lib/rancher/k3s/storage/scrutiny/config
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k3s-server
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-path
+  volumeMode: Filesystem
