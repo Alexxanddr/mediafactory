@@ -16,6 +16,10 @@ spec:
         app: qbittorrent-wg
     spec:
       dnsPolicy: None
+      hostAliases:
+      - hostnames:
+        - prowlarr.multimedia-factory.svc.cluster.local
+        ip: 10.43.150.43
       dnsConfig:
         nameservers:
           - 9.9.9.9
