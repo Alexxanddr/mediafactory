@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nutify
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nutify
+  template:
+    metadata:
+      labels:
+        app: nutify
+    spec:
+      dnsConfig:
+        nameservers:
+          - 1.1.1.1
+          - 8.8.8.8
+        options:
+          - name: timeout
+            value: "2"
+          - name: attempts
+            value: "2"
+
+      containers:
+        - name: nutify
+          image: dartsteven/nutify:latest-amd64
+
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - SYS_RAWIO
+                - MKNOD
+
+          env:
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: nutify-secret
+                  key: SECRET_KEY
+            - name: UDEV
+              value: "1"
+            - name: SSL_ENABLED
+              value: "false"
+
+          ports:
+            - containerPort: 3493
+            - containerPort: 5050
+            - containerPort: 443
+
+          volumeMounts:
+            - name: data
+              mountPath: /app/nutify/logs
+              subPath: logs
+            - name: data
+              mountPath: /app/nutify/instance
+              subPath: instance
+            - name: data
+              mountPath: /app/ssl
+              subPath: ssl
+            - name: data
+              mountPath: /etc/nut
+              subPath: nut
+
+            - name: dev
+              mountPath: /dev
+
+            - name: udev
+              mountPath: /run/udev
+              readOnly: true
+
+            - name: usb
+              mountPath: /dev/bus/usb
+
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: nutify-data
+
+        - name: dev
+          hostPath:
+            path: /dev
+
+        - name: udev
+          hostPath:
+            path: /run/udev
+
+        - name: usb
+          hostPath:
+            path: /dev/bus/usb

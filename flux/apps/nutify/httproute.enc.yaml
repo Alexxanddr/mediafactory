@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: nutify
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:PA4KLP/VEKOIN7PSOQUicEcqgfOxlgrTmoXyzQ==,iv:vYrRXbZdyQDq3jvIv1H885uq8yJSjbfSoPL5DIzB55Y=,tag:nBrJ3jlrBnDBg6G8s0YO9Q==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: nutify
+              port: 5050
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1MWNRZGxyYXNLbmVsV3Zj
+            ejUyd3dScFE3cFFYdXN1cDR2TWR5UFJNL0Y4CklJemtkRVAzV2xDZDEvbGVOQ2Ji
+            RzFwUlVDMEo3SlR4bGJCV1VHVmZ5ancKLS0tIHJZYTl5L1ZCL2hXQnA0S1hoS2Rk
+            dGJWaWhWMG41cFJnaHQvNmI4aW9wT0kKBc7tFUoYPyvCqwo+ydZE6eIlTVejU3sC
+            4HAQg8/0irJ7H8hZ4gTUoV4j5EY/WzqyPhP2VRmOZE0Swcy/2NH8NQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-27T20:26:18Z"
+    mac: ENC[AES256_GCM,data:rKViqVAGJB2xhwTiXxzRMAFambsQZgZbQe84ew3vgof3vqYMm5uXoZuWd2Q+9v8ybry4ZatsyT4ie6U8XI1vJimQUlCR+UFBvQEfaYQaaSvSZk8rV4xh7SeFrLUyvELlJw5ZxM3i3jeQyFyb8MbVScEgRC3fdvdLkjrmTYj08HM=,iv:dgzZdBTsmEwFzf6+llXiZB58T1YVJaIF35Odx5sr0qU=,tag:QLtaievQpVnu3yvwMxhB+w==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
