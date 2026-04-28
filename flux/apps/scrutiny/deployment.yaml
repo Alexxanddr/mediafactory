@@ -89,6 +89,8 @@ spec:
           name: dev-sda
         - mountPath: /dev/sdb
           name: dev-sdb
+        - mountPath: /dev/sdc
+          name: dev-sdc
         - mountPath: /dev/nvme0n1
           name: dev-nvme0n1
       volumes:
@@ -102,6 +104,10 @@ spec:
       - name: dev-sdb
         hostPath:
           path: /dev/sdb
+          type: BlockDevice
+      - name: dev-sdc
+        hostPath:
+          path: /dev/sdc
           type: BlockDevice
       - name: dev-nvme0n1
         hostPath:
