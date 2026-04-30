@@ -366,17 +366,17 @@ data:
               type: romm
               url: http://romm.gaming.svc:8080
               fields: ["platforms", "totalRoms", "saves", "states"]
-      - Scrutiny:
-          icon: https://github.com/AnalogJ/scrutiny/raw/master/webapp/frontend/src/assets/images/logo/scrutiny-logo-dark.png
-          href: https://scrutiny.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://scrutiny-web.extra-tools.svc:8080
-          showStats: false
-          app: scrutiny-web
-          namespace: extra-tools
-          podSelector: app in ( scrutiny-web )
-          widget:
-            type: scrutiny
-            url: http://scrutiny-web.extra-tools.svc:8080
+        - Scrutiny:
+            icon: https://github.com/AnalogJ/scrutiny/raw/master/webapp/frontend/src/assets/images/logo/scrutiny-logo-dark.png
+            href: https://scrutiny.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://scrutiny-web.extra-tools.svc:8080
+            showStats: false
+            app: scrutiny-web
+            namespace: extra-tools
+            podSelector: app in ( scrutiny-web )
+            widget:
+              type: scrutiny
+              url: http://scrutiny-web.extra-tools.svc:8080
     - OtherTools:
       - Questarr:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/questarr.png
