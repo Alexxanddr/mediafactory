@@ -28,10 +28,8 @@ metadata:
   name: dispatcharr-web
   namespace: multimedia-factory
 spec:
-  type: NodePort
   selector:
     app: dispatcharr-web
   ports:
     - port: 9191
       targetPort: 9191
-      nodePort: 30191

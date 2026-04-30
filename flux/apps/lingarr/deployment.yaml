@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lingarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lingarr
+  template:
+    metadata:
+      labels:
+        app: lingarr
+    spec:
+      containers:
+        - name: lingarr
+          image: ghcr.io/lingarr-translate/lingarr:latest
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:9876"
+            - name: DB_CONNECTION
+              value: "mysql"
+            - name: DB_HOST
+              value: "lingarr-db"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_DATABASE
+              value: "lingarr"
+            - name: DB_USERNAME
+              value: "lingarr"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lingarr-secrets
+                  key: db-password
+          ports:
+            - containerPort: 9876
+          volumeMounts:
+            - name: config
+              mountPath: /app/config
+            - name: media
+              mountPath: /movies
+              subPath: movies
+            - name: media
+              mountPath: /tv
+              subPath: tv
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: lingarr-config
+        - name: media
+          persistentVolumeClaim:
+            claimName: lingarr-media
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lingarr-db
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: lingarr-db
+  template:
+    metadata:
+      labels:
+        app: lingarr-db
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          env:
+            - name: MYSQL_DATABASE
+              value: lingarr
+            - name: MYSQL_USER
+              value: lingarr
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lingarr-secrets
+                  key: db-password
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lingarr-secrets
+                  key: mysql-root-password
+          volumeMounts:
+            - name: db-storage
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: db-storage
+          persistentVolumeClaim:
+            claimName: lingarr-db
