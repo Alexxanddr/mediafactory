@@ -42,6 +42,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/traefik.svg" width="32"></td><td><b><a href="https://traefik.io/">traefik</a></b></td><td>Cloud-native reverse proxy and load balancer</td></tr>
 <tr><td><img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png" width="32"></td><td><b><a href="https://pi-hole.net">pihole</a></b></td><td>Network AD Blocker</td></tr>
 <tr><td><img src="https://github.com/AnalogJ/scrutiny/raw/master/webapp/frontend/src/assets/images/logo/scrutiny-logo-dark.png" width="32"></td><td><b><a href="https://github.com/AnalogJ/scrutiny">Scrutiny</a></b></td><td>Hard Drive Check Tools</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png" width="32"></td><td><b><a href="https://github.com/DartSteven/Nutify">Nutify</a></b></td><td>UPS Monitoring Tool</td></tr>
 </table>
 
 ## Media Management
@@ -63,6 +64,8 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td><img src="https://sonarr.tv/img/logo.png" width="16"></td><td><b><a href="https://sonarr.tv/">sonarr</a></b></td><td>TV series collection manager</td></tr>
 <tr><td><img src="https://sonarr.tv/img/logo.png" width="16"></td><td><b><a href="https://github.com/MainKronos/Sonarr-AnimeDownloader">sonarr-animeworld</a></b></td><td>TV series collection manager specific for anime</td></tr>
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/tracearr.svg" width="16"></td><td><b><a href="https://github.com/connorgallopo/Tracearr/tree/main">tracearr</a></b></td><td>Plex analytics and monitoring</td></tr>
+<tr><td><img src="" width="16"></td><td><b><a href="https://github.com/lingarr-translate/lingarr">Lingarr</a></b></td><td>SRT subtitle translation</td></tr>
+<tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/dispatcharr.png" width="16"></td><td><b><a href="https://github.com/dispatcharr/dispatcharr">Dispatcharr</a></b></td><td>DVR manager</td></tr>
 <tr><td><img src="https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/gluetun.svg" width="16"></td><td><b><a href="https://github.com/qdm12/gluetun">gluetun</a></b></td><td>VPN Client</td></tr>
 </table>
 

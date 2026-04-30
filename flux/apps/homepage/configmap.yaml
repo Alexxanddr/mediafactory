@@ -31,11 +31,11 @@ data:
       Arr Stack:
         header: true
         style: row
-        columns: 4
+        columns: 5
       OtherMedia:
         header: false
         style: row
-        columns: 3
+        columns: 4
       Media Stack:
         style: row
         columns: 5
@@ -53,7 +53,7 @@ data:
       OtherTools:
         header: false
         style: row
-        columns: 3
+        columns: 4
   custom.css: ""
   custom.js: ""
   # docker.yaml: ""
@@ -116,6 +116,21 @@ data:
               url: http://bazarr.multimedia-factory.svc:6767
               key: {{HOMEPAGE_VAR_BAZARR_API}}
               enableQueue: true
+        - Dispatcharr:
+            icon: dispatcharr.png
+            href: https://dispatcharr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://dispatcharr-web.multimedia-factory.svc:9191
+            description: DVR TV
+            showStats: false
+            app: dispatcharr-web
+            namespace: multimedia-factory
+            podSelector: app in ( dispatcharr-web )
+            widget:
+              type: dispatcharr
+              url: http://dispatcharr-web.multimedia-factory.svc:9191
+              username: {{HOMEPAGE_VAR_DISPATCHARR_USER}}
+              password: {{HOMEPAGE_VAR_DISPATCHARR_PASS}}
+              enableActiveStreams: true # optional, defaults to false
     - OtherMedia:
       - Profilarr:
           icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
@@ -135,6 +150,15 @@ data:
           app: maintainerr
           namespace: multimedia-factory
           podSelector: app in ( maintainerr )
+      - Lingarr:
+          icon: lingarr.png
+          href: https://lingarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://lingarr.multimedia-factory.svc:9876
+          description: Lingarr
+          showStats: false
+          app: lingarr  
+          namespace: multimedia-factory
+          podSelector: app in ( lingarr )
       - AnimeWorld Sonarr:
           icon: https://www.svgrepo.com/show/514661/animeworld.svg
           href: https://animeworld.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -367,6 +391,17 @@ data:
           app: scrutiny-web
           namespace: extra-tools
           podSelector: app in ( scrutiny-web )
+          widget:
+            type: scrutiny
+            url: http://scrutiny-web.extra-tools.svc:8080
+      - Nutify:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png
+          href: https://nutify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://nutify.extra-tools.svc:5050
+          showStats: false
+          app: nutify
+          namespace: extra-tools
+          podSelector: app in ( nutify )
   widgets.yaml: |
     - greeting:
         text_size: xl
