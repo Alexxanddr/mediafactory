@@ -22,7 +22,7 @@ spec:
     websocket:
       enabled: true
       redis:
-        enabled: false
+        enabled: true
     persistence:
       enabled: true
       size: 5Gi
