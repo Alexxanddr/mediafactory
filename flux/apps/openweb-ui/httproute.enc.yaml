@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: openwebui
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:MOIUWx8QvbgzXXx3T1fFehbZsrDGSTgHI8S0K93xCg==,iv:/pzKdzg20exymy42BLQyfXS+sBTuyxrfDq7J52wv7TY=,tag:IBiuDTruYonCoCCVtwt4Hw==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: openwebui-web
+              port: 80
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4cTdZK0Zha3llTng1aXY3
+            dzQzZEU1Y0xlRENuMDE3bjRwWTRtRkdYMWxzCnZncCswa01OR29tVm42cUlmZFht
+            SlpJM0tzdzBJR1dmdVRBeVNwd2pYSlEKLS0tIHltZ1dXV0F5TVVsbEFuQWFEd2Vr
+            YTltTlRjODdrZ0RLdnJURGJ2WEdvVDQKsnmwc2QoQUfB0fTTEbpJUiWzvNqDWOli
+            gif0zXuzRKGVCWKpA4s09PFSiVHNNlpWh5+Ad9QIga6Q3CUzlQja3w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-02T07:12:00Z"
+    mac: ENC[AES256_GCM,data:g2noHaB1nKDiZQQuDjAzpbI0xNi3sFNN0o/68mk/g6/fVEQ6s1kHXUrbavKmf6cJahCIdPT+R5Jqs9afcO8ATriqhGUEoWNr2Xcu4BxhnMg/8nDuP69Hx+iFKy84rD5iGDg9CQLOzoR/TTp7GZrrxBnT1CCR/BN7MPpupbEX0JY=,iv:Do2WEPJEwL64ZJF/bylRaIiTwZKMRIMYekrRZ5z7Des=,tag:7s+0pB21o2j/sEwnDhXSKA==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
