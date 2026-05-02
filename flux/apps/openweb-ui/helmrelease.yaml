@@ -28,6 +28,10 @@ spec:
       size: 5Gi
       existingClaim: open-webui-config
     ollamaUrlsFromExtraEnv: true
+    service:
+      type: ClusterIP
+      port: 8080
+      containerPort: 8080
     extraEnvFrom:
       - secretRef:
           name: ollama-secrets
