@@ -16,7 +16,7 @@ spec:
                 value: /
           backendRefs:
             - name: openwebui-web
-              port: 80
+              port: 8080
 sops:
     age:
         - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
@@ -28,7 +28,7 @@ sops:
             YTltTlRjODdrZ0RLdnJURGJ2WEdvVDQKsnmwc2QoQUfB0fTTEbpJUiWzvNqDWOli
             gif0zXuzRKGVCWKpA4s09PFSiVHNNlpWh5+Ad9QIga6Q3CUzlQja3w==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-02T07:12:00Z"
-    mac: ENC[AES256_GCM,data:g2noHaB1nKDiZQQuDjAzpbI0xNi3sFNN0o/68mk/g6/fVEQ6s1kHXUrbavKmf6cJahCIdPT+R5Jqs9afcO8ATriqhGUEoWNr2Xcu4BxhnMg/8nDuP69Hx+iFKy84rD5iGDg9CQLOzoR/TTp7GZrrxBnT1CCR/BN7MPpupbEX0JY=,iv:Do2WEPJEwL64ZJF/bylRaIiTwZKMRIMYekrRZ5z7Des=,tag:7s+0pB21o2j/sEwnDhXSKA==,type:str]
+    lastmodified: "2026-05-02T07:40:13Z"
+    mac: ENC[AES256_GCM,data:X8EUbdT6JahNsRZai5D7nOVq6jSWecCArr3oN4WGOsMvhZ99UhWI2sXE54oyHLM92MM0rvihF/TdQMKS7DzTiSursX2tfAdq2TqXs6dmozwmEGZT/hjUeYENHxL30LQYaTsUe2w68qFwX7tLd5Xu1TxtuTSk7RVfvWPEpG7UPnA=,iv:su7VvIN+mg1beq+8Ov0XId9/OmCMETPMwVSs0PA5GKY=,tag:qexL+G2iYkCrtQqCcjKFxw==,type:str]
     encrypted_regex: hostnames|0
     version: 3.12.2
