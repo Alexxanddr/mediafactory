@@ -24,6 +24,11 @@ spec:
       enabled: false
     pms:
       configExistingClaim: plex-config
+      gpu:
+        nvidia:
+          enabled: true
+          devices: "all"         
+          capabilities: "compute,video,utility"
     service:
       type: NodePort
       port: 32400
