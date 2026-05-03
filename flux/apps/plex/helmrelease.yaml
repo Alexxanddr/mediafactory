@@ -29,6 +29,10 @@ spec:
           enabled: true
           devices: "all"         
           capabilities: "compute,video,utility"
+    resources:
+      limits:
+        nvidia.com/gpu: "1"
+    runtimeClassName: nvidia
     service:
       type: NodePort
       port: 32400
