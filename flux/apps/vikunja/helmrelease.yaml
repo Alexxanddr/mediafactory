@@ -24,7 +24,10 @@ spec:
           enabled: false
       configMaps:
         config:
-          enabled: false
+          enabled: true
+          data:
+            config.yml: |
+              cors.enable: false
       persistence:
         data:
           enabled: true
