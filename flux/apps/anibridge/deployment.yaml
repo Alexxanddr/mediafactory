@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: anibridge
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: anibridge
+  template:
+    metadata:
+      labels:
+        app: anibridge
+    spec:
+      containers:
+        - name: anibridge
+          image: ghcr.io/anibridge/anibridge:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "022"
+            - name: TZ
+              value: "Etc/UTC"
+          ports:
+            - containerPort: 4848
+          volumeMounts:
+            - name: anibridge-config
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 4848
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 4848
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+      volumes:
+        - name: anibridge-config
+          persistentVolumeClaim:
+            claimName: anibridge-config

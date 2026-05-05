@@ -260,7 +260,7 @@ data:
             namespace: multimedia-factory
             podSelector: app in ( grimmory )
             widget:
-              type: grimmory
+              type: booklore
               url: http://grimmory.multimedia-factory.svc:6060
               username: {{HOMEPAGE_VAR_GRIMMORY_USER}}
               password: {{HOMEPAGE_VAR_GRIMMORY_PASSWORD}}
