@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranga-pg
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tranga-pg
+  template:
+    metadata:
+      labels:
+        app: tranga-pg
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          envFrom:
+            - secretRef:
+                name: tranga-secret
+          ports:
+            - containerPort: 5432
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 80
+            periodSeconds: 30
+            timeoutSeconds: 60
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - postgres
+            initialDelaySeconds: 80
+            periodSeconds: 30
+            timeoutSeconds: 60
+            failureThreshold: 5
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranga-api
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tranga-api
+  template:
+    metadata:
+      labels:
+        app: tranga-api
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: tranga-api
+          image: glax/tranga-api:latest
+          envFrom:
+            - secretRef:
+                name: tranga-secret
+          ports:
+            - containerPort: 6531
+          volumeMounts:
+            - name: tranga-manga
+              mountPath: /Manga
+            - name: tranga-settings
+              mountPath: /usr/share/tranga-api
+      volumes:
+        - name: tranga-manga
+          persistentVolumeClaim:
+            claimName: tranga-manga
+        - name: tranga-settings
+          persistentVolumeClaim:
+            claimName: tranga-settings
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z tranga-pg 5432; do echo waiting for db; sleep 2; done;']
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tranga-website
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tranga-website
+  template:
+    metadata:
+      labels:
+        app: tranga-website
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: tranga-website
+          image: glax/tranga-website:latest
+          ports:
+            - containerPort: 80
+      initContainers:
+        - name: wait-for-api
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z tranga-api 6531; do echo waiting for api; sleep 2; done;']

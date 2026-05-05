@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: tranga
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:hSRyUffE8OmvEkKDfGOnKoQM3JwGfhFG1MwOGw==,iv:gqcK0H21aUQJz31O7Kw124xnZJ5U36eEJqfW0Kks6f4=,tag:Zi0+NG5MMuFS9xk1fhlf/Q==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: tranga-website
+              port: 80
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByV2FSKzhIelo1TU5LRzQx
+            VE9qVjNnRVIybytjMmZrbXQzYXBrV3lrdlNjCnd1a3hCOWhiWjF1NFNGUER1TC8z
+            TmNJeVp0S1k2SU5ZeXhEV1RtWEFNbWsKLS0tIGhkVHVqTVVYbUFVWThWM0RxemVK
+            Wk8zeEZ3SGd0YmE0TzJRQVVFVjNhSEkKcfpVoDbeNGsDX0FJcQOyq5w3v0KixTj5
+            sCcK4j8V3hepe+duj3NE5IKW5mAlFUUALHKYG/bzTRuWxyIyAVXPRA==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T19:57:47Z"
+    mac: ENC[AES256_GCM,data:ctnJ45Q7IuFrswuOpiA3uR1FTLoeTcXIzrvpIrnq74wNukkordkO7OxcRbqepwOP+66Xt0MUb5mZBWtYrzX8t6IJkVPT0L6pZJVheb26zC7ofzHgkX80KX8JsFTMrV1eEVoYUiteAvLpUZZkULmhB7oTsM7WUkqTgymah9jCXsA=,iv:N5GfTg0NTZyFPcD7f6r/eRkHPqIJJu6QyrjiT0jb2c4=,tag:sln03B51JLi442DOO1NMWQ==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
