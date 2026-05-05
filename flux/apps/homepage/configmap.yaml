@@ -251,19 +251,19 @@ data:
               url: http://kavita.multimedia-factory.svc:5000
               username: {{HOMEPAGE_VAR_KAVITA_USER}}
               password: {{HOMEPAGE_VAR_KAVITA_PASSWORD}}
-        - BookLore:
-            icon: booklore.svg
-            href: https://booklore.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://booklore.multimedia-factory.svc:6060
+        - Grimmory:
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/grimmory.png
+            href: https://grimmory.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://grimmory.multimedia-factory.svc:6060
             showStats: false
-            app: booklore
+            app: grimmory
             namespace: multimedia-factory
-            podSelector: app in ( booklore )
+            podSelector: app in ( grimmory )
             widget:
-              type: booklore
-              url: http://booklore.multimedia-factory.svc:6060
-              username: {{HOMEPAGE_VAR_BOOKLORE_USER}}
-              password: {{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}
+              type: grimmory
+              url: http://grimmory.multimedia-factory.svc:6060
+              username: {{HOMEPAGE_VAR_GRIMMORY_USER}}
+              password: {{HOMEPAGE_VAR_GRIMMORY_PASSWORD}}
         - YamTrack:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/yamtrack-light.png
             href: https://yamtrack.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
