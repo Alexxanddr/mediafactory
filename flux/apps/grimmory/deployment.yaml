@@ -1,24 +1,24 @@
 # apiVersion: apps/v1
 # kind: Deployment
 # metadata:
-#   name: booklore-db
+#   name: grimmory-db
 #   namespace: multimedia-factory
 # spec:
 #   replicas: 1
 #   selector:
 #     matchLabels:
-#       app: booklore-db
+#       app: grimmory-db
 #   template:
 #     metadata:
 #       labels:
-#         app: booklore-db
+#         app: grimmory-db
 #     spec:
 #       containers:
 #         - name: mariadb
 #           image: lscr.io/linuxserver/mariadb:11.4.5
 #           envFrom:
 #             - secretRef:
-#                 name: booklore-db-secret
+#                 name: grimmory-db-secret
 #           ports:
 #             - containerPort: 3306
 #           volumeMounts:
@@ -49,29 +49,29 @@
 #       volumes:
 #         - name: mariadb-config
 #           persistentVolumeClaim:
-#             claimName: booklore-mariadb-config
+#             claimName: grimmory-mariadb-config
 # ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: booklore-db
+  name: grimmory-db
   namespace: multimedia-factory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: booklore-db
+      app: grimmory-db
   template:
     metadata:
       labels:
-        app: booklore-db
+        app: grimmory-db
     spec:
       containers:
         - name: mariadb
           image: mariadb:latest
           envFrom:
           - secretRef:
-              name: booklore-db-secret
+              name: grimmory-db-secret
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -100,38 +100,38 @@ spec:
       volumes:
         - name: mariadb-config
           persistentVolumeClaim:
-            claimName: booklore-mariadb-config
+            claimName: grimmory-mariadb-config
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: booklore
+  name: grimmory
   namespace: multimedia-factory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: booklore
+      app: grimmory
   template:
     metadata:
       labels:
-        app: booklore
+        app: grimmory
     spec:
       enableServiceLinks: false
       containers:
-        - name: booklore
-          image: ghcr.io/booklore-app/booklore:latest
+        - name: grimmory
+          image: grimmory/grimmory:latest
           envFrom:
             - secretRef:
-                name: booklore-db-secret
+                name: grimmory-db-secret
           ports:
             - containerPort: 6060
           volumeMounts:
-            - name: booklore-data
+            - name: grimmory-data
               mountPath: /app/data
-            - name: booklore-books
+            - name: grimmory-books
               mountPath: /books
-            - name: booklore-bookdrop
+            - name: grimmory-bookdrop
               mountPath: /bookdrop
           livenessProbe:
             exec:
@@ -158,16 +158,16 @@ spec:
             timeoutSeconds: 10
             failureThreshold: 5
       volumes:
-        - name: booklore-data
+        - name: grimmory-data
           persistentVolumeClaim:
-            claimName: booklore-data
-        - name: booklore-books
+            claimName: grimmory-data
+        - name: grimmory-books
           persistentVolumeClaim:
-            claimName: booklore-books
-        - name: booklore-bookdrop
+            claimName: grimmory-books
+        - name: grimmory-bookdrop
           persistentVolumeClaim:
-            claimName: booklore-bookdrop
+            claimName: grimmory-bookdrop
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z booklore-db 3306; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z grimmory-db 3306; do echo waiting for db; sleep 2; done;']
