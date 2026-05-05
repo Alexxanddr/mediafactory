@@ -19,6 +19,12 @@ spec:
         repository: vikunja/vikunja
         tag: "latest"
         pullPolicy: Always
+      ingress:
+        main:
+          enabled: false
+      configMaps:
+        config:
+          enabled: false
       persistence:
         data:
           enabled: true
