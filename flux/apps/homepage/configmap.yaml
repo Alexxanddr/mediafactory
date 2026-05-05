@@ -384,7 +384,7 @@ data:
             showStats: false
             app: vikunja
             namespace: extra-tools
-            podSelector: app in ( vikunja )
+            podSelector: app.kubernetes.io/name in ( vikunja )
             widget:
               type: vikunja
               url: http://vikunja.extra-tools.svc:3456
