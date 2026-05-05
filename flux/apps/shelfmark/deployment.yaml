@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shelfmark
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shelfmark
+  template:
+    metadata:
+      labels:
+        app: shelfmark
+    spec:
+      containers:
+        - name: shelfmark
+          image: ghcr.io/calibrain/shelfmark:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+          ports:
+            - containerPort: 8084
+          volumeMounts:
+            - name: shelfmark-books
+              mountPath: /books
+            - name: shelfmark-config
+              mountPath: /config
+      volumes:
+        - name: shelfmark-books
+          persistentVolumeClaim:
+            claimName: shelfmark-books
+        - name: shelfmark-config
+          persistentVolumeClaim:
+            claimName: shelfmark-config
