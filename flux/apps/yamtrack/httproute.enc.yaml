@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: yamtrack
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:tMnBpfLooi2ZtXzO/l9cJGK40DYxvykGQrfzNlkr,iv:szEeKUtEj7PP1sitzT16525NrDBWyUMzuhRFlVBkUIg=,tag:GrjZjmmXPSMyXT8yW70i4g==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: yamtrack
+              port: 8000
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKNEhMeWtPdHR4bWpmY0JT
+            VTRRSUg0Y1VISHRCc25YNEdKS3pTK09TRHlVCis2d1dvK3V4YVh3YTBXalBTT3ZB
+            aFBicFpFNk94dE9UQVRUNkpvQmdwTlEKLS0tIEdLdnBMZFJDUXF0MVlJN0VRUk1W
+            aE52UUJqajVacVljV0RuNmJpZUJXMkEKLoGJhRgnWwgVrgNz66pxqiXv5WS6gaUm
+            WNbOOOJrpjG18qPwppqtGzRFDiqwdovWM/vcNLmfyZirYzSnzShi0g==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T16:08:56Z"
+    mac: ENC[AES256_GCM,data:B1m4+Bw+YSKBQiWfgdQ2LGN7TVEII0sWM5eabGLuCl8lFlD3UuMpHrDku1PtxzVwxDwZhKC6BLEf8H/1J8TGJb+hzgI7C4uUAH3s0tTvapy67RLCzad72tWF/sNIuzy4UlObqSaYsFxQuOwzXUyB9I/dc5cJ8/9hIujbpvCHcM8=,iv:DnIz59dWFrhZ++RfB9RwwgvBte+szE7prMnEQD8zFwA=,tag:ft0htJuRjqmTsTzZpoHpBw==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2

@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: kavita
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:yBJiBh+LdKkUFUlpbMFrafdod1L/Yv17xUwogw==,iv:LLdHOvTXlZlLVE2awSWPmZRZB4qeSgpFfBMTkSCmWJw=,tag:06yExYN6MMUWi3Y6pgkocg==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: kavita
+              port: 5000
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBkak9pMGVlNmg1SDIyYlgv
+            N3MvVU1UZ1NORzRHU1FQaE9MR3Iwa1hvaGo4CmVNUk1OTHBtTXNkZFF2aXpqOFBy
+            eHRZWmZacGlBRWQwbkVKWUh3NHMyQjgKLS0tIERJczZIU3JzbDE4dXNtN2IrREpI
+            V3pIV1ZGWTRkc1p0VzlYYWhUeXlSMmMK5hHBL5+o+dxsieoXdqz5UkNEZlTlm0vJ
+            A0s1UIBBPS/PvCjPV2NIdh3AKv9Nmo75eFAb2r+eHRteVgMc4ToB5Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T16:10:44Z"
+    mac: ENC[AES256_GCM,data:YJ+0UHEzYc6L4g0Odu/wLDvqk991Bk3UbSTBISBB5pXTlMPTbW0hFdnSrsCc5A0HxQfks0fN73mMvuFNwr/LayHsLMNXVokhRxm/Op99Di7SNA1X4WXLYz/GtFRQ4jtqBtzO6psCyQT+g57i48xrpadBkYlpEjSgF6Ex7RV1QhU=,iv:H4nDx87KpNGPCKHfGsx9ht7293II/nNWRQQOnsW+AgI=,tag:KzM0zCaAxEfvnOOiOEbHjQ==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2

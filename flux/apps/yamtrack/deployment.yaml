@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamtrack-db
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamtrack-db
+  template:
+    metadata:
+      labels:
+        app: yamtrack-db
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          envFrom:
+            - secretRef:
+                name: yamtrack-secret
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: yamtrack-db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: yamtrack-db-data
+          persistentVolumeClaim:
+            claimName: yamtrack-db-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamtrack-redis
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamtrack-redis
+  template:
+    metadata:
+      labels:
+        app: yamtrack-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:8-alpine
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: yamtrack-redis-data
+              mountPath: /data
+      volumes:
+        - name: yamtrack-redis-data
+          persistentVolumeClaim:
+            claimName: yamtrack-redis-data
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yamtrack
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: yamtrack
+  template:
+    metadata:
+      labels:
+        app: yamtrack
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: yamtrack
+          image: ghcr.io/fuzzygrim/yamtrack
+          envFrom:
+            - secretRef:
+                name: yamtrack-secret
+          ports:
+            - containerPort: 8000
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z yamtrack-db 5432; do echo waiting for db; sleep 2; done;']
+        - name: wait-for-redis
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z yamtrack-redis 6379; do echo waiting for redis; sleep 2; done;']

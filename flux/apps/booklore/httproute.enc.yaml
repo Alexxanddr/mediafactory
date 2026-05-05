@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: booklore
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:4X9m+4g8xZx5GVBypkptLNYgW10AJOeeLoBz7YBV,iv:MUQrDyJvw/KvOPkAfoLm50/pM9jH52vORcODDCzx/VI=,tag:wwr5G/ScK37kNfzc1O1INQ==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: booklore
+              port: 6060
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBRUGRydlVQVWhXcGZiR21n
+            TFlOdklGU3YvaEpIaXErRW9BYURRMlFEZUF3CkgzeVNtamJFWUlCRm1xQUVBL0ox
+            bjByOXE4UEV0RzllUTB1NnVGa2FVZWMKLS0tIHVMSUlrQTBoeUxiRUNtREk0OU80
+            TVdBanBWU0Ribjlxek5wUkxVMlN5UFEKJEgsOKLNKoCFNKnDJObkwIg8LoZxd2ce
+            d4ldKu4irNvkJu6H5RNGx9HIM/PW/l8BULrD4eMzwhElQd/w809qwQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T16:11:06Z"
+    mac: ENC[AES256_GCM,data:sNxMRfpMYN7epLkKJaXgkwUqObneb0n/OIbVgZGBoYvZAFId3/V0R2LquSxlQFA7H4JwCHGZ4nRIup9A0ezHHPCmnmjwIqd7W8GIZ4F2LCTOQAI2PrhzEcXeEWXj0lmfq17jnJvANgrl+FehDgH51Th0Y5VemTR/fE81UyYHR8k=,iv:putKYCflV9ST0cYXzM4vq2qZ59lIh+j5jAgCB31B3gU=,tag:QUVuXvv4Aa9PJ+RkmoE/Rg==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2

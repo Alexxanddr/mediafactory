@@ -1,0 +1,173 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: booklore-db
+#   namespace: multimedia-factory
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: booklore-db
+#   template:
+#     metadata:
+#       labels:
+#         app: booklore-db
+#     spec:
+#       containers:
+#         - name: mariadb
+#           image: lscr.io/linuxserver/mariadb:11.4.5
+#           envFrom:
+#             - secretRef:
+#                 name: booklore-db-secret
+#           ports:
+#             - containerPort: 3306
+#           volumeMounts:
+#             - name: mariadb-config
+#               mountPath: /config
+#           livenessProbe:
+#             exec:
+#               command:
+#                 - mariadb-admin
+#                 - ping
+#                 - -h
+#                 - localhost
+#             initialDelaySeconds: 30
+#             periodSeconds: 5
+#             timeoutSeconds: 5
+#             failureThreshold: 10
+#           readinessProbe:
+#             exec:
+#               command:
+#                 - mariadb-admin
+#                 - ping
+#                 - -h
+#                 - localhost
+#             initialDelaySeconds: 30
+#             periodSeconds: 5
+#             timeoutSeconds: 5
+#             failureThreshold: 10
+#       volumes:
+#         - name: mariadb-config
+#           persistentVolumeClaim:
+#             claimName: booklore-mariadb-config
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booklore-db
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booklore-db
+  template:
+    metadata:
+      labels:
+        app: booklore-db
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          envFrom:
+          - secretRef:
+              name: booklore-db-secret
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - name: mariadb-config
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - healthcheck.sh
+                - --connect
+                - --innodb_initialized
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - healthcheck.sh
+                - --connect
+                - --innodb_initialized
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+      volumes:
+        - name: mariadb-config
+          persistentVolumeClaim:
+            claimName: booklore-mariadb-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booklore
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: booklore
+  template:
+    metadata:
+      labels:
+        app: booklore
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: booklore
+          image: ghcr.io/booklore-app/booklore:latest
+          envFrom:
+            - secretRef:
+                name: booklore-db-secret
+          ports:
+            - containerPort: 6060
+          volumeMounts:
+            - name: booklore-data
+              mountPath: /app/data
+            - name: booklore-books
+              mountPath: /books
+            - name: booklore-bookdrop
+              mountPath: /bookdrop
+          livenessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - -O
+                - '-'
+                - http://localhost:6060/api/v1/healthcheck
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - wget
+                - -q
+                - -O
+                - '-'
+                - http://localhost:6060/api/v1/healthcheck
+            initialDelaySeconds: 60
+            periodSeconds: 60
+            timeoutSeconds: 10
+            failureThreshold: 5
+      volumes:
+        - name: booklore-data
+          persistentVolumeClaim:
+            claimName: booklore-data
+        - name: booklore-books
+          persistentVolumeClaim:
+            claimName: booklore-books
+        - name: booklore-bookdrop
+          persistentVolumeClaim:
+            claimName: booklore-bookdrop
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z booklore-db 3306; do echo waiting for db; sleep 2; done;']
