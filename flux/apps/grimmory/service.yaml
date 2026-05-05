@@ -2,11 +2,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: booklore-db
+  name: grimmory-db
   namespace: multimedia-factory
 spec:
   selector:
-    app: booklore-db
+    app: grimmory-db
   ports:
     - protocol: TCP
       port: 3306
@@ -17,11 +17,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: booklore
+  name: grimmory
   namespace: multimedia-factory
 spec:
   selector:
-    app: booklore
+    app: grimmory
   ports:
     - protocol: TCP
       port: 6060

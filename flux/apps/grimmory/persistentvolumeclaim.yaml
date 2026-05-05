@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: booklore-mariadb-config
+  name: grimmory-mariadb-config
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -11,13 +11,13 @@ spec:
       storage: 10Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: booklore-mariadb-config
+  volumeName: grimmory-mariadb-config
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: booklore-data
+  name: grimmory-data
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -27,13 +27,13 @@ spec:
       storage: 10Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: booklore-data
+  volumeName: grimmory-data
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: booklore-books
+  name: grimmory-books
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -43,13 +43,13 @@ spec:
       storage: 100Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: booklore-books
+  volumeName: grimmory-books
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: booklore-bookdrop
+  name: grimmory-bookdrop
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -59,6 +59,6 @@ spec:
       storage: 10Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: booklore-bookdrop
+  volumeName: grimmory-bookdrop
 
 ---

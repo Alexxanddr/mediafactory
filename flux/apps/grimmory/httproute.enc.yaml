@@ -1,7 +1,7 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-    name: booklore
+    name: grimmory
     namespace: multimedia-factory
 spec:
     parentRefs:
@@ -15,7 +15,7 @@ spec:
                 type: PathPrefix
                 value: /
           backendRefs:
-            - name: booklore
+            - name: grimmory
               port: 6060
 sops:
     age:
