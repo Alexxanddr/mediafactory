@@ -49,7 +49,7 @@ data:
 
       Tools:
         style: row
-        columns: 4
+        columns: 5
       OtherTools:
         header: false
         style: row
@@ -377,6 +377,20 @@ data:
             widget:
               type: scrutiny
               url: http://scrutiny-web.extra-tools.svc:8080
+        - Vikunja:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/vikunja.png
+            href: https://vikunja.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://vikunja.extra-tools.svc:3456
+            showStats: false
+            app: vikunja
+            namespace: extra-tools
+            podSelector: app in ( vikunja )
+            widget:
+              type: vikunja
+              url: http://vikunja.extra-tools.svc:3456
+              key: {{HOMEPAGE_VAR_VIKUNJA_PASSWORD}}
+              enableTaskList: true
+              version: 2
     - OtherTools:
       - Questarr:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/questarr.png
