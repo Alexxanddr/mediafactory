@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: vikunja
+  namespace: extra-tools
+spec:
+  releaseName: vikunja
+  interval: 5m
+  chart:
+    spec:
+      chart: vikunja
+      sourceRef:
+        kind: HelmRepository
+        name: vikunja
+        namespace: flux-system
+  values:
+    vikunja:
+      image:
+        repository: vikunja/vikunja
+        tag: "latest"
+        pullPolicy: Always
+      persistence:
+        data:
+          enabled: true
+          existingClaim: vikunja-data    
+          accessMode: ReadWriteOnce
+          size: 2Gi
+          mountPath: /app/vikunja/files
+        database:
+          enabled: true
+          existingClaim: vikunja-db      
+          accessMode: ReadWriteOnce
+          size: 2Gi
+          mountPath: /db

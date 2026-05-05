@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: vikunja
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:PqLDRd4T5Q8T9cBe2cImaJwcb9dPAYfCqzcvbFk=,iv:Z/TWWZx6pF6x8iHzZt0SAO6QuIPsNIufO91VQ67yte0=,tag:GFdcaZ2esRe1uqWH9KAsYw==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: vikunja
+              port: 3456
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4cTdZK0Zha3llTng1aXY3
+            dzQzZEU1Y0xlRENuMDE3bjRwWTRtRkdYMWxzCnZncCswa01OR29tVm42cUlmZFht
+            SlpJM0tzdzBJR1dmdVRBeVNwd2pYSlEKLS0tIHltZ1dXV0F5TVVsbEFuQWFEd2Vr
+            YTltTlRjODdrZ0RLdnJURGJ2WEdvVDQKsnmwc2QoQUfB0fTTEbpJUiWzvNqDWOli
+            gif0zXuzRKGVCWKpA4s09PFSiVHNNlpWh5+Ad9QIga6Q3CUzlQja3w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T09:13:56Z"
+    mac: ENC[AES256_GCM,data:7iHdMphMGCfWy+ij/oFSQeiHMpj8ni1Eu0hOJCqGjgkuVJgfA9Lr2yPRrp8T25Y1yI/TjlBt4Jbvvzc9KBRTyMM/Nn6Dwrzmat7qYDNRpwd2a76QnuhemCqxIP/K527EjbIwa378KcK/qYFX3jhmkaNYPMuhKyVarGwHSJzFgUw=,iv:0z5gAsXnqmKtvLuMvS2Pv4lWQAbxjDT+KBte22AxZxk=,tag:z9NTZkEN6BN5Y4YQmHEiGQ==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
