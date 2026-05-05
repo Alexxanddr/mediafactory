@@ -264,6 +264,15 @@ data:
               url: http://booklore.multimedia-factory.svc:6060
               username: {{HOMEPAGE_VAR_BOOKLORE_USER}}
               password: {{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}
+        - YamTrack:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/yamtrack-light.png
+            href: https://yamtrack.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://yamtrack.multimedia-factory.svc:8000
+            showStats: false
+            app: yamtrack
+            namespace: multimedia-factory
+            podSelector: app in ( yamtrack )
+            type: iframe
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg
