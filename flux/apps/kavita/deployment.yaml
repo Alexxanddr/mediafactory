@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kavita
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kavita
+  template:
+    metadata:
+      labels:
+        app: kavita
+    spec:
+      containers:
+        - name: kavita
+          image: lscr.io/linuxserver/kavita:latest
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: Etc/UTC
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: kavita-config
+              mountPath: /config
+            - name: kavita-data
+              mountPath: /data
+      volumes:
+        - name: kavita-config
+          persistentVolumeClaim:
+            claimName: kavita-config
+        - name: kavita-data
+          persistentVolumeClaim:
+            claimName: kavita-data
