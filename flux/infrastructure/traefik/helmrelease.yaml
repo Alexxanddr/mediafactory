@@ -30,12 +30,12 @@ spec:
         enabled: true
     gateway:
       namespacePolicy: All
-    web:
-      redirections:
-        entryPoint:
-          to: websecure
-          scheme: https
-          permanent: true
+    ports:
+      web:
+        redirections:
+          entryPoint:
+            to: websecure
+            scheme: https
+            permanent: true
     api:
       dashboard: true
-      # insecure: false
