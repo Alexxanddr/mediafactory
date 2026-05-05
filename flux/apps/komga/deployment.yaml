@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kavita
+  name: komga
   namespace: multimedia-factory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kavita
+      app: komga
   template:
     metadata:
       labels:
-        app: kavita
+        app: komga
     spec:
       containers:
-        - name: kavita
-          image: lscr.io/linuxserver/kavita:latest
+        - name: komga
+          image: gotson/komga:latest
           env:
             - name: PUID
               value: "1000"
@@ -24,16 +24,16 @@ spec:
             - name: TZ
               value: Etc/UTC
           ports:
-            - containerPort: 5000
+            - containerPort: 25600
           volumeMounts:
-            - name: kavita-config
+            - name: komga-config
               mountPath: /config
-            - name: kavita-data
+            - name: komga-data
               mountPath: /data
       volumes:
-        - name: kavita-config
+        - name: komga-config
           persistentVolumeClaim:
-            claimName: kavita-config
-        - name: kavita-data
+            claimName: komga-config
+        - name: komga-data
           persistentVolumeClaim:
-            claimName: kavita-data
+            claimName: komga-data
