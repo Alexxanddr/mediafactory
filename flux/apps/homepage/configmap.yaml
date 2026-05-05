@@ -32,7 +32,7 @@ data:
         header: true
         style: row
         columns: 5
-      OtherMedia:
+      OtherArr:
         header: false
         style: row
         columns: 4
@@ -131,7 +131,7 @@ data:
               username: {{HOMEPAGE_VAR_DISPATCHARR_USER}}
               password: {{HOMEPAGE_VAR_DISPATCHARR_PASS}}
               enableActiveStreams: true # optional, defaults to false
-    - OtherMedia:
+    - OtherArr:
       - Profilarr:
           icon: https://avatars.githubusercontent.com/u/171363348?s=48&v=4
           href: https://profilarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -238,6 +238,40 @@ data:
               type: fileflows
               url: http://fileflows.multimedia-factory.svc:5000
               fields: ["queue", "processing", "processed", "time"]
+        - Kavita:
+            icon: kavita.svg
+            href: https://kavita.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://kavita.multimedia-factory.svc:5000
+            showStats: false
+            app: kavita
+            namespace: multimedia-factory
+            podSelector: app in ( kavita )
+            widget:
+              type: kavita
+              url: http://kavita.multimedia-factory.svc:5000
+              username: {{HOMEPAGE_VAR_KAVITA_USER}}
+              password: {{HOMEPAGE_VAR_KAVITA_PASSWORD}}
+        - BookLore:
+            icon: booklore.svg
+            href: https://booklore.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://booklore.multimedia-factory.svc:6060
+            showStats: false
+            app: booklore
+            namespace: multimedia-factory
+            podSelector: app in ( booklore )
+            widget:
+              type: booklore
+              url: http://booklore.multimedia-factory.svc:6060
+              username: {{HOMEPAGE_VAR_BOOKLORE_USER}}
+              password: {{HOMEPAGE_VAR_BOOKLORE_PASSWORD}}
+        - YamTrack:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/yamtrack-light.png
+            href: https://yamtrack.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://yamtrack.multimedia-factory.svc:8000
+            showStats: false
+            app: yamtrack
+            namespace: multimedia-factory
+            podSelector: app in ( yamtrack )
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg
