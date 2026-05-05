@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: anibridge
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:hLHvWfb7ppHc4yxwJzqumRhHOnnHDdvnxonR7puahw==,iv:m6o+2W6AIqiL0V7CgsWxj3oyc0U8i7mLw8tm17+Rg3k=,tag:GI6zQomxnpDdh8+rxAh3cQ==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: anibridge
+              port: 4848
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzMEppcS8ycXV6dTFTSTVn
+            b0lMLzNuM1NMQmh2bmF5Q25NN3Vrd2pQZjFjClZ4L1lUK2dXVGF6MzlNMHhTMjk2
+            ZTRLVm5QQnhObXp4S2Q3WVloOStvV2cKLS0tIFVXNWtpVWZqSDZNWFdHcnpONEJl
+            VG9XNXZLaVg4TmJKSWVxYmVLbm52dzgKqq6aM+9wzATCVp3KASxI+1OLHzu5q5yU
+            AEoLC/X1Mo4RFAqNsR8YdvM14Mbr9fcluYHdwG6GHdxab0ODxMtP1w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-05T22:21:20Z"
+    mac: ENC[AES256_GCM,data:Edl4p1hqhQn1+yOK4MEJJlkRGysPdw2qyMogIBRIlutoa1zaNPJanpopDfPfFFcqEILniBqP5BSZh26hQnbNdzpXGPEFCIAckJ7eiWeROOBjVVPVdYFFsyXS0L+gwss567U/pA5L/wj3w17XwfZjLgUf2S11N/Q/W6Pjab2Gyvg=,iv:zd9A5CQt1ouVXT3kqr+LwElQjVFUjplggfHE33K8tVk=,tag:LOBFGRLmoaD+jouAtMrTMg==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
