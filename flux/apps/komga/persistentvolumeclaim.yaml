@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kavita-config
+  name: komga-config
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -11,13 +11,13 @@ spec:
       storage: 100Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: kavita-config
+  volumeName: komga-config
 
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: kavita-data
+  name: komga-data
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -27,6 +27,6 @@ spec:
       storage: 100Gi
   storageClassName: local-path
   volumeMode: Filesystem
-  volumeName: kavita-data
+  volumeName: komga-data
 
 ---

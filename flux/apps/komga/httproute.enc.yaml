@@ -1,22 +1,22 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-    name: kavita
+    name: komga
     namespace: multimedia-factory
 spec:
     parentRefs:
         - name: traefik-gateway
           namespace: system-addon
     hostnames:
-        - ENC[AES256_GCM,data:yBJiBh+LdKkUFUlpbMFrafdod1L/Yv17xUwogw==,iv:LLdHOvTXlZlLVE2awSWPmZRZB4qeSgpFfBMTkSCmWJw=,tag:06yExYN6MMUWi3Y6pgkocg==,type:str]
+        - ENC[AES256_GCM,data:+dD23rZNUER9TBLqSBGk5Bzt2j/sMnHOvD0u,iv:WCpv3KUGQwjh6HA3ATf1C5m++YDsGYGoPnhts0qvJT8=,tag:iwHKr+TkuLwRS9X1xFp2/g==,type:str]
     rules:
         - matches:
             - path:
                 type: PathPrefix
                 value: /
           backendRefs:
-            - name: kavita
-              port: 5000
+            - name: komga
+              port: 25600
 sops:
     age:
         - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
@@ -28,7 +28,7 @@ sops:
             V3pIV1ZGWTRkc1p0VzlYYWhUeXlSMmMK5hHBL5+o+dxsieoXdqz5UkNEZlTlm0vJ
             A0s1UIBBPS/PvCjPV2NIdh3AKv9Nmo75eFAb2r+eHRteVgMc4ToB5Q==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-05T16:10:44Z"
-    mac: ENC[AES256_GCM,data:YJ+0UHEzYc6L4g0Odu/wLDvqk991Bk3UbSTBISBB5pXTlMPTbW0hFdnSrsCc5A0HxQfks0fN73mMvuFNwr/LayHsLMNXVokhRxm/Op99Di7SNA1X4WXLYz/GtFRQ4jtqBtzO6psCyQT+g57i48xrpadBkYlpEjSgF6Ex7RV1QhU=,iv:H4nDx87KpNGPCKHfGsx9ht7293II/nNWRQQOnsW+AgI=,tag:KzM0zCaAxEfvnOOiOEbHjQ==,type:str]
+    lastmodified: "2026-05-05T23:02:59Z"
+    mac: ENC[AES256_GCM,data:oK0HwuDGJTQVo4hdbYW75mDjpJ6lwKLghdFRaIOpiZSoGL9AMbRUSdSdwBaAL+7MKnVNQUZZ8QMLG5HQSOsmg6EHJzvWZpXmO/QHHFvPxPt6QxLxrZgnPB71p4P+w9VeJgvyiLhQU6qdhD1ZZSbobRlRhbFr2zYjgjcwZmT6Kco=,iv:D5ImI6jKEYjSD/3xHQzbSea2nvcDklaQpPOINS8kgT0=,tag:24sku0QJihFQFUaQHJjP8A==,type:str]
     encrypted_regex: hostnames|0
     version: 3.12.2
