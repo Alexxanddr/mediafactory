@@ -83,7 +83,7 @@ spec:
             - mountPath: /data
               name: qbittorrent-wg-data
       volumes:
-        - name: wireguard-config
+        - name: qbittorrent-wg-wireguard-conf
           secret:
             secretName: qbittorrent-wg-wireguard-conf
         - name: qbittorrent-wg-opts
