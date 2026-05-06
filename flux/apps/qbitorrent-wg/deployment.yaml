@@ -32,7 +32,7 @@ spec:
               containerPort: 8888
           envFrom:
             - secretRef:
-                name: qbittorrent-wg-opts
+                name: qbittorrent-wg-opts-secret
           volumeMounts:
             - name: qbittorrent-wg-wireguard-conf
               mountPath: /gluetun/wireguard/
@@ -86,7 +86,7 @@ spec:
         - name: qbittorrent-wg-wireguard-conf
           secret:
             secretName: qbittorrent-wg-wireguard-conf
-        - name: qbittorrent-wg-opts
+        - name: qbittorrent-wg-opts-secret
           secret:
             secretName: qbittorrent-wg-opts-secret
         - name: qbittorrent-wg-data
