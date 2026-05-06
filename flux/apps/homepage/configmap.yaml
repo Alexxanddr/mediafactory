@@ -255,6 +255,8 @@ data:
               url: http://komga.multimedia-factory.svc:25600
               username: {{HOMEPAGE_VAR_KOMGA_USER}}
               password: {{HOMEPAGE_VAR_KOMGA_PASSWORD}}
+              key: {{HOMEPAGE_VAR_KOMGA_API_KEY}}
+              fields: ["libraries", "series", "books"]
         - Grimmory:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/grimmory.png
             href: https://grimmory.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -288,11 +290,11 @@ data:
         - Tranga:
             icon: https://tranga.internal.skypiea.work/_nuxt/blahaj.CO8PTXkI.png
             href: https://tranga.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://tranga.multimedia-factory.svc:80
+            siteMonitor: http://tranga-website.multimedia-factory.svc:80
             showStats: false
-            app: tranga
+            app: tranga-website
             namespace: multimedia-factory
-            podSelector: app in ( tranga )
+            podSelector: app in ( tranga-website )
         - Anibridge:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/anibridge.png
             href: https://anibridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
