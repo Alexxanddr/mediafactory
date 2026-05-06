@@ -253,8 +253,6 @@ data:
             widget:
               type: komga
               url: http://komga.multimedia-factory.svc:25600
-              username: {{HOMEPAGE_VAR_KOMGA_USER}}
-              password: {{HOMEPAGE_VAR_KOMGA_PASSWORD}}
               key: {{HOMEPAGE_VAR_KOMGA_API_KEY}}
               fields: ["libraries", "series", "books"]
         - Grimmory:
