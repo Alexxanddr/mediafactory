@@ -36,7 +36,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /var/lib/rancher/k3s/storage/komga/data
+    path: /mnt/md0/MediaFactory/books/manga
   nodeAffinity:
     required:
       nodeSelectorTerms:
