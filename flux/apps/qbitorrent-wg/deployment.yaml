@@ -3,12 +3,10 @@ kind: Deployment
 metadata:
   name: qbittorrent-wg
   namespace: multimedia-factory
-  labels:
-    app: qbittorrent-wg
 spec:
   replicas: 1
   strategy:
-    type: Recreate
+    type: RollingUpdate
   selector:
     matchLabels:
       app: qbittorrent-wg
@@ -17,99 +15,89 @@ spec:
       labels:
         app: qbittorrent-wg
     spec:
-      containers:
+      dnsPolicy: None
+      hostAliases:
+      - hostnames:
+        - prowlarr.multimedia-factory.svc.cluster.local
+        ip: 10.43.150.43
+      dnsConfig:
+        nameservers:
+          - 9.9.9.9
+          - 1.1.1.1
+      securityContext:
+        sysctls:
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "0"
 
-        # =========================
-        # GLUETUN (VPN gateway)
-        # =========================
-        - name: gluetun
-          image: ghcr.io/qdm12/gluetun:v3.41.1
-          securityContext:
-            capabilities:
-              add: ["NET_ADMIN"]
+      containers:
+        - name: qbittorrent-wg
+          image: trigus42/qbittorrentvpn
+          command:
+            - sh
+            - -c
+            - |
+              if ip link show wg0 >/dev/null 2>&1; then
+                echo "[pre-start] Removing stale wg0..."
+                ip link delete wg0 2>/dev/null || true
+              fi
+              exec /init
           ports:
-            - name: http-proxy
-              containerPort: 8888
+            - containerPort: 8080
           envFrom:
             - secretRef:
-                name: qbittorrent-wg-opts-secret
+                name: qbittorrent-wg-secret
+          env:
+            - name: VPN_TYPE
+              value: "wireguard"
+            - name: VPN_ENABLED
+              value: "yes"
+            - name: WEBUI_ALLOWED_NETWORKS
+              value: "192.168.0.0/16,10.0.0.0/8,172.16.0.0/16,127.0.0.0/8"
+          securityContext:
+            capabilities:
+              add:
+                - NET_ADMIN
+
           volumeMounts:
-            - name: qbittorrent-wg-wireguard-conf
-              mountPath: /gluetun/wireguard/
+            - mountPath: /config
+              name: qbittorrent-wg-config
+            - mountPath: /data
+              name: qbittorrent-wg-data
+            - name: wireguard-config
+              mountPath: /config/wireguard
               readOnly: true
+
           readinessProbe:
             exec:
               command:
                 - sh
                 - -c
                 - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 5
-            periodSeconds: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
             timeoutSeconds: 2
-            failureThreshold: 3
+            failureThreshold: 5
+
           livenessProbe:
             exec:
               command:
                 - sh
                 - -c
                 - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 2
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 3
             failureThreshold: 3
 
-        # =========================
-        # qbittorrent-wg
-        # =========================
-        - name: qbittorrent-wg
-          image: linuxserver/qbittorrent:latest
-          ports:
-            - containerPort: 9696
-          envFrom:
-            - secretRef:
-                name: qbittorrent-wg-opts-secret
-          env:
-            - name: DOCKER_MODS
-              value: "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest"
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: UMASK
-              value: "002"
-            - name: TZ
-              value: Etc/UTC
-          volumeMounts:
-            - mountPath: /config
-              name: qbittorrent-wg-config
-            - mountPath: /data
-              name: qbittorrent-wg-data
       volumes:
-        - name: qbittorrent-wg-wireguard-conf
+        - name: wireguard-config
           secret:
             secretName: qbittorrent-wg-wireguard-conf
-        - name: qbittorrent-wg-opts-secret
-          secret:
-            secretName: qbittorrent-wg-opts-secret
         - name: qbittorrent-wg-data
           persistentVolumeClaim:
             claimName: qbittorrent-wg-data
         - name: qbittorrent-wg-config
           persistentVolumeClaim:
             claimName: qbittorrent-wg-config
-
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 127.0.0.1
-      hostAliases:
-        - ip: "10.43.98.59"
-          hostnames:
-            - "qbittorrent-wg.multimedia-factory.svc"
-        - ip: "10.43.67.209"
-          hostnames:
-            - "sonarr.multimedia-factory.svc"
-        - ip: "10.43.26.74"
-          hostnames:
-            - "radarr.multimedia-factory.svc"
-            
