@@ -254,7 +254,7 @@ data:
               type: komga
               url: http://komga.multimedia-factory.svc:25600
               username: {{HOMEPAGE_VAR_KOMGA_USER}}
-              password: {{HOMEPAGE_VAR_KOMGA_PASSWORD}}ptional
+              password: {{HOMEPAGE_VAR_KOMGA_PASSWORD}}
         - Grimmory:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/grimmory.png
             href: https://grimmory.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
