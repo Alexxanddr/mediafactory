@@ -69,6 +69,8 @@ spec:
             - secretRef:
                 name: qbittorrent-wg-opts-secret
           env:
+            - name: DOCKER_MODS
+              value: "ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest"
             - name: PUID
               value: "1000"
             - name: PGID
