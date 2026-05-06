@@ -39,6 +39,10 @@ data:
       Media Stack:
         style: row
         columns: 5
+      OtherMedia:
+        header: false
+        style: row
+        columns: 4
       Infra Stack:
         style: row
         columns: 4
@@ -151,7 +155,7 @@ data:
           namespace: multimedia-factory
           podSelector: app in ( maintainerr )
       - Lingarr:
-          icon: lingarr.png
+          icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/lingarr.png
           href: https://lingarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
           siteMonitor: http://lingarr.multimedia-factory.svc:9876
           description: Lingarr
@@ -238,19 +242,19 @@ data:
               type: fileflows
               url: http://fileflows.multimedia-factory.svc:5000
               fields: ["queue", "processing", "processed", "time"]
-        - Kavita:
-            icon: kavita.svg
-            href: https://kavita.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://kavita.multimedia-factory.svc:5000
+        - Komga:
+            icon: komga.svg
+            href: https://komga.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://komga.multimedia-factory.svc:25600
             showStats: false
-            app: kavita
+            app: komga
             namespace: multimedia-factory
-            podSelector: app in ( kavita )
+            podSelector: app in ( komga )
             widget:
-              type: kavita
-              url: http://kavita.multimedia-factory.svc:5000
-              username: {{HOMEPAGE_VAR_KAVITA_USER}}
-              password: {{HOMEPAGE_VAR_KAVITA_PASSWORD}}
+              type: komga
+              url: http://komga.multimedia-factory.svc:25600
+              username: {{HOMEPAGE_VAR_KOMGA_USER}}
+              password: {{HOMEPAGE_VAR_KOMGA_PASSWORD}}ptional
         - Grimmory:
             icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/grimmory.png
             href: https://grimmory.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -264,6 +268,7 @@ data:
               url: http://grimmory.multimedia-factory.svc:6060
               username: {{HOMEPAGE_VAR_GRIMMORY_USER}}
               password: {{HOMEPAGE_VAR_GRIMMORY_PASSWORD}}
+    - OtherMedia:
         - YamTrack:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/yamtrack-light.png
             href: https://yamtrack.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -272,7 +277,30 @@ data:
             app: yamtrack
             namespace: multimedia-factory
             podSelector: app in ( yamtrack )
-            type: iframe
+        - Shelfmark:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/shelfmark.png
+            href: https://shelfmark.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://shelfmark.multimedia-factory.svc:8084
+            showStats: false
+            app: shelfmark
+            namespace: multimedia-factory
+            podSelector: app in ( shelfmark )
+        - Tranga:
+            icon: https://tranga.internal.skypiea.work/_nuxt/blahaj.CO8PTXkI.png
+            href: https://tranga.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://tranga.multimedia-factory.svc:80
+            showStats: false
+            app: tranga
+            namespace: multimedia-factory
+            podSelector: app in ( tranga )
+        - Anibridge:
+            icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/anibridge.png
+            href: https://anibridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://anibridge.multimedia-factory.svc:4848
+            showStats: false
+            app: anibridge
+            namespace: multimedia-factory
+            podSelector: app in ( anibridge )
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg

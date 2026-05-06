@@ -10,7 +10,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /var/lib/rancher/k3s/storage/tranga/manga
+    path: /mnt/md0/MediaFactory/books/manga
   nodeAffinity:
     required:
       nodeSelectorTerms:

@@ -62,7 +62,7 @@ spec:
   capacity:
     storage: 100Gi
   local:
-    path: /mnt/md0/MediaFactory/books
+    path: /mnt/md0/MediaFactory/books/books
   nodeAffinity:
     required:
       nodeSelectorTerms:
