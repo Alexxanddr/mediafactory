@@ -40,3 +40,7 @@ spec:
               permanent: true
     api:
       dashboard: true
+    logs:
+      access:
+        enabled: true
+        format: json
