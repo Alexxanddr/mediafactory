@@ -391,7 +391,7 @@ data:
       - OpenWebUI:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/open-webui-light.png
           href: https://openwebui.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://open-webui.system-addon.svc:8080 
+          siteMonitor: http://open-webui.extra-tools.svc:8080 
           showStats: false
           app: open-webui
           namespace: extra-tools
