@@ -141,7 +141,7 @@ spec:
         db_config:
           type: postgresql
           user: crowdsec
-          password: ${DB_PASSWORD}
+          password: "${DB_PASSWORD}"
           db_name: crowdsec
           host: crowdsec-postgres.system-addon.svc.cluster.local
           port: 5432
