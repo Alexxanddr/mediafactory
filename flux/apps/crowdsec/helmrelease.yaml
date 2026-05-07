@@ -1,0 +1,158 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: crowdsec
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/name: crowdsec
+    app.kubernetes.io/managed-by: flux
+spec:
+  releaseName: crowdsec
+  interval: 1h
+
+  # Aspetta che il Deployment PostgreSQL sia Ready prima di installare CrowdSec
+  dependsOn: []   # Aggiungere dipendenze Flux qui se PostgreSQL è gestito da un'altra HelmRelease
+
+  chart:
+    spec:
+      chart: crowdsec
+      sourceRef:
+        kind: HelmRepository
+        name: crowdsec
+        namespace: flux-system
+      interval: 12h
+  install:
+    crds: CreateReplace
+    remediation:
+      retries: 3
+  upgrade:
+    crds: CreateReplace
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+      strategy: rollback
+
+  valuesFrom:
+    - kind: Secret
+      name: crowdsec-keys
+      valuesKey: DB_PASSWORD
+      targetPath: config.config\.yaml\.local  
+      optional: false
+
+  values:
+    # --------------------------------------------------------------------------
+    # Runtime dei container nel cluster (docker = json, containerd = cri)
+    # --------------------------------------------------------------------------
+    container_runtime: containerd
+
+    # --------------------------------------------------------------------------
+    # LAPI – Local API (cervello di CrowdSec, scrive/legge dal DB)
+    # --------------------------------------------------------------------------
+    lapi:
+      replicas: 1
+      # Per HA con più repliche serve PostgreSQL (non SQLite)
+      # replicas: 2
+
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 500m
+          memory: 512Mi
+
+      # Persistenza per i certificati TLS interni tra agent e LAPI
+      persistentVolume:
+        config:
+          enabled: true
+          existingClaim: "crowdsec-data"
+
+      env:
+        # --- Enroll alla CrowdSec Console ---
+        - name: ENROLL_KEY
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-keys
+              key: ENROLL_KEY
+        - name: ENROLL_INSTANCE_NAME
+          value: "k3s"
+        - name: ENROLL_TAGS
+          value: "k8s linux production"
+
+        # --- Bouncer key per Traefik ---
+        - name: BOUNCER_KEY_traefik
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-keys
+              key: BOUNCER_KEY_traefik
+
+    # --------------------------------------------------------------------------
+    # Agent – processo che legge i log dei pod e li invia alla LAPI
+    # --------------------------------------------------------------------------
+    agent:
+      resources:
+        requests:
+          cpu: 100m
+          memory: 100Mi
+        limits:
+          cpu: 500m
+          memory: 256Mi
+
+      # Acquisizione log dai pod del cluster
+      # Aggiungi qui tutti i workload che vuoi monitorare
+      acquisition:
+        - namespace: system-addon
+          podName: traefik-*
+          program: traefik
+
+        # Esempio aggiuntivo per ingress-nginx:
+        # - namespace: ingress-nginx
+        #   podName: ingress-nginx-controller-*
+        #   program: nginx
+
+      env:
+        # Collections da caricare sull'agent
+        # Hub: https://hub.crowdsec.net/author/crowdsecurity
+        - name: COLLECTIONS
+          value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/linux"
+
+    # --------------------------------------------------------------------------
+    # config.yaml.local – configurazione interna del Security Engine
+    # Questa sezione mappa 1:1 con il file config.yaml.local di CrowdSec
+    # --------------------------------------------------------------------------
+    config:
+      config.yaml.local: |
+        api:
+          client:
+            # L'agent si de-registra dalla LAPI quando termina (evita ghost-agents)
+            unregister_on_exit: true
+          server:
+            # Auto-registrazione degli agent tramite token (no TLS necessario)
+            auto_registration:
+              enabled: true
+              token: "${REGISTRATION_TOKEN}"   # gestito automaticamente dal chart
+              allowed_ranges:
+                - "127.0.0.1/32"
+                - "10.0.0.0/8"
+                - "172.16.0.0/12"
+                - "192.168.0.0/16"
+
+        # Configurazione database PostgreSQL
+        # L'host punta al Service creato dai manifest postgres/
+        db_config:
+          type: postgresql
+          user: crowdsec
+          password: ${DB_PASSWORD}
+          db_name: crowdsec
+          host: crowdsec-postgres.system-addon.svc.cluster.local
+          port: 5432
+          sslmode: disable   # metti "require" se abiliti TLS su PostgreSQL
+
+          flush:
+            # Rimuovi automaticamente i bouncer con chiave API scaduta
+            bouncers_autodelete:
+              api_key: 1h
+            # Rimuovi automaticamente gli agent non attivi
+            agents_autodelete:
+              login_password: 6h
+              cert: 6h
