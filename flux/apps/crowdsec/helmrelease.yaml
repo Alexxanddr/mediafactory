@@ -32,13 +32,6 @@ spec:
       retries: 3
       strategy: rollback
 
-  valuesFrom:
-    - kind: Secret
-      name: crowdsec-keys
-      valuesKey: DB_PASSWORD
-      targetPath: config.config\.yaml\.local  
-      optional: false
-
   values:
     # --------------------------------------------------------------------------
     # Runtime dei container nel cluster (docker = json, containerd = cri)
@@ -52,6 +45,12 @@ spec:
       replicas: 1
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
+      env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-keys
+              key: DB_PASSWORD
 
       resources:
         requests:
