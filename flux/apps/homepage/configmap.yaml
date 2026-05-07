@@ -395,7 +395,7 @@ data:
           showStats: false
           app: open-webui
           namespace: extra-tools
-          podSelector: app.kubernetes.io/component in ( open-webui )
+          podSelector: app.kubernetes.io/name in ( open-webui )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
