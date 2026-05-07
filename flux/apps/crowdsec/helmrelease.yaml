@@ -45,12 +45,6 @@ spec:
       replicas: 1
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
-      env:
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: crowdsec-keys
-              key: DB_PASSWORD
 
       resources:
         requests:
@@ -84,6 +78,12 @@ spec:
             secretKeyRef:
               name: crowdsec-keys
               key: BOUNCER_KEY_traefik
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-keys
+              key: DB_PASSWORD
 
     # --------------------------------------------------------------------------
     # Agent – processo che legge i log dei pod e li invia alla LAPI
