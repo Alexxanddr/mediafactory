@@ -35,21 +35,21 @@ data:
       OtherArr:
         header: false
         style: row
-        columns: 4
+        columns: 5
       Media Stack:
         style: row
         columns: 5
       OtherMedia:
         header: false
         style: row
-        columns: 4
+        columns: 5
       Infra Stack:
         style: row
-        columns: 4
+        columns: 5
       OtherInfra:
         header: false
         style: row
-        columns: 3
+        columns: 5
 
       Tools:
         style: row
