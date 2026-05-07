@@ -15,8 +15,9 @@ spec:
         namespace: flux-system
   values:
     service:
-      type: LoadBalancer
-      externalTrafficPolicy: Local
+      spec:
+        type: LoadBalancer
+        externalTrafficPolicy: Local
       annotations:
         metallb.io/ip-allocated-from-pool: generic-cluster-pool
         metallb.universe.tf/address-pool: generic-cluster-pool
