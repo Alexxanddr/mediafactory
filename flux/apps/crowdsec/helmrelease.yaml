@@ -113,7 +113,7 @@ spec:
         # Collections da caricare sull'agent
         # Hub: https://hub.crowdsec.net/author/crowdsecurity
         - name: COLLECTIONS
-          value: "crowdsecurity/traefik crowdsecurity/http-cve crowdsecurity/linux"
+          value: "crowdsecurity/traefik"
 
     # --------------------------------------------------------------------------
     # config.yaml.local – configurazione interna del Security Engine
