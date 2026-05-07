@@ -121,7 +121,7 @@ spec:
     # Questa sezione mappa 1:1 con il file config.yaml.local di CrowdSec
     # --------------------------------------------------------------------------
     config:
-      "config.yaml.local": |
+      config.yaml.local: |
         api:
           client:
             # L'agent si de-registra dalla LAPI quando termina (evita ghost-agents)
