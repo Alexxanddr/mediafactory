@@ -388,6 +388,14 @@ data:
           app: duplicati
           namespace: system-addon
           podSelector: app in ( duplicati )
+      - OpenWebUI:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/open-webui-light.png
+          href: https://openwebui.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://open-webui.system-addon.svc:8080 
+          showStats: false
+          app: open-webui
+          namespace: extra-tools
+          podSelector: app.kubernetes.io/component in ( open-webui )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
