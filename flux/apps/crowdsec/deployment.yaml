@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crowdsec-postgres
+  namespace: system-addon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crowdsec-postgres
+  template:
+    metadata:
+      labels:
+        app: crowdsec-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:17
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: crowdsec-secrets
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: crowdsec-postgres
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "dispatch", "-d", "crowdsec"]
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: crowdsec-postgres
+          persistentVolumeClaim:
+            claimName: crowdsec-postgres
