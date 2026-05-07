@@ -55,10 +55,10 @@ spec:
           memory: 512Mi
 
       # Persistenza per i certificati TLS interni tra agent e LAPI
-      persistentVolume:
-        config:
-          enabled: true
-          existingClaim: "crowdsec-data"
+      # persistentVolume:
+      #   config:
+      #     enabled: true
+      #     existingClaim: "crowdsec-data"
 
       env:
         # --- Enroll alla CrowdSec Console ---
