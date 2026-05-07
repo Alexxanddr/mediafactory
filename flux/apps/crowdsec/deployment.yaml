@@ -39,7 +39,7 @@ spec:
               mountPath: /var/lib/postgresql/data
           readinessProbe:
             exec:
-              command: ["pg_isready", "-U", "dispatch", "-d", "crowdsec"]
+              command: ["pg_isready", "-U", "crowdsec", "-d", "crowdsec"]
             initialDelaySeconds: 5
             periodSeconds: 5
       volumes:
