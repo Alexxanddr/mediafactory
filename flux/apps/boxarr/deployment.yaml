@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: boxarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: boxarr
+  template:
+    metadata:
+      labels:
+        app: boxarr
+    spec:
+      containers:
+        - name: boxarr
+          image: ghcr.io/iongpt/boxarr:latest
+          ports:
+            - containerPort: 8888
+          volumeMounts:
+            - name: boxarr-config
+              mountPath: /config
+      volumes:
+        - name: boxarr-config
+          persistentVolumeClaim:
+            claimName: boxarr-config

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: boxarr
+  namespace: multimedia-factory
+spec:
+  selector:
+    app: boxarr
+  ports:
+    - protocol: TCP
+      port: 8888
+      targetPort: 8888
+  type: ClusterIP
