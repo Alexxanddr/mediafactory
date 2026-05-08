@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: youtarr-config
+  namespace: multimedia-factory
+data:
+  IN_DOCKER_CONTAINER: "1"
+  TZ: "Europe/Rome"
+  LOG_LEVEL: "info"
+  AUTH_ENABLED: ""
+  AUTH_PRESET_USERNAME: ""
+  AUTH_PRESET_PASSWORD: ""
+  YOUTUBE_OUTPUT_DIR: "/usr/src/app/data"  # CHANGEME: host path shown in the UI, informational only

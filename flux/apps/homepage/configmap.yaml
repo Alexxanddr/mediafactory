@@ -42,7 +42,7 @@ data:
       OtherMedia:
         header: false
         style: row
-        columns: 5
+        columns: 6
       Infra Stack:
         style: row
         columns: 5
@@ -57,7 +57,7 @@ data:
       OtherTools:
         header: false
         style: row
-        columns: 3
+        columns: 6
   custom.css: ""
   custom.js: ""
   # docker.yaml: ""
@@ -309,6 +309,14 @@ data:
             app: boxarr
             namespace: multimedia-factory
             podSelector: app in ( boxarr )
+        - Youtarr:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/youtarr.png
+            href: https://youtarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://youtarr.multimedia-factory.svc:3011
+            showStats: false
+            app: youtarr
+            namespace: multimedia-factory
+            podSelector: app in ( youtarr )
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg
@@ -495,6 +503,14 @@ data:
           app: nutify
           namespace: extra-tools
           podSelector: app in ( nutify )
+      - It-Tools:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/it-tools-light.svg
+          href: https://it-tools.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://it-tools.extra-tools.svc:80
+          showStats: false
+          app: it-tools
+          namespace: extra-tools
+          podSelector: app in ( it-tools )
   widgets.yaml: |
     - greeting:
         text_size: xl

@@ -1,0 +1,141 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youtarr-db
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: youtarr-db
+  template:
+    metadata:
+      labels:
+        app: youtarr-db
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:10.3
+          args:
+            - --port=3321
+            - --character-set-server=utf8mb4
+            - --collation-server=utf8mb4_unicode_ci
+            - --innodb-file-per-table=1
+            - --innodb-large-prefix=ON
+          envFrom:
+            - secretRef:
+                name: youtarr-db-secret
+          ports:
+            - containerPort: 3321
+          volumeMounts:
+            - name: youtarr-db-data
+              mountPath: /var/lib/mysql
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -P
+                - "3321"
+                - -u
+                - root
+                - -p$(MYSQL_ROOT_PASSWORD)
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -P
+                - "3321"
+                - -u
+                - root
+                - -p$(MYSQL_ROOT_PASSWORD)
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 5
+      volumes:
+        - name: youtarr-db-data
+          persistentVolumeClaim:
+            claimName: youtarr-db-data
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: youtarr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: youtarr
+  template:
+    metadata:
+      labels:
+        app: youtarr
+    spec:
+      enableServiceLinks: false
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+      containers:
+        - name: youtarr
+          image: dialmaster/youtarr:latest
+          envFrom:
+            - secretRef:
+                name: youtarr-db-secret
+            - configMapRef:
+                name: youtarr-config
+          ports:
+            - containerPort: 3011
+          volumeMounts:
+            - name: youtarr-data
+              mountPath: /usr/src/app/data
+            - name: youtarr-images
+              mountPath: /app/server/images
+            - name: youtarr-config
+              mountPath: /app/config
+            - name: youtarr-jobs
+              mountPath: /app/jobs
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3011
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3011
+            initialDelaySeconds: 40
+            periodSeconds: 30
+            timeoutSeconds: 10
+            failureThreshold: 3
+      volumes:
+        - name: youtarr-data
+          persistentVolumeClaim:
+            claimName: youtarr-data
+        - name: youtarr-images
+          persistentVolumeClaim:
+            claimName: youtarr-images
+        - name: youtarr-config
+          persistentVolumeClaim:
+            claimName: youtarr-config
+        - name: youtarr-jobs
+          persistentVolumeClaim:
+            claimName: youtarr-jobs
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nc -z youtarr-db 3321; do echo waiting for db; sleep 2; done;']
