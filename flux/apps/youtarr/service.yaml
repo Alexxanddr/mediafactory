@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: youtarr-db
+  namespace: multimedia-factory
+spec:
+  selector:
+    app: youtarr-db
+  ports:
+    - protocol: TCP
+      port: 3321
+      targetPort: 3321
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: youtarr
+  namespace: multimedia-factory
+spec:
+  selector:
+    app: youtarr
+  ports:
+    - protocol: TCP
+      port: 3011
+      targetPort: 3011
+  type: ClusterIP
