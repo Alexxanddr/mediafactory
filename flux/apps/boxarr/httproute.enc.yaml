@@ -8,7 +8,7 @@ spec:
         - name: traefik-gateway
           namespace: system-addon
     hostnames:
-        - ENC[AES256_GCM,data:nIHZkAQhZsKMvYbT96uT8OVkGEQKjxA=,iv:m8RzXDOfs8WO3CO00L0AofWdD1K3Kn0vyyDmvhEGOCY=,tag:NtSA6+JUfbOOEHD2SKAVSg==,type:str]
+        - ENC[AES256_GCM,data:L8P+rSWz8lzDP+HrUcpuDjMUqlDF6yqXqmbJFA==,iv:JlHZYBQC79NPy+GgeYUMkWF+N5j28f8Ebk4aZH8SU9A=,tag:DJ8KnSIVNnuWu2ff3+BCow==,type:str]
     rules:
         - matches:
             - path:
@@ -28,7 +28,7 @@ sops:
             aHNNOEZ3Z3l1bGptT21tVXNsS1lCWmsKx/u+/XXhCWZWgquZyjYslmI5twkm6KM9
             42M0dhm7E5EUfT0AZYnX9HLLNVKR+aR0dWb4yAfq/AjQRzvlEsqnpw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-08T09:14:09Z"
-    mac: ENC[AES256_GCM,data:s8iwrgjGdr0cPyjci588jJhrq+SC1GpU8JNdrvbFbZ3rVrY614YQB0rrEXlYhuIreo7LsKdEKK4MNh4NqDyrgPji7UXmwujpRKF3o/hlEz5FwkR+/hrPiK84PhdLwZ5Fz3eO/Doa47EqFfvsIwUJ/JcfcsMIW2f3Kaox0sZ83xQ=,iv:ebcGBZlvFq1a9HzReeXNMW7SSkGhacwQSXNSIpK+dvU=,tag:rTJJ6lVlSTAeeSjLNW9+UA==,type:str]
+    lastmodified: "2026-05-08T09:17:43Z"
+    mac: ENC[AES256_GCM,data:R1K/tV/VZzPx/pngc5t0m+iJXtBjdISNV9q5Zkk6lHt6835MPQsK+buileE3ZE/DoErOqD1ox0d7fxEyjmNgNKQJc2VFnLe5W+e9OYQLL38QW7MhzscilXzHWeTjHF6iSy/byOA4Q21ocTFwt7V8xfCjhshoXrxy1YTLrJGYouQ=,iv:GH53j/PRJCqayj4fJ1Kw31Fvjipf02nH6bzRYDQ8qqw=,tag:sgtpxq3GnsC1duxpvlDXeg==,type:str]
     encrypted_regex: hostnames|0
     version: 3.12.2
