@@ -13,6 +13,7 @@ spec:
       labels:
         app: boxarr
     spec:
+      enableServiceLinks: false
       containers:
         - name: boxarr
           image: ghcr.io/iongpt/boxarr:latest
