@@ -21,6 +21,9 @@ spec:
           volumeMounts:
             - name: boxarr-config
               mountPath: /config
+          env:
+          - name: TZ
+            value: "Europe/Rome"
       volumes:
         - name: boxarr-config
           persistentVolumeClaim:
