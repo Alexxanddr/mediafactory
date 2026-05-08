@@ -301,6 +301,14 @@ data:
             app: anibridge
             namespace: multimedia-factory
             podSelector: app in ( anibridge )
+        - Boxarr:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/boxarr.png
+            href: https://boxarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://boxarr.multimedia-factory.svc:8888
+            showStats: false
+            app: boxarr
+            namespace: multimedia-factory
+            podSelector: app in ( boxarr )
     - Infra Stack:
         - Ubiquiti:
             icon: unifi.svg
