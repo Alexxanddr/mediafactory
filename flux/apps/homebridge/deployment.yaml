@@ -17,7 +17,7 @@ spec:
       hostNetwork: true
       containers:
       - name: homebridge
-        image: homebridge/homebridge:beta
+        image: homebridge/homebridge:latest
         ports:
         - containerPort: 8581
         livenessProbe:
