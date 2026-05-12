@@ -45,6 +45,8 @@ spec:
           name: duplicati-config
         - mountPath: /data
           name: duplicati-data
+        - mountPath: /backup-volume
+          name: duplicati-das-volume
       volumes:
       - name: duplicati-config
         persistentVolumeClaim:
@@ -52,3 +54,6 @@ spec:
       - name: duplicati-data
         persistentVolumeClaim:
           claimName: duplicati-data
+      - name: duplicati-das-volume
+        persistentVolumeClaim:
+          claimName: duplicati-das-volume

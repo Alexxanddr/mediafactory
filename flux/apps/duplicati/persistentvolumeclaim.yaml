@@ -28,3 +28,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: duplicati-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: duplicati-das-volume
+  namespace: system-addon
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: duplicati-das-volume
