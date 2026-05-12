@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: autobrr
+  namespace: multimedia-factory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: autobrr
+  template:
+    metadata:
+      labels:
+        app: autobrr
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: autobrr
+          image: ghcr.io/autobrr/autobrr:latest
+          ports:
+            - containerPort: 7474
+          volumeMounts:
+            - name: autobrr-config
+              mountPath: /config
+          env:
+          - name: TZ
+            value: "Europe/Rome"
+      volumes:
+        - name: autobrr-config
+          persistentVolumeClaim:
+            claimName: autobrr-config
