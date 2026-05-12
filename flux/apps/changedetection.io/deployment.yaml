@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: changedetection
+  namespace: extra-tools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: changedetection
+  template:
+    metadata:
+      labels:
+        app: changedetection
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: changedetection
+          image: ghcr.io/dgtlmoon/changedetection.io
+          ports:
+            - containerPort: 5000
+          volumeMounts:
+            - name: changedetection-config
+              mountPath: /datastore
+          env:
+          - name: TZ
+            value: "Europe/Rome"
+      volumes:
+        - name: changedetection-config
+          persistentVolumeClaim:
+            claimName: changedetection-config
