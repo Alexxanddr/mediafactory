@@ -18,6 +18,12 @@ spec:
           image: ghcr.io/milouk/trackerdex:latest
           ports:
             - containerPort: 80
-          envFrom:
-            - secretRef:
-                name: trackerdex-secret
+          volumeMounts:
+            - name: trackerdex-env
+              mountPath: /app/trackerdex.env
+              subPath: trackerdex.env
+              readOnly: true
+      volumes:
+        - name: trackerdex-env
+          secret:
+            secretName: trackerdex-secret
