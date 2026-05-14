@@ -18,12 +18,9 @@ spec:
           image: ghcr.io/milouk/trackerdex:latest
           ports:
             - containerPort: 80
-          volumeMounts:
-            - name: trackerdex-env
-              mountPath: /app/trackerdex.env
-              subPath: trackerdex.env
-              readOnly: true
-      volumes:
-        - name: trackerdex-env
-          secret:
-            secretName: trackerdex-secret
+          env:
+            - name: PIHOLE_UPSTREAM
+              value: "http://pihole-web"
+          envFrom:
+            - secretRef:
+                name: trackerdex-secret
