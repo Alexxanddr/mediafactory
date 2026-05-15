@@ -415,7 +415,7 @@ data:
               key: {{HOMEPAGE_VAR_CHANGEDETECTION_API_KEY}}
         - Crowdsec:
             icon: crowdsec.png
-            href: https://crowdsec.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
+            href: https://app.crowdsec.net/security-engines
             showStats: false
             app: crowdsec-service
             namespace: extra-tools
