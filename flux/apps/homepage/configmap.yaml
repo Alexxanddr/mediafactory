@@ -418,7 +418,7 @@ data:
             href: https://app.crowdsec.net/security-engines
             showStats: false
             app: crowdsec-service
-            namespace: extra-tools
+            namespace: system-addon
             podSelector: k8s-app in ( crowdsec )
             widget:
               type: crowdsec
