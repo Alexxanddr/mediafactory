@@ -389,6 +389,43 @@ data:
               url: http://pihole-web.extra-tools.svc
               version: 6
               key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
+        - Autobrr:
+            icon: Autobrr.png
+            href: https://autobrr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
+            showStats: false
+            app: autobrr
+            namespace: multimedia-factory
+            podSelector: app in ( autobrr )
+            widget:
+              type: autobrr
+              url: http://autobrr.multimedia-factory.svc:7474
+              version: 1
+              key: {{HOMEPAGE_VAR_AUTOBRR_API_KEY}}
+        - Changedetection.io:
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/changedetection.png
+            href: https://changedetection.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
+            showStats: false
+            app: changedetection
+            namespace: extra-tools
+            podSelector: app in ( changedetection )
+            widget:
+              type: changedetectionio
+              url: http://changedetection.extra-tools.svc:5000
+              version: 1
+              key: {{HOMEPAGE_VAR_CHANGEDETECTION_API_KEY}}
+        - Crowdsec:
+            icon: crowdsec.png
+            href: https://crowdsec.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
+            showStats: false
+            app: crowdsec-service
+            namespace: extra-tools
+            podSelector: k8s-app in ( crowdsec-service )
+            widget:
+              type: crowdsec
+              url: http://crowdsec-service.system-addon.svc:8080
+              username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
+              password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
+              limit24h: true # optional, limits alerts to last 24h. Default: false
     - OtherInfra:
       - Metoro:
           icon: https://metoro.io/static/images/Metoro_16_9.svg
