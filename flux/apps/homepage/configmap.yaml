@@ -390,7 +390,7 @@ data:
               version: 6
               key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
         - Autobrr:
-            icon: Autobrr.png
+            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/autobrr.png
             href: https://autobrr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
             showStats: false
             app: autobrr
@@ -419,7 +419,7 @@ data:
             showStats: false
             app: crowdsec-service
             namespace: extra-tools
-            podSelector: k8s-app in ( crowdsec-service )
+            podSelector: k8s-app in ( crowdsec )
             widget:
               type: crowdsec
               url: http://crowdsec-service.system-addon.svc:8080
