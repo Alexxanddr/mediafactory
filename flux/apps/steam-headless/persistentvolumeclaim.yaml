@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: steam-headless-home
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: steam-headless-home
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: steam-headless-games
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  volumeName: steam-headless-games

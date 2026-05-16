@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: steam-headless
+  namespace: gaming
+spec:
+  selector:
+    app: steam-headless
+  ports:
+    - name: novnc
+      protocol: TCP
+      port: 8083
+      targetPort: 8083
+    - name: sunshine
+      protocol: TCP
+      port: 47990
+      targetPort: 47990
+  type: ClusterIP

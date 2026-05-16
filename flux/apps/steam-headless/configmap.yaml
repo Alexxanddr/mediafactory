@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: steam-headless-config
+  namespace: gaming
+data:
+  TZ: "Europe/Rome"
+  USER_LOCALES: "en_US.UTF-8 UTF-8"
+  DISPLAY: ":55"
+  PUID: "1000"
+  PGID: "1000"
+  UMASK: "000"
+  MODE: "primary"
+  WEB_UI_MODE: "vnc"
+  ENABLE_VNC_AUDIO: "true"
+  PORT_NOVNC_WEB: "8083"
+  NEKO_NAT1TO1: ""
+  ENABLE_STEAM: "true"
+  STEAM_ARGS: "-silent"
+  ENABLE_SUNSHINE: "true"
+  ENABLE_EVDEV_INPUTS: "true"
+  FORCE_X11_DUMMY_CONFIG: "true"
+  NVIDIA_DRIVER_CAPABILITIES: "all"
+  NVIDIA_VISIBLE_DEVICES: "all"
+  NVIDIA_DRIVER_VERSION: ""
+  SHM_SIZE: "2G"
+  SUNSHINE_ARGS: "--no-gui"
