@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: steam-headless
+  namespace: gaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: steam-headless
+  template:
+    metadata:
+      labels:
+        app: steam-headless
+    spec:
+      hostNetwork: true
+      hostIPC: true
+      hostname: steam-headless
+      hostAliases:
+        - ip: "127.0.0.1"
+          hostnames:
+            - steam-headless
+      containers:
+        - name: steam-headless
+          image: josh5/steam-headless:latest
+
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: all
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: all
+
+          securityContext:
+            privileged: true
+
+
+          envFrom:
+            - secretRef:
+                name: steam-headless-secret
+            - configMapRef:
+                name: steam-headless-config
+
+          volumeMounts:
+            - name: home-dir
+              mountPath: /home/default
+            - name: games-dir
+              mountPath: /mnt/games
+            - name: x11-socket
+              mountPath: /tmp/.X11-unix
+            - name: pulse-socket
+              mountPath: /tmp/pulse
+            - name: dev-input
+              mountPath: /dev/input
+              readOnly: true
+      runtimeClassName: nvidia
+      volumes:
+        - name: home-dir
+          persistentVolumeClaim:
+            claimName: steam-headless-home
+        - name: games-dir
+          persistentVolumeClaim:
+            claimName: steam-headless-games
+        - name: x11-socket
+          hostPath:
+            path: /tmp/.X11-unix
+        - name: pulse-socket
+          hostPath:
+            path: /tmp/pulse
+        - name: dev-input
+          hostPath:
+            path: /dev/input

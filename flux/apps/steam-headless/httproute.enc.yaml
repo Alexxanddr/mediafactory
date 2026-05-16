@@ -1,0 +1,71 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: steam-headless
+    namespace: gaming
+    # annotations:
+    #   traefik.io/router.middlewares: gaming-novnc-headers@kubernetescrd
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:lRCfCOECSKsU31IaAHTMTs9GO/tifbLlxU/t,iv:yQxKNChBeKy0VxveHK6OEejxyzYlRUvZgjEJ/y4qA0I=,tag:9t3T34/Ks2a82jDTi+72sQ==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: steam-headless
+              port: 8083
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMd29sT3ZyMGtZVjlNbEpm
+            ZmY2TlhOQkt1YjV2dlFzZDM4c0txWmNkaGdFCmRXQ3R6ci9QcVNpRzNrN2Rubmc2
+            dk5KRjMweVNZZ3BadENwKzhHbHFRSmcKLS0tIDg4d01td01wSUpFZkFHeDY3WWlZ
+            aDcwck12dTRRZzhNWHp4RnRqU3RrdkEKulsOCAKfYNTrIuGErkBcsl4u+FqgNcXU
+            sJ3P02xzbcGJdmq+j8yXFwGOxWbKDzbanzE0dEloGDoJ3CWVAfaZ4Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-16T13:04:35Z"
+    mac: ENC[AES256_GCM,data:+DOEoeHjoXBsVL4myoIAQbiVyYjlcTL4XYH9u42HDSFLbKW4k4CMcxKA8CLZJMM+8WJLvv7ixf06JI0f0hrat8MaXNWKWNSzXR3mfTMoT2Ju1xcLpwCgP3u/RFWrodGOa1+Bttan2+s1Uc4PpcS+3jMSpDsOrDsYUgBV7I9/Rkg=,iv:mcMJbx5OaQ42d2S310pvqN/8mKG0fIyvpQJyKZEXr24=,tag:4yWiCaolP8p7nT8wGIrgnQ==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: sunshine
+    namespace: gaming
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:rhTSPdRVS54zregZ2Rol/jn1mRE3/XUjiJaOScRq,iv:YlyErQ3C5UOicwWZniD6FNydn/e/xbhVTzCLyNYrt0c=,tag:o3qtIFB3EbrI4AEoOxwzCA==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: sunshine
+              port: 47990
+sops:
+    age:
+        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMd29sT3ZyMGtZVjlNbEpm
+            ZmY2TlhOQkt1YjV2dlFzZDM4c0txWmNkaGdFCmRXQ3R6ci9QcVNpRzNrN2Rubmc2
+            dk5KRjMweVNZZ3BadENwKzhHbHFRSmcKLS0tIDg4d01td01wSUpFZkFHeDY3WWlZ
+            aDcwck12dTRRZzhNWHp4RnRqU3RrdkEKulsOCAKfYNTrIuGErkBcsl4u+FqgNcXU
+            sJ3P02xzbcGJdmq+j8yXFwGOxWbKDzbanzE0dEloGDoJ3CWVAfaZ4Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-05-16T13:04:35Z"
+    mac: ENC[AES256_GCM,data:+DOEoeHjoXBsVL4myoIAQbiVyYjlcTL4XYH9u42HDSFLbKW4k4CMcxKA8CLZJMM+8WJLvv7ixf06JI0f0hrat8MaXNWKWNSzXR3mfTMoT2Ju1xcLpwCgP3u/RFWrodGOa1+Bttan2+s1Uc4PpcS+3jMSpDsOrDsYUgBV7I9/Rkg=,iv:mcMJbx5OaQ42d2S310pvqN/8mKG0fIyvpQJyKZEXr24=,tag:4yWiCaolP8p7nT8wGIrgnQ==,type:str]
+    encrypted_regex: hostnames|0
+    version: 3.12.2
