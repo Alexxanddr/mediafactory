@@ -16,10 +16,13 @@ spec:
       hostNetwork: true
       hostIPC: true
       hostname: steam-headless
-      hostAliases:
-        - ip: "127.0.0.1"
-          hostnames:
-            - steam-headless
+
+      runtimeClassName: nvidia
+
+      securityContext:
+        seccompProfile:
+          type: Unconfined
+
       containers:
         - name: steam-headless
           image: josh5/steam-headless:latest
@@ -30,15 +33,19 @@ spec:
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: all
 
-          securityContext:
-            privileged: true
-
-
           envFrom:
             - secretRef:
                 name: steam-headless-secret
             - configMapRef:
                 name: steam-headless-config
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+                - NET_ADMIN
+                - SYS_ADMIN
+                - SYS_NICE
 
           volumeMounts:
             - name: home-dir
@@ -49,23 +56,41 @@ spec:
               mountPath: /tmp/.X11-unix
             - name: pulse-socket
               mountPath: /tmp/pulse
+
+            # DEVICES (equivalenti docker-compose)
+            - name: dev-fuse
+              mountPath: /dev/fuse
+            - name: dev-uinput
+              mountPath: /dev/uinput
             - name: dev-input
               mountPath: /dev/input
               readOnly: true
-      runtimeClassName: nvidia
+
       volumes:
         - name: home-dir
           persistentVolumeClaim:
             claimName: steam-headless-home
+
         - name: games-dir
           persistentVolumeClaim:
             claimName: steam-headless-games
+
         - name: x11-socket
           hostPath:
             path: /tmp/.X11-unix
+
         - name: pulse-socket
           hostPath:
             path: /tmp/pulse
+
         - name: dev-input
           hostPath:
             path: /dev/input
+
+        - name: dev-fuse
+          hostPath:
+            path: /dev/fuse
+
+        - name: dev-uinput
+          hostPath:
+            path: /dev/uinput
