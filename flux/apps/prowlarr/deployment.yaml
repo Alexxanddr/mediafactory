@@ -62,7 +62,7 @@ spec:
         # PROWLARR
         # =========================
         - name: prowlarr
-          image: ghcr.io/hotio/prowlarr
+          image: lscr.io/linuxserver/prowlarr:latest
           ports:
             - containerPort: 9696
           env:
