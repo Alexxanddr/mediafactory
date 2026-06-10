@@ -54,7 +54,7 @@ spec:
           limits:
             cpu: "2"
             memory: "4Gi"
-            nvidia.com/gpu: "1"
+            #nvidia.com/gpu: "1"
       volumes:
       - name: fileflows-node-common
         persistentVolumeClaim:
