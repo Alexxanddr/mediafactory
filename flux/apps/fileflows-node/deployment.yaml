@@ -51,14 +51,11 @@ spec:
         - name: dri
           mountPath: /dev/dri
         resources:
-          requests:
-            cpu: "500m"
-            memory: "1Gi"
-            nvidia.com/gpu: "1"
           limits:
             cpu: "2"
             memory: "4Gi"
             nvidia.com/gpu: "1"
+      runtimeClassName: nvidia
       volumes:
       - name: fileflows-node-common
         persistentVolumeClaim:
