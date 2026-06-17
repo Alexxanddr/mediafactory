@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: animeworld
-          image: alexxanddr/test-downloader-an:latest
+          image: ghcr.io/mainkronos/anime_downloader:2.1.0
           # ports:
           #   - containerPort: 5000
           env:
