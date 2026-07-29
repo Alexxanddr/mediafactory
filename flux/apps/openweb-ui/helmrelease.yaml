@@ -35,3 +35,7 @@ spec:
     extraEnvFrom:
       - secretRef:
           name: ollama-secrets
+    image:
+      repository: ghcr.io/open-webui/open-webui
+      tag: "latest"
+      pullPolicy: "Always"
