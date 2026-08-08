@@ -580,7 +580,11 @@ data:
         memory: true
         network: default
     - unifi_console:
-        url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
+        url: {{HOMEPAGE_VAR_UBIQUITI_UDR7_URL}}
         username: {{HOMEPAGE_VAR_UBIQUITI_UDR7_USER}}
         password: {{HOMEPAGE_VAR_UBIQUITI_UDR7_PASSWORD}}
+    - unifi_console:
+        url: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_URL}}
+        username: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_USER}}
+        password: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_PASSWORD}}
 ---
