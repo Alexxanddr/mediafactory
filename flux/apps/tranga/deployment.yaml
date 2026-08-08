@@ -16,6 +16,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:17
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: tranga-secret
@@ -62,6 +63,7 @@ spec:
       containers:
         - name: tranga-api
           image: glax/tranga-api:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: tranga-secret
@@ -104,6 +106,7 @@ spec:
       containers:
         - name: tranga-website
           image: glax/tranga-website:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
       initContainers:

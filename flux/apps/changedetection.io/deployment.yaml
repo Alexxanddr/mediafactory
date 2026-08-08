@@ -17,6 +17,7 @@ spec:
       containers:
         - name: changedetection
           image: ghcr.io/dgtlmoon/changedetection.io
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           volumeMounts:

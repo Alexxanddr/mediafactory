@@ -27,6 +27,7 @@ spec:
         - name: TZ
           value: Etc/UTC
         image: ghcr.io/hotio/radarr
+        imagePullPolicy: Always
         name: radarr
         ports:
         - containerPort: 7878

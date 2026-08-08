@@ -16,6 +16,7 @@ spec:
       containers:
         - name: anibridge
           image: ghcr.io/anibridge/anibridge:latest
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

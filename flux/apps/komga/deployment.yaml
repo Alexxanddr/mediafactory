@@ -16,6 +16,7 @@ spec:
       containers:
         - name: komga
           image: gotson/komga:latest
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

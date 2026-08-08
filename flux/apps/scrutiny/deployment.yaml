@@ -18,6 +18,7 @@ spec:
     spec:
       containers:
       - name: scrutiny-web
+        imagePullPolicy: Always
         image: ghcr.io/starosdev/scrutiny:latest-web
         ports:
         - containerPort: 8080
@@ -67,6 +68,7 @@ spec:
     spec:
       containers:
       - name: scrutiny-collector
+        imagePullPolicy: Always
         image: ghcr.io/starosdev/scrutiny:latest-collector
         env:
         - name: COLLECTOR_API_ENDPOINT

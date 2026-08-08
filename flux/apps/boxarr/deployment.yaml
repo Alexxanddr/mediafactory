@@ -17,6 +17,7 @@ spec:
       containers:
         - name: boxarr
           image: ghcr.io/iongpt/boxarr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8888
           volumeMounts:

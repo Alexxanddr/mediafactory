@@ -16,6 +16,7 @@ spec:
       containers:
         - name: redis
           image: redis:8-alpine
+          imagePullPolicy: Always
           args: ["redis-server", "--appendonly", "yes"]
           ports:
             - containerPort: 6379
@@ -45,6 +46,7 @@ spec:
       containers:
         - name: tracearr
           image: ghcr.io/connorgallopo/tracearr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 3000
           env:
