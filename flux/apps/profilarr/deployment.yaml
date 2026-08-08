@@ -22,6 +22,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 9696
+        envFrom:
+        - secretRef:
+            name: profilarr
         env:
         - name: PUID
           value: '1000'
