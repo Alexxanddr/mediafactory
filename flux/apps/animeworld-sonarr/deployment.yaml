@@ -17,7 +17,9 @@ spec:
     spec:
       containers:
         - name: animeworld
-          image: ghcr.io/mainkronos/anime_downloader:2.1.0
+          image: ghcr.io/mainkronos/anime_downloader:latest
+          imagePullPolicy: Always
+          # command: ["/bin/sh", "-c"]
           # ports:
           #   - containerPort: 5000
           env:

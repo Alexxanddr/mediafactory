@@ -98,6 +98,7 @@ spec:
       containers:
         - name: web
           image: ghcr.io/dispatcharr/dispatcharr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 9191
           env:
@@ -160,6 +161,7 @@ spec:
       containers:
         - name: celery
           image: ghcr.io/dispatcharr/dispatcharr:latest
+          imagePullPolicy: Always
           command: ["/app/docker/entrypoint.celery.sh"]
           env:
             - name: DISPATCHARR_ENV

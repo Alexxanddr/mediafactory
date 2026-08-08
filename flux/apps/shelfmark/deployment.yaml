@@ -16,6 +16,7 @@ spec:
       containers:
         - name: shelfmark
           image: ghcr.io/calibrain/shelfmark:latest
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

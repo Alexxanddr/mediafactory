@@ -17,6 +17,7 @@ spec:
       containers:
         - name: questarr
           image: ghcr.io/doezer/questarr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 5000
           volumeMounts:

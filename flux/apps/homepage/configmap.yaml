@@ -318,14 +318,22 @@ data:
             namespace: multimedia-factory
             podSelector: app in ( youtarr )
     - Infra Stack:
-        - Ubiquiti:
+        - UniFiDR7:
             icon: unifi.svg
             href: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
             widget:
               type: unifi
-              url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
-              username: {{HOMEPAGE_VAR_UBIQUITI_USER}}
-              password: {{HOMEPAGE_VAR_UBIQUITI_PASSWORD}}
+              url: {{HOMEPAGE_VAR_UBIQUITI_UDR7_URL}}
+              username: {{HOMEPAGE_VAR_UBIQUITI_UDR7_USER}}
+              password: {{HOMEPAGE_VAR_UBIQUITI_UDR7_PASSWORD}}
+        - UCGUltra:
+            icon: unifi.svg
+            href: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
+            widget:
+              type: unifi
+              url: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_URL}}
+              username: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_USER}}
+              password: {{HOMEPAGE_VAR_UBIQUITI_UCGULTRA_PASSWORD}}
         - SpeedTest:
             icon: speedtest-tracker.png
             href: https://speedy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -524,14 +532,6 @@ data:
           app: questarr
           namespace: gaming
           podSelector: app in ( questarr )
-      - File Browser Quantum:
-          icon: filebrowser.png
-          href: https://filebrowser.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://filebrowser.extra-tools.svc:80
-          showStats: false
-          app: filebrowser
-          namespace: extra-tools
-          podSelector: app in ( filebrowser )
       - Nutify:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png
           href: https://nutify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -581,6 +581,6 @@ data:
         network: default
     - unifi_console:
         url: {{HOMEPAGE_VAR_UBIQUITI_HREF}}
-        username: {{HOMEPAGE_VAR_UBIQUITI_USER}}
-        password: {{HOMEPAGE_VAR_UBIQUITI_PASSWORD}}
+        username: {{HOMEPAGE_VAR_UBIQUITI_UDR7_USER}}
+        password: {{HOMEPAGE_VAR_UBIQUITI_UDR7_PASSWORD}}
 ---

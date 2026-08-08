@@ -16,6 +16,7 @@ spec:
       containers:
         - name: lingarr
           image: ghcr.io/lingarr-translate/lingarr:latest
+          imagePullPolicy: Always
           env:
             - name: ASPNETCORE_URLS
               value: "http://+:9876"
@@ -73,6 +74,7 @@ spec:
       containers:
         - name: mariadb
           image: mariadb:latest
+          imagePullPolicy: Always
           env:
             - name: MYSQL_DATABASE
               value: lingarr

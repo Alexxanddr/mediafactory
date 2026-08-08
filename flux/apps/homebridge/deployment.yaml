@@ -18,6 +18,7 @@ spec:
       containers:
       - name: homebridge
         image: homebridge/homebridge:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8581
         livenessProbe:

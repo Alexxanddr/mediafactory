@@ -23,7 +23,8 @@ spec:
         # GLUETUN (VPN gateway)
         # =========================
         - name: gluetun
-          image: ghcr.io/qdm12/gluetun:v3.41.1
+          image: ghcr.io/qdm12/gluetun:latest
+          imagePullPolicy: Always
           securityContext:
             capabilities:
               add: ["NET_ADMIN"]
@@ -63,6 +64,7 @@ spec:
         # =========================
         - name: prowlarr
           image: lscr.io/linuxserver/prowlarr:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 9696
           env:
@@ -83,6 +85,7 @@ spec:
         # =========================
         - name: flaresolverr
           image: ghcr.io/flaresolverr/flaresolverr
+          imagePullPolicy: Always
           ports:
             - containerPort: 8191
           env:

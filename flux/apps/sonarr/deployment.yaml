@@ -19,6 +19,7 @@ spec:
       containers:
       - name: sonarr
         image: ghcr.io/hotio/sonarr
+        imagePullPolicy: Always
         env:
         - name: PUID
           value: '1000'

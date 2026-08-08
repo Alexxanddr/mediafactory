@@ -19,6 +19,7 @@ spec:
       containers:
       - name: fileflows
         image: revenz/fileflows
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         env:

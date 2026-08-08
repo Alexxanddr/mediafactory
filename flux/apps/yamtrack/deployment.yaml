@@ -16,6 +16,7 @@ spec:
       containers:
         - name: postgres
           image: postgres:16-alpine
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: yamtrack-secret
@@ -47,6 +48,7 @@ spec:
       containers:
         - name: redis
           image: redis:8-alpine
+          imagePullPolicy: Always
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -76,6 +78,7 @@ spec:
       containers:
         - name: yamtrack
           image: ghcr.io/fuzzygrim/yamtrack
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: yamtrack-secret

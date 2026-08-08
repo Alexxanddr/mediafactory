@@ -16,6 +16,7 @@ spec:
       containers:
         - name: mariadb
           image: mariadb:10.3
+          imagePullPolicy: Always
           args:
             - --port=3321
             - --character-set-server=utf8mb4
@@ -90,6 +91,7 @@ spec:
       containers:
         - name: youtarr
           image: dialmaster/youtarr:latest
+          imagePullPolicy: Always
           envFrom:
             - secretRef:
                 name: youtarr-db-secret

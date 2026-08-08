@@ -18,6 +18,7 @@ spec:
       containers:
       - name: speedtest-tracker
         image: lscr.io/linuxserver/speedtest-tracker:latest
+        imagePullPolicy: Always
         env:
         - name: PUID
           value: '1000'

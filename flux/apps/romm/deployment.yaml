@@ -68,6 +68,7 @@ spec:
       containers:
         - name: romm
           image: rommapp/romm:latest
+          imagePullPolicy: Always
           envFrom:
           - secretRef:
               name: romm-db-secret
