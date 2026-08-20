@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: questarr
   namespace: gaming
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

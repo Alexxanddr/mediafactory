@@ -5,6 +5,9 @@ metadata:
   namespace: multimedia-factory
   labels:
     app: fileflows-node
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   serviceName: fileflows-node
   replicas: 1

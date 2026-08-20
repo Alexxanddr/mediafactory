@@ -5,6 +5,9 @@ metadata:
   namespace: multimedia-factory
   labels:
     app: prowlarr
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   strategy:

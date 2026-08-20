@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: speedtest-tracker
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

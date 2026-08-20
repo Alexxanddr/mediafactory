@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: steam-headless
   namespace: gaming
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 0
   selector:
