@@ -25,3 +25,7 @@ spec:
     secret:
       name: "keel-secret"
       create: false
+    image:
+      repository: ghcr.io/keel-hq/keel
+      tag: latest
+      pullPolicy: Always
