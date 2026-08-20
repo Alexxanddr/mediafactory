@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: cloudflared
   namespace: system-addon
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 2
   selector:

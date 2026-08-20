@@ -6,6 +6,9 @@ metadata:
     app: radarr
   name: radarr
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

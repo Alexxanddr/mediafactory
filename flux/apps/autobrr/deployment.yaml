@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: autobrr
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

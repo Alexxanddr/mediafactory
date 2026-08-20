@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: changedetection
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:

@@ -6,6 +6,9 @@ metadata:
   namespace: multimedia-factory
   labels:
     app.kubernetes.io/name: homepage
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   revisionHistoryLimit: 3
   replicas: 1

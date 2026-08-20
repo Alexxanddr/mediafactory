@@ -6,6 +6,9 @@ metadata:
     app: duplicati
   name: duplicati
   namespace: system-addon
+  annotations:
+    keel.sh/policy: all
+    keel.sh/trigger: poll
 spec:
   replicas: 1
   selector:
