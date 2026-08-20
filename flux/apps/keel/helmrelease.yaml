@@ -14,3 +14,14 @@ spec:
         kind: HelmRepository
         name: keel
         namespace: flux-system
+  values:
+    service:
+      enabled: true
+      type: ClusterIP
+      externalPort: 9300
+    polling:
+      enabled: true
+      defaultSchedule: "@every 60m"
+    secret:
+      name: "keel-secret"
+      create: false
