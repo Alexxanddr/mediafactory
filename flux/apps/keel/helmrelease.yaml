@@ -1,0 +1,16 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keel
+  namespace: system-addon
+spec:
+  releaseName: keel
+  interval: 5m
+  chart:
+    spec:
+      chart: keel
+      sourceRef:
+        kind: HelmRepository
+        name: keel
+        namespace: flux-system
