@@ -7,8 +7,9 @@ metadata:
   name: maintainerr
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,24 +21,24 @@ spec:
         app: maintainerr
     spec:
       containers:
-      - name: maintainerr
-        image:  ghcr.io/maintainerr/maintainerr
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 6246
-        env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
-        - name: UMASK
-          value: '002'
-        - name: TZ
-          value: Etc/UTC
-        volumeMounts:
-        - mountPath: /opt/data
-          name: maintainerr-config
+        - name: maintainerr
+          image: ghcr.io/maintainerr/maintainerr
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 6246
+          env:
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+            - name: TZ
+              value: Etc/UTC
+          volumeMounts:
+            - mountPath: /opt/data
+              name: maintainerr-config
       volumes:
-      - name: maintainerr-config
-        persistentVolumeClaim:
-          claimName: maintainerr-config
+        - name: maintainerr-config
+          persistentVolumeClaim:
+            claimName: maintainerr-config

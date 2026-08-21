@@ -6,8 +6,9 @@ metadata:
   labels:
     app: prowlarr
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   strategy:
@@ -21,7 +22,6 @@ spec:
         app: prowlarr
     spec:
       containers:
-
         # =========================
         # GLUETUN (VPN gateway)
         # =========================
@@ -61,7 +61,6 @@ spec:
             periodSeconds: 15
             timeoutSeconds: 2
             failureThreshold: 3
-
         # =========================
         # PROWLARR
         # =========================
@@ -82,7 +81,6 @@ spec:
           volumeMounts:
             - name: prowlarr-config
               mountPath: /config
-
         # =========================
         # FLARESOLVERR
         # =========================
@@ -98,11 +96,9 @@ spec:
         - name: prowlarr-config
           persistentVolumeClaim:
             claimName: prowlarr-config
-
         - name: wireguard-proxy-secret
           secret:
             secretName: wireguard-proxy-secret
-
         - name: gluetun-options
           secret:
             secretName: gluetun-options
@@ -120,4 +116,3 @@ spec:
         - ip: "10.43.26.74"
           hostnames:
             - "radarr.multimedia-factory.svc"
-            

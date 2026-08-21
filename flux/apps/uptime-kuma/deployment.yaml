@@ -7,8 +7,9 @@ metadata:
   name: uptime-kuma
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,24 +21,24 @@ spec:
         app: uptime-kuma
     spec:
       containers:
-      - name: uptime-kuma
-        image: louislam/uptime-kuma:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3001
-        env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
-        - name: UMASK
-          value: '002'
-        - name: TZ
-          value: Etc/UTC
-        volumeMounts:
-        - mountPath: /app/data
-          name: uptime-kuma-data
+        - name: uptime-kuma
+          image: louislam/uptime-kuma:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+          env:
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+            - name: TZ
+              value: Etc/UTC
+          volumeMounts:
+            - mountPath: /app/data
+              name: uptime-kuma-data
       volumes:
-      - name: uptime-kuma-data
-        persistentVolumeClaim:
-          claimName: uptime-kuma-data
+        - name: uptime-kuma-data
+          persistentVolumeClaim:
+            claimName: uptime-kuma-data

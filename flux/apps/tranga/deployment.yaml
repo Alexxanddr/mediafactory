@@ -4,8 +4,9 @@ metadata:
   name: tranga-pg
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -45,13 +46,16 @@ spec:
             periodSeconds: 30
             timeoutSeconds: 60
             failureThreshold: 5
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tranga-api
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -88,13 +92,16 @@ spec:
         - name: wait-for-db
           image: busybox:1.28
           command: ['sh', '-c', 'until nc -z tranga-pg 5432; do echo waiting for db; sleep 2; done;']
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: tranga-website
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:

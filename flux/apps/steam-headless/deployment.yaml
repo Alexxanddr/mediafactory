@@ -4,8 +4,9 @@ metadata:
   name: steam-headless
   namespace: gaming
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 0
   selector:
@@ -19,29 +20,23 @@ spec:
       hostNetwork: true
       hostIPC: true
       hostname: steam-headless
-
       runtimeClassName: nvidia
-
       securityContext:
         seccompProfile:
           type: Unconfined
-
       containers:
         - name: steam-headless
           image: josh5/steam-headless:latest
-
           env:
             - name: NVIDIA_VISIBLE_DEVICES
               value: all
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: all
-
           envFrom:
             - secretRef:
                 name: steam-headless-secret
             - configMapRef:
                 name: steam-headless-config
-
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -49,7 +44,6 @@ spec:
                 - NET_ADMIN
                 - SYS_ADMIN
                 - SYS_NICE
-
           volumeMounts:
             - name: home-dir
               mountPath: /home/default
@@ -59,7 +53,6 @@ spec:
               mountPath: /tmp/.X11-unix
             - name: pulse-socket
               mountPath: /tmp/pulse
-
             # DEVICES (equivalenti docker-compose)
             - name: dev-fuse
               mountPath: /dev/fuse
@@ -68,32 +61,25 @@ spec:
             - name: dev-input
               mountPath: /dev/input
               readOnly: true
-
       volumes:
         - name: home-dir
           persistentVolumeClaim:
             claimName: steam-headless-home
-
         - name: games-dir
           persistentVolumeClaim:
             claimName: steam-headless-games
-
         - name: x11-socket
           hostPath:
             path: /tmp/.X11-unix
-
         - name: pulse-socket
           hostPath:
             path: /tmp/pulse
-
         - name: dev-input
           hostPath:
             path: /dev/input
-
         - name: dev-fuse
           hostPath:
             path: /dev/fuse
-
         - name: dev-uinput
           hostPath:
             path: /dev/uinput

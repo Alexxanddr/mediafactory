@@ -7,8 +7,9 @@ metadata:
   name: profilarr
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,27 +21,27 @@ spec:
         app: profilarr
     spec:
       containers:
-      - name: profilarr
-        image: ghcr.io/dictionarry-hub/profilarr:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 9696
-        envFrom:
-        - secretRef:
-            name: profilarr
-        env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
-        - name: UMASK
-          value: '002'
-        - name: TZ
-          value: Etc/UTC
-        volumeMounts:
-        - mountPath: /config
-          name: profilarr-config
+        - name: profilarr
+          image: ghcr.io/dictionarry-hub/profilarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 9696
+          envFrom:
+            - secretRef:
+                name: profilarr
+          env:
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+            - name: TZ
+              value: Etc/UTC
+          volumeMounts:
+            - mountPath: /config
+              name: profilarr-config
       volumes:
-      - name: profilarr-config
-        persistentVolumeClaim:
-          claimName: profilarr-config
+        - name: profilarr-config
+          persistentVolumeClaim:
+            claimName: profilarr-config

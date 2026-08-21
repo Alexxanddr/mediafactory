@@ -57,8 +57,9 @@ metadata:
   name: grimmory-db
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -74,8 +75,8 @@ spec:
           image: mariadb:latest
           imagePullPolicy: Always
           envFrom:
-          - secretRef:
-              name: grimmory-db-secret
+            - secretRef:
+                name: grimmory-db-secret
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -111,6 +112,10 @@ kind: Deployment
 metadata:
   name: grimmory
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:

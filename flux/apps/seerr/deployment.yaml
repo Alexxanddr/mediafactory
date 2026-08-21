@@ -6,8 +6,9 @@ metadata:
   name: seerr
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -22,36 +23,36 @@ spec:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
       containers:
-      - name: seerr
-        image: ghcr.io/seerr-team/seerr:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 5055
-        env:
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
-        - name: UMASK
-          value: "002"
-        - name: TZ
-          value: Etc/UTC
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-              - ALL
-          readOnlyRootFilesystem: false
-          runAsNonRoot: true
-          privileged: false
-          runAsUser: 1000
-          runAsGroup: 1000
-          seccompProfile:
-            type: RuntimeDefault
-        volumeMounts:
-        - mountPath: /app/config
-          name: seerr-config
+        - name: seerr
+          image: ghcr.io/seerr-team/seerr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5055
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: Etc/UTC
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            privileged: false
+            runAsUser: 1000
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+          volumeMounts:
+            - mountPath: /app/config
+              name: seerr-config
       volumes:
-      - name: seerr-config
-        persistentVolumeClaim:
-          claimName: seerr-config
+        - name: seerr-config
+          persistentVolumeClaim:
+            claimName: seerr-config

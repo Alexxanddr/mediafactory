@@ -7,8 +7,9 @@ metadata:
   name: flaresolverr
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,11 +21,11 @@ spec:
         app: flaresolverr
     spec:
       containers:
-      - name: flaresolverr
-        image: ghcr.io/flaresolverr/flaresolverr
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8191
-        env:
-        - name: LOG_LEVEL
-          value: info
+        - name: flaresolverr
+          image: ghcr.io/flaresolverr/flaresolverr
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8191
+          env:
+            - name: LOG_LEVEL
+              value: info

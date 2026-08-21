@@ -4,8 +4,9 @@ metadata:
   name: dispatcharr-postgres
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -55,6 +56,10 @@ kind: Deployment
 metadata:
   name: dispatcharr-redis
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -88,6 +93,10 @@ kind: Deployment
 metadata:
   name: dispatcharr-web
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -151,6 +160,10 @@ kind: Deployment
 metadata:
   name: celery
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
