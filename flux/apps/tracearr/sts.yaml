@@ -3,6 +3,10 @@ kind: StatefulSet
 metadata:
   name: tracearr-timescale
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   serviceName: tracearr-timescale
   replicas: 1

@@ -5,8 +5,9 @@ metadata:
   name: speedtest-tracker
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -19,44 +20,48 @@ spec:
     spec:
       dnsPolicy: ClusterFirst
       containers:
-      - name: speedtest-tracker
-        image: lscr.io/linuxserver/speedtest-tracker:latest
-        imagePullPolicy: Always
-        env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
-        - name: DISPLAY_TIMEZONE
-          value: UTC
-        - name: DB_CONNECTION
-          value: pgsql
-        - name: DB_HOST
-          value: postgres
-        - name: DB_PORT
-          value: '5432'
-        - name: DB_DATABASE
-          value: speedtest_tracker
-        - name: SPEEDTEST_SCHEDULE
-          value: 0 * * * *
-        - name: SPEEDTEST_SERVERS
-          value: '3243'
-        envFrom:
-        - secretRef:
-            name: speedtest-secret
-        volumeMounts:
-        - mountPath: /config
-          name: speedtest-tracker
+        - name: speedtest-tracker
+          image: lscr.io/linuxserver/speedtest-tracker:latest
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: DISPLAY_TIMEZONE
+              value: UTC
+            - name: DB_CONNECTION
+              value: pgsql
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: '5432'
+            - name: DB_DATABASE
+              value: speedtest_tracker
+            - name: SPEEDTEST_SCHEDULE
+              value: 0 * * * *
+            - name: SPEEDTEST_SERVERS
+              value: '3243'
+          envFrom:
+            - secretRef:
+                name: speedtest-secret
+          volumeMounts:
+            - mountPath: /config
+              name: speedtest-tracker
       volumes:
-      - name: speedtest-tracker
-        persistentVolumeClaim:
-          claimName: speedtest-tracker
+        - name: speedtest-tracker
+          persistentVolumeClaim:
+            claimName: speedtest-tracker
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -68,25 +73,25 @@ spec:
         app.kubernetes.io/name: postgres
     spec:
       containers:
-      - name: postgres
-        image: postgres:15.1
-        env:
-        - name: POSTGRES_DB
-          value: speedtest_tracker
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: speedtest-secret
-              key: DB_PASSWORD
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: speedtest-secret
-              key: DB_USERNAME
-        volumeMounts:
-        - mountPath: /var/lib/postgresql/data
-          name: postgres
+        - name: postgres
+          image: postgres:15.1
+          env:
+            - name: POSTGRES_DB
+              value: speedtest_tracker
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: speedtest-secret
+                  key: DB_PASSWORD
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: speedtest-secret
+                  key: DB_USERNAME
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres
       volumes:
-      - name: postgres
-        persistentVolumeClaim:
-          claimName: postgres
+        - name: postgres
+          persistentVolumeClaim:
+            claimName: postgres

@@ -5,8 +5,9 @@ metadata:
   name: homebridge
   namespace: home-automation
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -19,27 +20,27 @@ spec:
     spec:
       hostNetwork: true
       containers:
-      - name: homebridge
-        image: homebridge/homebridge:latest
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8581
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8581
-          initialDelaySeconds: 60
-          periodSeconds: 30
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8581
-          initialDelaySeconds: 30
-          periodSeconds: 15
-        volumeMounts:
-        - mountPath: /homebridge
-          name: homebridge-pvc
+        - name: homebridge
+          image: homebridge/homebridge:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8581
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8581
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8581
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          volumeMounts:
+            - mountPath: /homebridge
+              name: homebridge-pvc
       volumes:
-      - name: homebridge-pvc
-        persistentVolumeClaim:
-          claimName: homebridge-pvc
+        - name: homebridge-pvc
+          persistentVolumeClaim:
+            claimName: homebridge-pvc

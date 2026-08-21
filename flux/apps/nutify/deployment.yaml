@@ -4,8 +4,9 @@ metadata:
   name: nutify
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -25,7 +26,6 @@ spec:
             value: "2"
           - name: attempts
             value: "2"
-
       containers:
         - name: nutify
           image: dartsteven/nutify:latest-amd64
@@ -37,7 +37,6 @@ spec:
                 - SYS_ADMIN
                 - SYS_RAWIO
                 - MKNOD
-
           env:
             - name: SECRET_KEY
               valueFrom:
@@ -48,12 +47,10 @@ spec:
               value: "1"
             - name: SSL_ENABLED
               value: "false"
-
           ports:
             - containerPort: 3493
             - containerPort: 5050
             - containerPort: 443
-
           volumeMounts:
             - name: data
               mountPath: /app/nutify/logs
@@ -67,30 +64,23 @@ spec:
             - name: data
               mountPath: /etc/nut
               subPath: nut
-
             - name: dev
               mountPath: /dev
-
             - name: udev
               mountPath: /run/udev
               readOnly: true
-
             - name: usb
               mountPath: /dev/bus/usb
-
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: nutify-data
-
         - name: dev
           hostPath:
             path: /dev
-
         - name: udev
           hostPath:
             path: /run/udev
-
         - name: usb
           hostPath:
             path: /dev/bus/usb

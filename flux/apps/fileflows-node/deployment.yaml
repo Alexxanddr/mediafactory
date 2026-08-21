@@ -6,8 +6,9 @@ metadata:
   labels:
     app: fileflows-node
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   serviceName: fileflows-node
   replicas: 1
@@ -21,57 +22,57 @@ spec:
     spec:
       runtimeClassName: nvidia
       containers:
-      - name: fileflows-node
-        image: revenz/fileflows
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 5000
-        env:
-        - name: PUID
-          value: "1000"
-        - name: PGID
-          value: "1000"
-        - name: UMASK
-          value: "002"
-        - name: TZ
-          value: Etc/UTC
-        - name: ServerUrl
-          value: http://fileflows.multimedia-factory.svc:5000
-        - name: FFNODE
-          value: "1"
-        - name: NVIDIA_DRIVER_CAPABILITIES
-          value: "compute,video,utility"
-        - name: NVIDIA_VISIBLE_DEVICES
-          value: "all"
-        volumeMounts:
-        - name: fileflows-node-common
-          mountPath: /app/common
-        - name: fileflows-node-data
-          mountPath: /app/Data
-        - name: fileflows-node-media
-          mountPath: /media
-        - name: fileflows-node-temp
-          mountPath: /temp
-        - name: dri
-          mountPath: /dev/dri
-        resources:
-          limits:
-            cpu: "2"
-            memory: "4Gi"
-            #nvidia.com/gpu: "1"
+        - name: fileflows-node
+          image: revenz/fileflows
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: Etc/UTC
+            - name: ServerUrl
+              value: http://fileflows.multimedia-factory.svc:5000
+            - name: FFNODE
+              value: "1"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: "compute,video,utility"
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "all"
+          volumeMounts:
+            - name: fileflows-node-common
+              mountPath: /app/common
+            - name: fileflows-node-data
+              mountPath: /app/Data
+            - name: fileflows-node-media
+              mountPath: /media
+            - name: fileflows-node-temp
+              mountPath: /temp
+            - name: dri
+              mountPath: /dev/dri
+          resources:
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+              #nvidia.com/gpu: "1"
       volumes:
-      - name: fileflows-node-common
-        persistentVolumeClaim:
-          claimName: fileflows-node-common
-      - name: fileflows-node-data
-        persistentVolumeClaim:
-          claimName: fileflows-node-data
-      - name: fileflows-node-media
-        persistentVolumeClaim:
-          claimName: fileflows-node-media
-      - name: fileflows-node-temp
-        persistentVolumeClaim:
-          claimName: fileflows-node-temp
-      - name: dri
-        hostPath:
-          path: /dev/dri
+        - name: fileflows-node-common
+          persistentVolumeClaim:
+            claimName: fileflows-node-common
+        - name: fileflows-node-data
+          persistentVolumeClaim:
+            claimName: fileflows-node-data
+        - name: fileflows-node-media
+          persistentVolumeClaim:
+            claimName: fileflows-node-media
+        - name: fileflows-node-temp
+          persistentVolumeClaim:
+            claimName: fileflows-node-temp
+        - name: dri
+          hostPath:
+            path: /dev/dri

@@ -4,8 +4,9 @@ metadata:
   name: youtarr-db
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -70,13 +71,16 @@ spec:
         - name: youtarr-db-data
           persistentVolumeClaim:
             claimName: youtarr-db-data
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: youtarr
   namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:

@@ -4,8 +4,9 @@ metadata:
   name: changedetection
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -27,8 +28,8 @@ spec:
             - name: changedetection-config
               mountPath: /datastore
           env:
-          - name: TZ
-            value: "Europe/Rome"
+            - name: TZ
+              value: "Europe/Rome"
       volumes:
         - name: changedetection-config
           persistentVolumeClaim:

@@ -4,8 +4,9 @@ metadata:
   name: romm-db
   namespace: gaming
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,8 +21,8 @@ spec:
         - name: mariadb
           image: mariadb:latest
           envFrom:
-          - secretRef:
-              name: romm-db-secret
+            - secretRef:
+                name: romm-db-secret
           ports:
             - containerPort: 3306
           volumeMounts:
@@ -57,6 +58,10 @@ kind: Deployment
 metadata:
   name: romm
   namespace: gaming
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -73,8 +78,8 @@ spec:
           image: rommapp/romm:latest
           imagePullPolicy: Always
           envFrom:
-          - secretRef:
-              name: romm-db-secret
+            - secretRef:
+                name: romm-db-secret
           ports:
             - containerPort: 8080
           volumeMounts:

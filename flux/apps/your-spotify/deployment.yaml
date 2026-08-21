@@ -5,8 +5,9 @@ metadata:
   name: your-spotify-server
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -18,20 +19,24 @@ spec:
         app: your-spotify-server
     spec:
       containers:
-      - name: server
-        image: yooooomi/your_spotify_server
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        envFrom:
-        - secretRef:
-            name: spotify-secret
+        - name: server
+          image: yooooomi/your_spotify_server
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: spotify-secret
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: your-spotify-web
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -43,23 +48,27 @@ spec:
         app: your-spotify-web
     spec:
       containers:
-      - name: web
-        image: yooooomi/your_spotify_client
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 3000
-        env:
-        - name: API_ENDPOINT
-          valueFrom:
-            secretKeyRef:
-              name: spotify-secret
-              key: API_ENDPOINT
+        - name: web
+          image: yooooomi/your_spotify_client
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: spotify-secret
+                  key: API_ENDPOINT
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:

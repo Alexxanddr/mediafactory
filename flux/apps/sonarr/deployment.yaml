@@ -7,8 +7,9 @@ metadata:
   name: sonarr
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,29 +21,29 @@ spec:
         app: sonarr
     spec:
       containers:
-      - name: sonarr
-        image: ghcr.io/hotio/sonarr
-        imagePullPolicy: Always
-        env:
-        - name: PUID
-          value: '1000'
-        - name: PGID
-          value: '1000'
-        - name: UMASK
-          value: '002'
-        - name: TZ
-          value: Etc/UTC
-        ports:
-        - containerPort: 8989
-        volumeMounts:
-        - mountPath: /config
-          name: sonarr-config
-        - mountPath: /data
-          name: sonarr-data
+        - name: sonarr
+          image: ghcr.io/hotio/sonarr
+          imagePullPolicy: Always
+          env:
+            - name: PUID
+              value: '1000'
+            - name: PGID
+              value: '1000'
+            - name: UMASK
+              value: '002'
+            - name: TZ
+              value: Etc/UTC
+          ports:
+            - containerPort: 8989
+          volumeMounts:
+            - mountPath: /config
+              name: sonarr-config
+            - mountPath: /data
+              name: sonarr-data
       volumes:
-      - name: sonarr-data
-        persistentVolumeClaim:
-          claimName: sonarr-data
-      - name: sonarr-config
-        persistentVolumeClaim:
-          claimName: sonarr-config
+        - name: sonarr-data
+          persistentVolumeClaim:
+            claimName: sonarr-data
+        - name: sonarr-config
+          persistentVolumeClaim:
+            claimName: sonarr-config

@@ -4,8 +4,9 @@ metadata:
   name: questarr
   namespace: gaming
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -27,8 +28,8 @@ spec:
             - name: questarr-data
               mountPath: /app/data
           env:
-          - name: SQLITE_DB_PATH
-            value: "/app/data/sqlite.db"
+            - name: SQLITE_DB_PATH
+              value: "/app/data/sqlite.db"
       volumes:
         - name: questarr-data
           persistentVolumeClaim:

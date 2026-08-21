@@ -7,8 +7,9 @@ metadata:
   name: scrutiny-web
   namespace: extra-tools
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -20,37 +21,37 @@ spec:
         app: scrutiny-web
     spec:
       containers:
-      - name: scrutiny-web
-        imagePullPolicy: Always
-        image: ghcr.io/starosdev/scrutiny:latest-web
-        ports:
-        - containerPort: 8080
-        env:
-        - name: SCRUTINY_WEB_INFLUXDB_HOST
-          value: scrutiny-influxdb
-        volumeMounts:
-        - mountPath: /opt/scrutiny/config
-          name: scrutiny-config
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 10
-          failureThreshold: 20
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 8080
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 10
-          failureThreshold: 20
+        - name: scrutiny-web
+          imagePullPolicy: Always
+          image: ghcr.io/starosdev/scrutiny:latest-web
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SCRUTINY_WEB_INFLUXDB_HOST
+              value: scrutiny-influxdb
+          volumeMounts:
+            - mountPath: /opt/scrutiny/config
+              name: scrutiny-config
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 20
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 20
       volumes:
-      - name: scrutiny-config
-        persistentVolumeClaim:
-          claimName: scrutiny-config
+        - name: scrutiny-config
+          persistentVolumeClaim:
+            claimName: scrutiny-config
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -59,6 +60,10 @@ metadata:
     app: scrutiny-collector
   name: scrutiny-collector
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -70,54 +75,54 @@ spec:
         app: scrutiny-collector
     spec:
       containers:
-      - name: scrutiny-collector
-        imagePullPolicy: Always
-        image: ghcr.io/starosdev/scrutiny:latest-collector
-        env:
-        - name: COLLECTOR_API_ENDPOINT
-          value: http://scrutiny-web:8080
-        - name: COLLECTOR_HOST_ID
-          value: scrutiny
-        - name: COLLECTOR_RUN_STARTUP
-          value: 'false'
-        securityContext:
-          privileged: true
-          capabilities:
-            add:
-            - SYS_RAWIO
-            - SYS_ADMIN
-        volumeMounts:
-        - mountPath: /run/udev
-          name: udev
-          readOnly: true
-        - mountPath: /dev/sda
-          name: dev-sda
-        - mountPath: /dev/sdb
-          name: dev-sdb
-        - mountPath: /dev/sdc
-          name: dev-sdc
-        - mountPath: /dev/nvme0n1
-          name: dev-nvme0n1
+        - name: scrutiny-collector
+          imagePullPolicy: Always
+          image: ghcr.io/starosdev/scrutiny:latest-collector
+          env:
+            - name: COLLECTOR_API_ENDPOINT
+              value: http://scrutiny-web:8080
+            - name: COLLECTOR_HOST_ID
+              value: scrutiny
+            - name: COLLECTOR_RUN_STARTUP
+              value: 'false'
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_RAWIO
+                - SYS_ADMIN
+          volumeMounts:
+            - mountPath: /run/udev
+              name: udev
+              readOnly: true
+            - mountPath: /dev/sda
+              name: dev-sda
+            - mountPath: /dev/sdb
+              name: dev-sdb
+            - mountPath: /dev/sdc
+              name: dev-sdc
+            - mountPath: /dev/nvme0n1
+              name: dev-nvme0n1
       volumes:
-      - name: udev
-        hostPath:
-          path: /run/udev
-      - name: dev-sda
-        hostPath:
-          path: /dev/sda
-          type: BlockDevice
-      - name: dev-sdb
-        hostPath:
-          path: /dev/sdb
-          type: BlockDevice
-      - name: dev-sdc
-        hostPath:
-          path: /dev/sdc
-          type: BlockDevice
-      - name: dev-nvme0n1
-        hostPath:
-          path: /dev/nvme0n1
-          type: BlockDevice
+        - name: udev
+          hostPath:
+            path: /run/udev
+        - name: dev-sda
+          hostPath:
+            path: /dev/sda
+            type: BlockDevice
+        - name: dev-sdb
+          hostPath:
+            path: /dev/sdb
+            type: BlockDevice
+        - name: dev-sdc
+          hostPath:
+            path: /dev/sdc
+            type: BlockDevice
+        - name: dev-nvme0n1
+          hostPath:
+            path: /dev/nvme0n1
+            type: BlockDevice
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -126,6 +131,10 @@ metadata:
     app: scrutiny-influxdb
   name: scrutiny-influxdb
   namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:
@@ -137,31 +146,30 @@ spec:
         app: scrutiny-influxdb
     spec:
       containers:
-      - name: influxdb
-        image: influxdb:2.8
-        ports:
-        - containerPort: 8086
-        volumeMounts:
-        - mountPath: /var/lib/influxdb2
-          name: scrutiny-influxdb-data
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8086
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          timeoutSeconds: 10
-          failureThreshold: 20
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 8086
-          initialDelaySeconds: 5
-          periodSeconds: 5
-          timeoutSeconds: 10
-          failureThreshold: 20
+        - name: influxdb
+          image: influxdb:2.8
+          ports:
+            - containerPort: 8086
+          volumeMounts:
+            - mountPath: /var/lib/influxdb2
+              name: scrutiny-influxdb-data
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 20
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8086
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            timeoutSeconds: 10
+            failureThreshold: 20
       volumes:
-      - name: scrutiny-influxdb-data
-        persistentVolumeClaim:
-          claimName: scrutiny-influxdb-data
-
+        - name: scrutiny-influxdb-data
+          persistentVolumeClaim:
+            claimName: scrutiny-influxdb-data

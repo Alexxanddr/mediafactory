@@ -4,8 +4,9 @@ metadata:
   name: qbittorrent-wg
   namespace: multimedia-factory
   annotations:
-    keel.sh/policy: all
+    keel.sh/policy: force
     keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   strategy:
@@ -20,9 +21,9 @@ spec:
     spec:
       dnsPolicy: None
       hostAliases:
-      - hostnames:
-        - prowlarr.multimedia-factory.svc.cluster.local
-        ip: 10.43.150.43
+        - hostnames:
+            - prowlarr.multimedia-factory.svc.cluster.local
+          ip: 10.43.150.43
       dnsConfig:
         nameservers:
           - 9.9.9.9
@@ -33,7 +34,6 @@ spec:
             value: "1"
           - name: net.ipv6.conf.all.disable_ipv6
             value: "0"
-
       containers:
         - name: qbittorrent-wg
           image: trigus42/qbittorrentvpn
@@ -63,7 +63,6 @@ spec:
             capabilities:
               add:
                 - NET_ADMIN
-
           volumeMounts:
             - mountPath: /config
               name: qbittorrent-wg-config
@@ -72,7 +71,6 @@ spec:
             - name: wireguard-config
               mountPath: /config/wireguard
               readOnly: true
-
           readinessProbe:
             exec:
               command:
@@ -83,7 +81,6 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 2
             failureThreshold: 5
-
           livenessProbe:
             exec:
               command:
@@ -94,7 +91,6 @@ spec:
             periodSeconds: 30
             timeoutSeconds: 3
             failureThreshold: 3
-
       volumes:
         - name: wireguard-config
           secret:
