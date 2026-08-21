@@ -59,7 +59,6 @@ spec:
             - 131.0.72.0/22
     api:
       dashboard: true
-    logs:
-      access:
-        enabled: true
-        format: json
+    accessLog:
+      enabled: true
+      format:  "json"
