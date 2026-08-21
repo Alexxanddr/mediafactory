@@ -3,7 +3,6 @@ resource "helm_release" "flux_operator" {
   namespace        = "flux-system"
   repository       = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart            = "flux-operator"
-  version          = "0.45.1"
   create_namespace = true
 }
 
@@ -14,7 +13,6 @@ resource "helm_release" "flux_instance" {
   namespace  = "flux-system"
   repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
   chart      = "flux-instance"
-  version    = "0.45.1"
   values = [
     file("values/flux-values.yaml")
   ]
