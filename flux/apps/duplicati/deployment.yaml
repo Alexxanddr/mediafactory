@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,17 +19,30 @@ spec:
       labels:
         app: duplicati
     spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+
       containers:
         - name: duplicati
           image: linuxserver/duplicati
           imagePullPolicy: Always
+
+          securityContext:
+            privileged: true
+            allowPrivilegeEscalation: true
+            runAsUser: 0
+            runAsGroup: 0
+
           ports:
             - containerPort: 8200
+
           env:
             - name: PUID
-              value: '1000'
+              value: '0'
             - name: PGID
-              value: '1000'
+              value: '0'
             - name: UMASK
               value: '002'
             - name: TZ
@@ -45,6 +57,7 @@ spec:
                 secretKeyRef:
                   name: duplicati-encryption-key
                   key: DUPLICATI__WEBSERVICE_PASSWORD
+
           volumeMounts:
             - mountPath: /config
               name: duplicati-config
@@ -52,13 +65,16 @@ spec:
               name: duplicati-data
             - mountPath: /backup-volume
               name: duplicati-das-volume
+
       volumes:
         - name: duplicati-config
           persistentVolumeClaim:
             claimName: duplicati-config
+
         - name: duplicati-data
           persistentVolumeClaim:
             claimName: duplicati-data
+
         - name: duplicati-das-volume
           persistentVolumeClaim:
             claimName: duplicati-das-volume
