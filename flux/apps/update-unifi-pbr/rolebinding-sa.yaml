@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unifi-youtube-pbr-sync-x
+  namespace: system-addon
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: unifi-youtube-pbr-state-x
+  namespace: system-addon
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["unifi-youtube-pbr-state-x"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: unifi-youtube-pbr-state-x
+  namespace: system-addon
+subjects:
+  - kind: ServiceAccount
+    name: unifi-youtube-pbr-sync-x
+    namespace: system-addon
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: unifi-youtube-pbr-state-x
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: unifi-youtube-pbr-sync-y
+  namespace: system-addon
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: unifi-youtube-pbr-state-y
+  namespace: system-addon
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    resourceNames: ["unifi-youtube-pbr-state-y"]
+    verbs: ["get", "patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: unifi-youtube-pbr-state-y
+  namespace: system-addon
+subjects:
+  - kind: ServiceAccount
+    name: unifi-youtube-pbr-sync-y
+    namespace: system-addon
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: unifi-youtube-pbr-state-y
+
