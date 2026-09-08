@@ -1,0 +1,139 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: unifi-youtube-pbr-sync-router-x
+  namespace: system-addon
+spec:
+  # Every six hours, at minute 17, in the CronJob controller's timezone.
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 900
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 86400
+      activeDeadlineSeconds: 600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: unifi-youtube-pbr-sync-router-x
+        spec:
+          serviceAccountName: unifi-youtube-pbr-sync-x
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: sync
+              # Build and publish the included Dockerfile, then replace this.
+              image: ghcr.io/alexxanddr/update-unifi-pbr:latest
+              imagePullPolicy: Always
+              env:
+                - name: POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: STATE_CONFIGMAP_NAME
+                  value: unifi-youtube-pbr-state-x
+                - name: UNIFI_SITE
+                  value: default
+                - name: UNIFI_ROUTE_NAME
+                  value: Youtube
+                - name: UNIFI_VERIFY_TLS
+                  value: "false"
+                - name: MAX_CIDRS
+                  value: "1000"
+                - name: HTTP_TIMEOUT_SECONDS
+                  value: "30"
+              envFrom:
+                - secretRef:
+                    name: unifi-youtube-pbr-credentials-x
+                - secretRef:
+                    name: unifi-youtube-pbr-decryption-key-x
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 96Mi
+                limits:
+                  cpu: 250m
+                  memory: 192Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: unifi-youtube-pbr-sync-router-y
+  namespace: system-addon
+spec:
+  # Every six hours, at minute 17, in the CronJob controller's timezone.
+  schedule: "0 * * * *"
+  concurrencyPolicy: Forbid
+  startingDeadlineSeconds: 900
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      ttlSecondsAfterFinished: 86400
+      activeDeadlineSeconds: 600
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: unifi-youtube-pbr-sync-router-y
+        spec:
+          serviceAccountName: unifi-youtube-pbr-sync-y
+          restartPolicy: Never
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65532
+            runAsGroup: 65532
+            seccompProfile:
+              type: RuntimeDefault
+          containers:
+            - name: sync
+              # Build and publish the included Dockerfile, then replace this.
+              image: ghcr.io/alexxanddr/update-unifi-pbr:latest
+              imagePullPolicy: Always
+              env:
+                - name: POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      fieldPath: metadata.namespace
+                - name: STATE_CONFIGMAP_NAME
+                  value: unifi-youtube-pbr-state-y
+                - name: UNIFI_SITE
+                  value: default
+                - name: UNIFI_ROUTE_NAME
+                  value: Youtube
+                - name: UNIFI_VERIFY_TLS
+                  value: "false"
+                - name: MAX_CIDRS
+                  value: "1000"
+                - name: HTTP_TIMEOUT_SECONDS
+                  value: "30"
+              envFrom:
+                - secretRef:
+                    name: unifi-youtube-pbr-credentials-y
+                - secretRef:
+                    name: unifi-youtube-pbr-decryption-key-y
+              resources:
+                requests:
+                  cpu: 25m
+                  memory: 96Mi
+                limits:
+                  cpu: 250m
+                  memory: 192Mi
+              securityContext:
+                allowPrivilegeEscalation: false
+                readOnlyRootFilesystem: true
+                capabilities:
+                  drop: ["ALL"]
