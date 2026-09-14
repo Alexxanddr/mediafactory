@@ -1,0 +1,21 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sparkyfitness
+  namespace: database
+spec:
+  name: sparkyfitness
+  owner: sparkyfitness
+  cluster:
+    name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dispatcharr
+  namespace: database
+spec:
+  name: dispatcharr
+  owner: dispatcharr
+  cluster:
+    name: postgres
