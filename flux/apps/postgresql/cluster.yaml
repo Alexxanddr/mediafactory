@@ -1,0 +1,25 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+  namespace: database
+spec:
+  instances: 1
+  storage:
+    storageClass: local-path
+    size: 50Gi
+
+  managed:
+    roles:
+      - name: sparkyfitness
+        login: true
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: sparkyfitness-db-credentials
+      - name: dispatcharr
+        login: true
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: dispatcharr-db-credentials
