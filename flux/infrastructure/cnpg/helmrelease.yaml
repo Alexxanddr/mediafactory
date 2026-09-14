@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: cloudnative-pg
-  namespace: system-addon
+  namespace: database
 spec:
   interval: 30m
 
