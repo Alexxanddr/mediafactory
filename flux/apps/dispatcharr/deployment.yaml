@@ -113,28 +113,12 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9191
+          envFrom:
+            - secretRef:
+                name: dispatcharr-postgres
           env:
             - name: DISPATCHARR_ENV
               value: modular
-            - name: POSTGRES_HOST
-              value: dispatcharr-postgres
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_DB
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_PASSWORD
             - name: REDIS_HOST
               value: dispatcharr-redis
             - name: REDIS_PORT
@@ -179,30 +163,14 @@ spec:
           image: ghcr.io/dispatcharr/dispatcharr:latest
           imagePullPolicy: Always
           command: ["/app/docker/entrypoint.celery.sh"]
+          envFrom:
+            - secretRef:
+                name: dispatcharr-postgres
           env:
             - name: DISPATCHARR_ENV
               value: modular
             - name: DISPATCHARR_PORT
               value: "9191"
-            - name: POSTGRES_HOST
-              value: dispatcharr-postgres
-            - name: POSTGRES_PORT
-              value: "5432"
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_DB
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dispatcharr-secrets
-                  key: POSTGRES_PASSWORD
             - name: REDIS_HOST
               value: dispatcharr-redis
             - name: REDIS_PORT
