@@ -115,7 +115,7 @@ spec:
             - containerPort: 9191
           envFrom:
             - secretRef:
-                name: dispatcharr-postgres
+                name: dispatcharr-secrets
           env:
             - name: DISPATCHARR_ENV
               value: modular
@@ -165,7 +165,7 @@ spec:
           command: ["/app/docker/entrypoint.celery.sh"]
           envFrom:
             - secretRef:
-                name: dispatcharr-postgres
+                name: dispatcharr-secrets
           env:
             - name: DISPATCHARR_ENV
               value: modular
