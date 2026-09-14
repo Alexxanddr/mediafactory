@@ -14,17 +14,3 @@ spec:
   volumeMode: Filesystem
   volumeName: speedtest-tracker
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: postgres
-  namespace: extra-tools
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: speedtest-tracker-postgresql
