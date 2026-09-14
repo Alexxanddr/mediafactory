@@ -23,3 +23,11 @@ spec:
         createdb: true
         passwordSecret:
           name: dispatcharr-db-credentials
+      - name: speedtesttracker
+        login: true
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: speedtesttracker-db-credentials
+
+

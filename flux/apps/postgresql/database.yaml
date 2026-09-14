@@ -19,3 +19,14 @@ spec:
   owner: dispatcharr
   cluster:
     name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: speedtesttracker
+  namespace: database
+spec:
+  name: speedtesttracker
+  owner: speedtesttracker
+  cluster:
+    name: postgres
