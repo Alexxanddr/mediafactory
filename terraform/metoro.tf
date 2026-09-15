@@ -29,15 +29,15 @@ resource "helm_release" "metoro_exporter" {
   chart      = "metoro-exporter"
   version    = "0.478.0"
 
-  # set_sensitive {
-  #   name  = "exporter.secret.bearerToken"
-  #   value = var.metoro_bearer_token
-  # }
+  set_sensitive {
+    name  = "exporter.secret.bearerToken"
+    value = var.metoro_bearer_token
+  }
 
-  # set {
-  #   name  = "redis.enabled"
-  #   value = "false"
-  # }
+  set {
+    name  = "redis.enabled"
+    value = "false"
+  }
 
   # set {
   #   name  = "exporter.secret.externalSecret.enabled"
