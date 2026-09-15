@@ -147,4 +147,4 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z youtarr-db 3321; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z mariadb.database.svc.cluster.local 3306; do echo waiting for db; sleep 2; done;']
