@@ -7,6 +7,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://grimmory.multimedia-factory.svc:6060"
+    uptime-kuma.io/name: "grimmory"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   selector:

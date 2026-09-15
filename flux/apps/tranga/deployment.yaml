@@ -7,6 +7,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://tranga-api.multimedia-factory.svc:6531"
+    uptime-kuma.io/name: "tranga-api"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   selector:
@@ -53,6 +61,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://tranga-website.multimedia-factory.svc:80"
+    uptime-kuma.io/name: "tranga-website"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   selector:
