@@ -7,6 +7,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://yamtrack.multimedia-factory.svc:8000"
+    uptime-kuma.io/name: "yamtrack"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   selector:
