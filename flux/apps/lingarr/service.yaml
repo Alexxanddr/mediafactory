@@ -10,15 +10,3 @@ spec:
       targetPort: 9876
   selector:
     app: lingarr
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: lingarr-db
-  namespace: multimedia-factory
-spec:
-  type: ClusterIP
-  ports:
-    - port: 3306
-  selector:
-    app: lingarr-db

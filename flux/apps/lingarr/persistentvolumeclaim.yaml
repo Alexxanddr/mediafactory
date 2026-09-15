@@ -28,18 +28,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: lingarr-media
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: lingarr-db
-  namespace: multimedia-factory
-spec:
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: lingarr-db
