@@ -61,7 +61,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:
