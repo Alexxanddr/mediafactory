@@ -57,6 +57,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
+          envFrom:
+            - secretRef:
+                name: tracearr-secret
           env:
             - name: NODE_ENV
               value: production
@@ -66,28 +69,6 @@ spec:
               value: "0.0.0.0"
             - name: TZ
               value: UTC
-            - name: REDIS_URL
-              value: redis://tracearr-redis:6379
-            - name: JWT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: tracearr-secret
-                  key: JWT_SECRET
-            - name: COOKIE_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: tracearr-secret
-                  key: COOKIE_SECRET
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: tracearr-secret
-                  key: DB_PASSWORD
-            - name: DATABASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: tracearr-secret
-                  key: DATABASE_URL
           volumeMounts:
             - name: backup
               mountPath: /data/backup
