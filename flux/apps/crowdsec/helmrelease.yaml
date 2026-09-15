@@ -143,7 +143,7 @@ spec:
           user: crowdsec
           password: "${DB_PASSWORD}"
           db_name: crowdsec
-          host: crowdsec-postgres.system-addon.svc.cluster.local
+          host: postgres-rw.database.svc.cluster.local
           port: 5432
           sslmode: disable   # metti "require" se abiliti TLS su PostgreSQL
 

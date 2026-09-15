@@ -35,3 +35,9 @@ spec:
         createdb: true
         passwordSecret:
           name: yamtrack-db-credentials
+      - name: crowdsec
+        login: true
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: crowdsec-db-credentials
