@@ -39,6 +39,10 @@ spec:
       appDatabase:
         existingSecret: sparkyfitness-secrets
 
+      envFrom:
+        - secretRef:
+            name: sparkyfitness-secrets
+
     ingress:
       enabled: false
 
