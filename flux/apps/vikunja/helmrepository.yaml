@@ -1,8 +1,0 @@
-apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
-metadata:
-  name: vikunja
-  namespace: flux-system
-spec:
-  type: oci
-  url: oci://ghcr.io/go-vikunja/helm-chart
