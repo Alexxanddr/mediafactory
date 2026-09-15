@@ -5,6 +5,7 @@ metadata:
   namespace: monitoring
 spec:
   interval: 30m
+
   chart:
     spec:
       chart: metoro-exporter
