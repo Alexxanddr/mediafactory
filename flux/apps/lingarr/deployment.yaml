@@ -21,24 +21,12 @@ spec:
         - name: lingarr
           image: ghcr.io/lingarr-translate/lingarr:latest
           imagePullPolicy: Always
+          envFrom:
+            - secretRef:
+                name: lingarr-secrets
           env:
             - name: ASPNETCORE_URLS
               value: "http://+:9876"
-            - name: DB_CONNECTION
-              value: "mysql"
-            - name: DB_HOST
-              value: "lingarr-db"
-            - name: DB_PORT
-              value: "3306"
-            - name: DB_DATABASE
-              value: "lingarr"
-            - name: DB_USERNAME
-              value: "lingarr"
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: lingarr-secrets
-                  key: db-password
           ports:
             - containerPort: 9876
           volumeMounts:
@@ -68,7 +56,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
