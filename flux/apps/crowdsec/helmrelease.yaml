@@ -33,15 +33,6 @@ spec:
       strategy: rollback
 
   values:
-    podAnnotations:
-      uptime-kuma.io/enabled: "true"
-      uptime-kuma.io/type: "http"
-      uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
-      uptime-kuma.io/name: "crowdsec"
-      uptime-kuma.io/interval: "60"
-      uptime-kuma.io/retries: "3"
-      uptime-kuma.io/notifications: "Monitoring Bot"
-      uptime-kuma.io/group: "Security & Cluster Management"
     # --------------------------------------------------------------------------
     # Runtime dei container nel cluster (docker = json, containerd = cri)
     # --------------------------------------------------------------------------

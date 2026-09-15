@@ -19,15 +19,6 @@ spec:
     namespace: flux-system
   releaseName: cert-manager
   values:
-    podAnnotations:
-          uptime-kuma.io/enabled: "true"
-          uptime-kuma.io/type: "port"
-          uptime-kuma.io/url: "cert-manager.cert-manager.svc:9402"
-          uptime-kuma.io/name: "cert-manager"
-          uptime-kuma.io/interval: "60"
-          uptime-kuma.io/retries: "3"
-          uptime-kuma.io/notifications: "Monitoring Bot"
-          uptime-kuma.io/group: "Network & Connectivity"
     controller:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
