@@ -67,10 +67,6 @@ spec:
           env:
             - name: DISPATCHARR_ENV
               value: modular
-            - name: REDIS_HOST
-              value: dispatcharr-redis
-            - name: REDIS_PORT
-              value: "6379"
             - name: DISPATCHARR_LOG_LEVEL
               value: info
           volumeMounts:
@@ -119,10 +115,8 @@ spec:
               value: modular
             - name: DISPATCHARR_PORT
               value: "9191"
-            - name: REDIS_HOST
-              value: dispatcharr-redis
-            - name: REDIS_PORT
-              value: "6379"
+            # - name: REDIS_HOST
+            #   value: dispatcharr-redis
             - name: DISPATCHARR_LOG_LEVEL
               value: info
             - name: DJANGO_SETTINGS_MODULE
