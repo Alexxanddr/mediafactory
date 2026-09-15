@@ -61,7 +61,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 1
+  replicas: 0
   strategy:
     type: Recreate
   selector:
@@ -182,4 +182,4 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z grimmory-db 3306; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z mariadb.database.svc.cluster.local 3306; do echo waiting for db; sleep 2; done;']
