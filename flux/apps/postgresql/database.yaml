@@ -41,3 +41,14 @@ spec:
   owner: yamtrack
   cluster:
     name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: crowdsec
+  namespace: database
+spec:
+  name: crowdsec
+  owner: crowdsec
+  cluster:
+    name: postgres
