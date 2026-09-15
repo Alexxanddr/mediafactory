@@ -72,6 +72,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://scrutiny-web.extra-tools.svc:8080"
+    uptime-kuma.io/name: "scrutiny-collector"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   selector:
@@ -143,6 +151,14 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://scrutiny-influxdb.extra-tools.svc:8086"
+    uptime-kuma.io/name: "scrutiny-influxdb"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Arr Stack"
 spec:
   replicas: 1
   strategy:
