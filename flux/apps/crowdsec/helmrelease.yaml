@@ -33,6 +33,15 @@ spec:
       strategy: rollback
 
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "http"
+      uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
+      uptime-kuma.io/name: "crowdsec"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Security & Cluster Management"
     # --------------------------------------------------------------------------
     # Runtime dei container nel cluster (docker = json, containerd = cri)
     # --------------------------------------------------------------------------
@@ -42,6 +51,15 @@ spec:
     # LAPI – Local API (cervello di CrowdSec, scrive/legge dal DB)
     # --------------------------------------------------------------------------
     lapi:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
+        uptime-kuma.io/name: "crowdsec"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster Management"
       replicas: 1
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
@@ -89,6 +107,15 @@ spec:
     # Agent – processo che legge i log dei pod e li invia alla LAPI
     # --------------------------------------------------------------------------
     agent:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
+        uptime-kuma.io/name: "crowdsec"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster Management"
       resources:
         requests:
           cpu: 100m

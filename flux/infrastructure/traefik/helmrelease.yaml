@@ -14,6 +14,16 @@ spec:
         name: traefik
         namespace: flux-system
   values:
+    deployment:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "port"
+        uptime-kuma.io/url: "traefik.system-addon.svc:443"
+        uptime-kuma.io/name: "traefik"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Network & Connectivity"
     service:
       spec:
         type: LoadBalancer

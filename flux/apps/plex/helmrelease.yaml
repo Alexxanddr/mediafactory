@@ -15,6 +15,16 @@ spec:
         name: plex-media-server
         namespace: flux-system
   values:
+    statefulSet:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://plex-media-server.multimedia-factory.svc:32400"
+        uptime-kuma.io/name: "plex"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Media & Streaming"
     image:
       registry: index.docker.io
       repository: plexinc/pms-docker

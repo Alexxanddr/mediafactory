@@ -15,6 +15,15 @@ spec:
         name: keel
         namespace: flux-system
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "port"
+      uptime-kuma.io/url: "keel.system-addon.svc:9300"
+      uptime-kuma.io/name: "keel"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Security & Cluster Management"
     service:
       enabled: true
       type: ClusterIP

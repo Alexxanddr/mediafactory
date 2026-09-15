@@ -25,5 +25,14 @@ spec:
       remediateLastFailure: true
 
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "port"
+      uptime-kuma.io/url: "cloudnative-pg.database.svc:8080"
+      uptime-kuma.io/name: "cloudnative-pg"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage, Databases & File Processing"
     config:
       clusterWide: true
