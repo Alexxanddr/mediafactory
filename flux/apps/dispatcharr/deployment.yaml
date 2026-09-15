@@ -14,7 +14,7 @@ metadata:
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Media Tools"
+    uptime-kuma.io/group: "Media Acquisition"
 spec:
   replicas: 1
   selector:
@@ -62,14 +62,6 @@ metadata:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
-    uptime-kuma.io/enabled: "true"
-    uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://celery.multimedia-factory.svc:9191"
-    uptime-kuma.io/name: "celery"
-    uptime-kuma.io/interval: "60"
-    uptime-kuma.io/retries: "3"
-    uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Media Tools"
 spec:
   replicas: 1
   selector:
@@ -93,8 +85,6 @@ spec:
               value: modular
             - name: DISPATCHARR_PORT
               value: "9191"
-            # - name: REDIS_HOST
-            #   value: dispatcharr-redis
             - name: DISPATCHARR_LOG_LEVEL
               value: info
             - name: DJANGO_SETTINGS_MODULE

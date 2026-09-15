@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Media Tools"
+    uptime-kuma.io/group: "Storage & Databases"
 spec:
   serviceName: fileflows-node
   replicas: 1
