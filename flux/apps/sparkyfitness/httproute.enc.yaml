@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: sparkyfitness
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:Ev28OwPB8efrg+q+ry5qdD+mzA8mDV9sizvLYLx2uWrFUWY=,iv:mi6IqiIkwGUlkQ64YBHo1Z4SLqyg03GxW2AZ+hJK4IM=,tag:HJRMe03AzkFA3epEN1oUYw==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: sparkyfitness
+              port: 80
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1aDMwTjh6dXMrWnBwbWVr
+            SC9mdThzczVCaVZFUW12d3ZFSHBKL1FsQ25JCncxZHhyTTFOcVlCbU5FWGFkd1gv
+            clBOWXRRaDdkeUlxdTh4dHZ4NmpuVUEKLS0tIDBKUlUxMTJqRVE0ckpMdlFyNFFo
+            aUdQcUhOZ2xJUElyV1pYMjZWY3IzRlEKYFuAkUtiirAU+hdSC1nUYxjP2EQtc9El
+            SXOTxqLwwo1okgigb9QOTs9mdJ12Zn+MkOEecgJHLUVEi1SK4tqWhQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(hostnames)$
+    lastmodified: "2026-09-15T08:58:51Z"
+    mac: ENC[AES256_GCM,data:AHMPHFvh+8yahUjNcnxYOSLDzWFlpZKnXWR11gAI4kOYshTplCdoMJeAzVfghgEWbs60XE2Q2Ec3V1dGkuDwFRpFy7CIbJPAJ/JmycjtWkO7iFugv7ICK3F4cJjNyzXv08+TiNgVT7FEvXIucOq3ZBA4lFhGmkWPs9dmOYDpNVw=,iv:BlrGeOO+uxMq7gKuoZsj84cTUivDr0KSBEnCuNlr768=,tag:GhbfZBjNf6k6V4xf97KeOQ==,type:str]
+    version: 3.13.3
