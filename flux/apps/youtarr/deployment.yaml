@@ -8,7 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: youtarr-db

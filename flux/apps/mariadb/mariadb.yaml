@@ -33,6 +33,7 @@ spec:
     collation-server=utf8mb4_unicode_ci
 
     innodb_file_per_table=1
-
+    max_connections=200
+    innodb_buffer_pool_size=512M
   updateStrategy:
     type: ReplicasFirstPrimaryLast
