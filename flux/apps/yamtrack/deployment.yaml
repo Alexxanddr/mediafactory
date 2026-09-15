@@ -8,7 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: yamtrack-db
@@ -99,7 +99,7 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z yamtrack-db 5432; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z postgres-rw.database.svc.cluster.local 5432; do echo waiting for db; sleep 2; done;']
         - name: wait-for-redis
           image: busybox:1.28
           command: ['sh', '-c', 'until nc -z yamtrack-redis 6379; do echo waiting for redis; sleep 2; done;']
