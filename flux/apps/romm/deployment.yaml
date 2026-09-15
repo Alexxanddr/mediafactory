@@ -1,63 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: romm-db
-  namespace: gaming
-  annotations:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/matchTag: "true"
-spec:
-  replicas: 1
-  strategy:
-    type: Recreate
-  selector:
-    matchLabels:
-      app: romm-db
-  template:
-    metadata:
-      labels:
-        app: romm-db
-    spec:
-      containers:
-        - name: mariadb
-          image: mariadb:latest
-          envFrom:
-            - secretRef:
-                name: romm-db-secret
-          ports:
-            - containerPort: 3306
-          volumeMounts:
-            - name: mysql-data
-              mountPath: /var/lib/mysql
-          livenessProbe:
-            exec:
-              command:
-                - healthcheck.sh
-                - --connect
-                - --innodb_initialized
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
-          readinessProbe:
-            exec:
-              command:
-                - healthcheck.sh
-                - --connect
-                - --innodb_initialized
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            timeoutSeconds: 5
-            failureThreshold: 5
-      volumes:
-        - name: mysql-data
-          persistentVolumeClaim:
-            claimName: romm-mysql-data
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: romm
   namespace: gaming
   annotations:
@@ -109,4 +52,4 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z romm-db 3306; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z mariadb.database.svc.cluster.local 3306; do echo waiting for db; sleep 2; done;']
