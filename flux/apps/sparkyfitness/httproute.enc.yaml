@@ -15,7 +15,7 @@ spec:
                 type: PathPrefix
                 value: /
           backendRefs:
-            - name: sparkyfitness
+            - name: sparkyfitness-frontend
               port: 80
 sops:
     age:
@@ -29,6 +29,6 @@ sops:
             -----END AGE ENCRYPTED FILE-----
           recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: ^(hostnames)$
-    lastmodified: "2026-09-15T08:58:51Z"
-    mac: ENC[AES256_GCM,data:AHMPHFvh+8yahUjNcnxYOSLDzWFlpZKnXWR11gAI4kOYshTplCdoMJeAzVfghgEWbs60XE2Q2Ec3V1dGkuDwFRpFy7CIbJPAJ/JmycjtWkO7iFugv7ICK3F4cJjNyzXv08+TiNgVT7FEvXIucOq3ZBA4lFhGmkWPs9dmOYDpNVw=,iv:BlrGeOO+uxMq7gKuoZsj84cTUivDr0KSBEnCuNlr768=,tag:GhbfZBjNf6k6V4xf97KeOQ==,type:str]
+    lastmodified: "2026-09-15T09:25:55Z"
+    mac: ENC[AES256_GCM,data:2UsUsEswJDR7egBRKBMJwXbqbR4JH6KX7q4RMrzPM4n9DxOWxVPA9Nx9FAdgNMFecwZQ0BTif4j9xYfHWKFeUc11RJlFAZeWCkoUg24KuqCOyIZ5LgwI56+xogNMztvT3wJopvUs5EoF7Wg02guY0+xVHlpJUZY30QKDrZ2Xz0k=,iv:Yh7zgkfQWNlVDOhfQT/5iZXwtaZ78IWhgnkItOV4O14=,tag:rL5vR9PLzE+Rg3wZ3m5HZg==,type:str]
     version: 3.13.3
