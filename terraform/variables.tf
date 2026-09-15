@@ -69,8 +69,3 @@ variable "whitelist_email" {
   description = "whitelist of email for idp provider"
   type        = map(string)
 }
-
-variable "redis_password" {
-  type      = string
-  sensitive = true
-}
