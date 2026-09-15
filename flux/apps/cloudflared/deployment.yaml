@@ -15,6 +15,7 @@ metadata:
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/status-codes: "404"
     uptime-kuma.io/group: "Network & Connectivity"
 spec:
   replicas: 2
