@@ -39,9 +39,24 @@ spec:
       appDatabase:
         existingSecret: sparkyfitness-secrets
 
-      envFrom:
-        - secretRef:
-            name: sparkyfitness-secrets
+      extraEnv:
+        - name: SPARKY_FITNESS_FRONTEND_URL
+          valueFrom:
+            secretKeyRef:
+              name: sparkyfitness-secrets
+              key: SPARKY_FITNESS_FRONTEND_URL
+
+        - name: BETTER_AUTH_URL
+          valueFrom:
+            secretKeyRef:
+              name: sparkyfitness-secrets
+              key: BETTER_AUTH_URL
+
+        - name: SPARKY_FITNESS_EXTRA_TRUSTED_ORIGINS
+          valueFrom:
+            secretKeyRef:
+              name: sparkyfitness-secrets
+              key: SPARKY_FITNESS_EXTRA_TRUSTED_ORIGINS
 
     ingress:
       enabled: false
