@@ -9,62 +9,38 @@ spec:
   characterSet: utf8mb4
   collate: utf8mb4_unicode_ci
 
-# ---
-# apiVersion: k8s.mariadb.com/v1alpha1
-# kind: Database
-# metadata:
-#   name: app2
-#   namespace: database
-# spec:
-#   mariaDbRef:
-#     name: mariadb
-#   characterSet: utf8mb4
-#   collate: utf8mb4_unicode_ci
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: lingarr
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
 
-# ---
-# apiVersion: k8s.mariadb.com/v1alpha1
-# kind: Database
-# metadata:
-#   name: app3
-#   namespace: database
-# spec:
-#   mariaDbRef:
-#     name: mariadb
-#   characterSet: utf8mb4
-#   collate: utf8mb4_unicode_ci
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: romm
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
 
-# ---
-# apiVersion: k8s.mariadb.com/v1alpha1
-# kind: Database
-# metadata:
-#   name: app4
-#   namespace: database
-# spec:
-#   mariaDbRef:
-#     name: mariadb
-#   characterSet: utf8mb4
-#   collate: utf8mb4_unicode_ci
-
-# ---
-# apiVersion: k8s.mariadb.com/v1alpha1
-# kind: Database
-# metadata:
-#   name: app5
-#   namespace: database
-# spec:
-#   mariaDbRef:
-#     name: mariadb
-#   characterSet: utf8mb4
-#   collate: utf8mb4_unicode_ci
-
-# ---
-# apiVersion: k8s.mariadb.com/v1alpha1
-# kind: Database
-# metadata:
-#   name: app6
-#   namespace: database
-# spec:
-#   mariaDbRef:
-#     name: mariadb
-#   characterSet: utf8mb4
-#   collate: utf8mb4_unicode_ci
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: grimmory
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
