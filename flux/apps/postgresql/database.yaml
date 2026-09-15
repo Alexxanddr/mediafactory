@@ -30,3 +30,14 @@ spec:
   owner: speedtesttracker
   cluster:
     name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: yamtrack
+  namespace: database
+spec:
+  name: yamtrack
+  owner: yamtrack
+  cluster:
+    name: postgres
