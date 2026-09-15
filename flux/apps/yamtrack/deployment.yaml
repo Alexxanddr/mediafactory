@@ -1,39 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yamtrack-redis
-  namespace: multimedia-factory
-  annotations:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/matchTag: "true"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: yamtrack-redis
-  template:
-    metadata:
-      labels:
-        app: yamtrack-redis
-    spec:
-      containers:
-        - name: redis
-          image: redis:8-alpine
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 6379
-          volumeMounts:
-            - name: yamtrack-redis-data
-              mountPath: /data
-      volumes:
-        - name: yamtrack-redis-data
-          persistentVolumeClaim:
-            claimName: yamtrack-redis-data
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: yamtrack
   namespace: multimedia-factory
   annotations:
