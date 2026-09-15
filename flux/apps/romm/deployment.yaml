@@ -87,8 +87,6 @@ spec:
           volumeMounts:
             - name: romm-resources
               mountPath: /romm/resources
-            # - name: romm-redis-data
-            #   mountPath: /redis-data
             - name: romm-library
               mountPath: /romm/library
             - name: romm-assets
@@ -99,9 +97,6 @@ spec:
         - name: romm-resources
           persistentVolumeClaim:
             claimName: romm-resources
-        # - name: romm-redis-data
-        #   persistentVolumeClaim:
-        #     claimName: romm-redis-data
         - name: romm-library
           persistentVolumeClaim:
             claimName: romm-library
