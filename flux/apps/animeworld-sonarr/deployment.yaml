@@ -11,7 +11,7 @@ metadata:
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "https://animeworld.multimedia-factory.svc:5000"
+    uptime-kuma.io/url: "http://animeworld.multimedia-factory.svc:5000"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
