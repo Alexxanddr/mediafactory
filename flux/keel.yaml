@@ -1,0 +1,31 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: keel
+  namespace: system-addon
+spec:
+  releaseName: keel
+  interval: 5m
+  chart:
+    spec:
+      chart: keel
+      sourceRef:
+        kind: HelmRepository
+        name: keel
+        namespace: flux-system
+  values:
+    service:
+      enabled: true
+      type: ClusterIP
+      externalPort: 9300
+    polling:
+      enabled: true
+      defaultSchedule: "@every 60m"
+    secret:
+      name: "keel-secret"
+      create: false
+    image:
+      repository: ghcr.io/keel-hq/keel
+      tag: latest
+      pullPolicy: Always

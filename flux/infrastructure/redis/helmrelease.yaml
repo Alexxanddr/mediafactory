@@ -23,7 +23,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "port"
-        uptime-kuma.io/url: "redis.database.svc:6379"
+        uptime-kuma.io/url: "redis-master.database.svc:6379"
         uptime-kuma.io/name: "redis"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
