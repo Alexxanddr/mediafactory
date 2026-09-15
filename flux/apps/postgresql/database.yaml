@@ -45,6 +45,17 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
+  name: tranga
+  namespace: database
+spec:
+  name: tranga
+  owner: tranga
+  cluster:
+    name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
   name: crowdsec
   namespace: database
 spec:
