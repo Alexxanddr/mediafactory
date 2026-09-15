@@ -1,42 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yamtrack-db
-  namespace: multimedia-factory
-  annotations:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/matchTag: "true"
-spec:
-  replicas: 0
-  selector:
-    matchLabels:
-      app: yamtrack-db
-  template:
-    metadata:
-      labels:
-        app: yamtrack-db
-    spec:
-      containers:
-        - name: postgres
-          image: postgres:16-alpine
-          imagePullPolicy: Always
-          envFrom:
-            - secretRef:
-                name: yamtrack-secret
-          ports:
-            - containerPort: 5432
-          volumeMounts:
-            - name: yamtrack-db-data
-              mountPath: /var/lib/postgresql/data
-      volumes:
-        - name: yamtrack-db-data
-          persistentVolumeClaim:
-            claimName: yamtrack-db-data
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: yamtrack-redis
   namespace: multimedia-factory
   annotations:
