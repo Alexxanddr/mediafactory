@@ -1,0 +1,17 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metoro-exporter
+  namespace: monitoring
+spec:
+  interval: 30m
+
+  chart:
+    spec:
+      chart: metoro-exporter
+      version: "0.478.0"
+      sourceRef:
+        kind: HelmRepository
+        name: metoro
+        namespace: flux-system
+      interval: 1h
