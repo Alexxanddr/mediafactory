@@ -14,7 +14,25 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "http"
+      uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
+      uptime-kuma.io/name: "nvidia-dcgm-exporter"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Monitoring & Observability"
     toolkit:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
+        uptime-kuma.io/name: "nvidia-dcgm-exporter"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Monitoring & Observability"
       env:
         - name: CONTAINERD_CONFIG
           value: /var/lib/rancher/k3s/agent/etc/containerd/config.toml
@@ -25,5 +43,14 @@ spec:
         - name: CONTAINERD_SET_AS_DEFAULT
           value: "true"
     devicePlugin:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
+        uptime-kuma.io/name: "nvidia-dcgm-exporter"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Monitoring & Observability"
       config:
         name: time-slicing-config-all

@@ -27,6 +27,15 @@ spec:
       retries: 3
 
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "port"
+      uptime-kuma.io/url: "mariadb-operator.database.svc:8080"
+      uptime-kuma.io/name: "mariadb-operator"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage, Databases & File Processing"
     currentNamespaceOnly: false
 
     metrics:
