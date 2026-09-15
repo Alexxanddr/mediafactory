@@ -1,40 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tracearr-redis
-  namespace: multimedia-factory
-  annotations:
-    keel.sh/policy: force
-    keel.sh/trigger: poll
-    keel.sh/matchTag: "true"
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: tracearr-redis
-  template:
-    metadata:
-      labels:
-        app: tracearr-redis
-    spec:
-      containers:
-        - name: redis
-          image: redis:8-alpine
-          imagePullPolicy: Always
-          args: ["redis-server", "--appendonly", "yes"]
-          ports:
-            - containerPort: 6379
-          volumeMounts:
-            - name: data
-              mountPath: /data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: tracearr-redis-config
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: tracearr
   namespace: multimedia-factory
   annotations:

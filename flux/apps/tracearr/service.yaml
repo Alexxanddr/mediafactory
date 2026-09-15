@@ -14,18 +14,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tracearr-redis
-  namespace: multimedia-factory
-spec:
-  ports:
-    - port: 6379
-      name: tracearr-redis
-  selector:
-    app: tracearr-redis
----
-apiVersion: v1
-kind: Service
-metadata:
   name: tracearr
   namespace: multimedia-factory
 spec:
