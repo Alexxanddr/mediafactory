@@ -4,5 +4,10 @@ metadata:
   name: sparkyfitness
   namespace: flux-system
 spec:
-  interval: 1h
-  url: oci://ghcr.io/codewithcj/sparkyfitness
+  interval: 24h
+  url: oci://ghcr.io/codewithcj/charts/sparkyfitness
+  layerSelector:
+    mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
+    operation: copy
+  ref:
+    semver: "1.x"
