@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Arr Stack"
+    uptime-kuma.io/group: "Media Acquisition"
 spec:
   replicas: 1
   strategy:

@@ -15,7 +15,7 @@ metadata:
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/status-codes: "404"
-    uptime-kuma.io/group: "Media Tools"
+    uptime-kuma.io/group: "Media & Streaming"
 spec:
   replicas: 1
   selector:
@@ -69,7 +69,7 @@ metadata:
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Arr Stack"
+    uptime-kuma.io/group: "Media & Streaming"
 spec:
   replicas: 1
   selector:
