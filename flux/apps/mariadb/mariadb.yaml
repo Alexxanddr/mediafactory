@@ -1,0 +1,38 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb
+  namespace: database
+spec:
+  rootPasswordSecretKeyRef:
+    name: mariadb-root
+    key: password
+
+  image: mariadb:11.8
+
+  replicas: 1
+
+  storage:
+    size: 50Gi
+    storageClassName: local-path
+
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
+  myCnf: |
+    [mariadb]
+    max_connections=200
+    innodb_buffer_pool_size=512M
+
+    character-set-server=utf8mb4
+    collation-server=utf8mb4_unicode_ci
+
+    innodb_file_per_table=1
+
+  updateStrategy:
+    type: ReplicasFirstPrimaryLast

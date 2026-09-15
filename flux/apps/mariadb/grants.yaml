@@ -1,0 +1,82 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Grant
+metadata:
+  name: youtarr
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb
+  username: youtarr
+  database: youtarr
+  privileges:
+    - ALL
+
+# ---
+# apiVersion: k8s.mariadb.com/v1alpha1
+# kind: Grant
+# metadata:
+#   name: app2
+#   namespace: database
+# spec:
+#   mariaDbRef:
+#     name: mariadb
+#   username: app2
+#   database: app2
+#   privileges:
+#     - ALL
+
+# ---
+# apiVersion: k8s.mariadb.com/v1alpha1
+# kind: Grant
+# metadata:
+#   name: app3
+#   namespace: database
+# spec:
+#   mariaDbRef:
+#     name: mariadb
+#   username: app3
+#   database: app3
+#   privileges:
+#     - ALL
+
+# ---
+# apiVersion: k8s.mariadb.com/v1alpha1
+# kind: Grant
+# metadata:
+#   name: app4
+#   namespace: database
+# spec:
+#   mariaDbRef:
+#     name: mariadb
+#   username: app4
+#   database: app4
+#   privileges:
+#     - ALL
+
+# ---
+# apiVersion: k8s.mariadb.com/v1alpha1
+# kind: Grant
+# metadata:
+#   name: app5
+#   namespace: database
+# spec:
+#   mariaDbRef:
+#     name: mariadb
+#   username: app5
+#   database: app5
+#   privileges:
+#     - ALL
+
+# ---
+# apiVersion: k8s.mariadb.com/v1alpha1
+# kind: Grant
+# metadata:
+#   name: app6
+#   namespace: database
+# spec:
+#   mariaDbRef:
+#     name: mariadb
+#   username: app6
+#   database: app6
+#   privileges:
+#     - ALL
