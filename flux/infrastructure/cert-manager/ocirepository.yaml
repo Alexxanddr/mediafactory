@@ -9,3 +9,5 @@ spec:
   layerSelector:
     mediaType: "application/vnd.cncf.helm.chart.content.v1.tar+gzip"
     operation: copy
+  ref:
+    semver: "1.x"
