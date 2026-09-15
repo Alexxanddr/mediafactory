@@ -5,4 +5,4 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
-  url: oci://ghcr.io/codewithcj/charts/sparkyfitness
+  url: oci://ghcr.io/codewithcj/sparkyfitness
