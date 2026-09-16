@@ -3,6 +3,7 @@ kind: HelmRelease
 metadata:
   name: mariadb-operator
   namespace: database
+
 spec:
   interval: 15m
 
@@ -36,6 +37,7 @@ spec:
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
       uptime-kuma.io/group: "Storage & Databases"
+
     currentNamespaceOnly: false
 
     metrics:
