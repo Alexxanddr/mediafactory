@@ -10,7 +10,7 @@ spec:
       uptime-kuma.io/type: "port"
       uptime-kuma.io/url: "mariadb.database.svc"
       uptime-kuma.io/port: "3306"
-      uptime-kuma.io/name: "mariadb"
+      uptime-kuma.io/name: "mariadb database"
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
