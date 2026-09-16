@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: uptime-kuma
-          image: louislam/uptime-kuma:latest
+          image: louislam/uptime-kuma:2
           imagePullPolicy: Always
           ports:
             - containerPort: 3001
