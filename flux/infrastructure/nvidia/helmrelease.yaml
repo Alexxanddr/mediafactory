@@ -20,7 +20,7 @@ spec:
     driver:
       enabled: false
 
-    daemonsets:
+    operator:
       annotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
