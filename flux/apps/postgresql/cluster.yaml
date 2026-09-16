@@ -5,7 +5,7 @@ metadata:
   namespace: database
 spec:
   instances: 1
-  podMetadata:
+  inheritedMetadata:
     annotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "port"
