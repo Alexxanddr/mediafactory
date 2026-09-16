@@ -14,9 +14,49 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
-    driver:
-      enabled: false
-    podAnnotations:
+  driver:
+    enabled: false
+
+  daemonsets:
+    annotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "http"
+      uptime-kuma.io/url: "http://gpu-operator.nvidia-operator.svc:8080"
+      uptime-kuma.io/name: "nvidia-operator"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/status-codes: "404"
+      uptime-kuma.io/group: "Monitoring & Observability"
+  toolkit:
+    enabled: true
+
+    env:
+      - name: CONTAINERD_CONFIG
+        value: /var/lib/rancher/k3s/agent/etc/containerd/config.toml
+
+      - name: CONTAINERD_SOCKET
+        value: /run/k3s/containerd/containerd.sock
+
+      - name: CONTAINERD_RUNTIME_CLASS
+        value: nvidia
+
+      - name: CONTAINERD_SET_AS_DEFAULT
+        value: "true"
+
+  devicePlugin:
+    enabled: true
+
+    config:
+      name: time-slicing-config-all
+
+  gfd:
+    enabled: true
+
+  dcgmExporter:
+    enabled: true
+
+    annotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "http"
       uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
@@ -25,35 +65,3 @@ spec:
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
       uptime-kuma.io/group: "Monitoring & Observability"
-    toolkit:
-      enabled: true
-      podAnnotations:
-        uptime-kuma.io/enabled: "true"
-        uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
-        uptime-kuma.io/name: "nvidia-dcgm-exporter"
-        uptime-kuma.io/interval: "60"
-        uptime-kuma.io/retries: "3"
-        uptime-kuma.io/notifications: "Monitoring Bot"
-        uptime-kuma.io/group: "Monitoring & Observability"
-      env:
-        - name: CONTAINERD_CONFIG
-          value: /var/lib/rancher/k3s/agent/etc/containerd/config.toml
-        - name: CONTAINERD_SOCKET
-          value: /run/k3s/containerd/containerd.sock
-        - name: CONTAINERD_RUNTIME_CLASS
-          value: nvidia
-        - name: CONTAINERD_SET_AS_DEFAULT
-          value: "true"
-    devicePlugin:
-      podAnnotations:
-        uptime-kuma.io/enabled: "true"
-        uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
-        uptime-kuma.io/name: "nvidia-dcgm-exporter"
-        uptime-kuma.io/interval: "60"
-        uptime-kuma.io/retries: "3"
-        uptime-kuma.io/notifications: "Monitoring Bot"
-        uptime-kuma.io/group: "Monitoring & Observability"
-      config:
-        name: time-slicing-config-all
