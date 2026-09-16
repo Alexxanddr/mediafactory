@@ -18,7 +18,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://traefik.system-addon.svc"
+        uptime-kuma.io/url: "https://traefik.system-addon.svc"
         uptime-kuma.io/name: "traefik"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
