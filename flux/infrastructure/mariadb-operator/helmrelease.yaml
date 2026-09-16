@@ -30,8 +30,9 @@ spec:
   values:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
-      uptime-kuma.io/type: "port"
-      uptime-kuma.io/url: "mariadb-operator.database.svc:8080"
+      uptime-kuma.io/type: "http"
+      uptime-kuma.io/url: "http://mariadb-operator-metrics.database.svc:8080"
+      uptime-kuma.io/status-codes: "404"
       uptime-kuma.io/name: "mariadb-operator"
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
