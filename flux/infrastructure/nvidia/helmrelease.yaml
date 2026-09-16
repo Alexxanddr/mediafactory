@@ -3,8 +3,10 @@ kind: HelmRelease
 metadata:
   name: nvidia
   namespace: nvidia-operator
+
 spec:
   interval: 30m
+
   chart:
     spec:
       chart: gpu-operator
@@ -13,6 +15,7 @@ spec:
         name: nvidia-gpu-operator
         namespace: flux-system
       interval: 1h
+
   values:
     driver:
       enabled: false
@@ -28,6 +31,7 @@ spec:
         uptime-kuma.io/notifications: "Monitoring Bot"
         uptime-kuma.io/status-codes: "404"
         uptime-kuma.io/group: "Monitoring & Observability"
+
     toolkit:
       enabled: true
 
