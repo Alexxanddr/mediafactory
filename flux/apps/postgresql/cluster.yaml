@@ -3,22 +3,12 @@ kind: Cluster
 metadata:
   name: postgres
   namespace: database
-  annotations:
-    uptime-kuma.io/enabled: "true"
-    uptime-kuma.io/type: "port"
-    uptime-kuma.io/url: "postgres-rw.database.svc"
-    uptime-kuma.io/port: "5432"
-    uptime-kuma.io/name: "postgres database"
-    uptime-kuma.io/interval: "60"
-    uptime-kuma.io/retries: "3"
-    uptime-kuma.io/notifications: "Monitoring Bot"
-    uptime-kuma.io/group: "Storage & Databases"
 spec:
   instances: 1
   inheritedMetadata:
     annotations:
       uptime-kuma.io/enabled: "true"
-      uptime-kuma.io/type: "port"
+      uptime-kuma.io/type: "tcp"
       uptime-kuma.io/url: "postgres-rw.database.svc"
       uptime-kuma.io/port: "5432"
       uptime-kuma.io/name: "postgres database"
