@@ -28,8 +28,9 @@ spec:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "port"
-      uptime-kuma.io/url: "cloudnative-pg.database.svc:8080"
-      uptime-kuma.io/name: "cloudnative-pg"
+      uptime-kuma.io/url: "cnpg-webhook-service.database.svc"
+      uptime-kuma.io/port: "443"
+      uptime-kuma.io/name: "cloudnative-pg-operator"
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
