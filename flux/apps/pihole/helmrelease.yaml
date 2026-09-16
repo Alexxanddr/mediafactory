@@ -22,6 +22,7 @@ spec:
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/status-codes: "403"
       uptime-kuma.io/group: "Network & Connectivity"
     image:
       tag: "latest"

@@ -45,12 +45,13 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
+        uptime-kuma.io/url: "http://crowdsec-service.system-addon.svc:8080"
         uptime-kuma.io/name: "crowdsec"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
         uptime-kuma.io/notifications: "Monitoring Bot"
-        uptime-kuma.io/group: "Security & Cluster Management"
+        uptime-kuma.io/status-codes: "404"
+        uptime-kuma.io/group: "Security & Cluster"
       replicas: 1
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
@@ -101,12 +102,13 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://crowdsec-lapi.system-addon.svc:8080/v1/heartbeat"
+        uptime-kuma.io/url: "http://crowdsec-agent-service.system-addon.svc:6060"
         uptime-kuma.io/name: "crowdsec"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
         uptime-kuma.io/notifications: "Monitoring Bot"
-        uptime-kuma.io/group: "Security & Cluster Management"
+        uptime-kuma.io/status-codes: "404"
+        uptime-kuma.io/group: "Security & Cluster"
       resources:
         requests:
           cpu: 100m
