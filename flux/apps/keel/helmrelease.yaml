@@ -17,13 +17,14 @@ spec:
   values:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
-      uptime-kuma.io/type: "port"
-      uptime-kuma.io/url: "keel.system-addon.svc:9300"
+      uptime-kuma.io/type: "http"
+      uptime-kuma.io/url: "http://keel.system-addon.svc:9300"
       uptime-kuma.io/name: "keel"
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
       uptime-kuma.io/group: "Security & Cluster Management"
+      uptime-kuma.io/status-codes: "404"
     service:
       enabled: true
       type: ClusterIP
