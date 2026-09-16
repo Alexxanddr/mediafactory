@@ -23,7 +23,7 @@ spec:
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"
       uptime-kuma.io/notifications: "Monitoring Bot"
-      uptime-kuma.io/group: "Security & Cluster Management"
+      uptime-kuma.io/group: "Security & Cluster"
     service:
       enabled: true
       type: ClusterIP
