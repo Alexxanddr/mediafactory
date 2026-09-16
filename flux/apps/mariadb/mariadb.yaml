@@ -4,6 +4,17 @@ metadata:
   name: mariadb
   namespace: database
 spec:
+  podMetadata:
+    annotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "port"
+      uptime-kuma.io/url: "mariadb.database.svc"
+      uptime-kuma.io/port: "3306"
+      uptime-kuma.io/name: "mariadb"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage & Databases"
   rootPasswordSecretKeyRef:
     name: mariadb-root
     key: password
