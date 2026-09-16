@@ -6,6 +6,7 @@ metadata:
 spec:
   interval: 15m
   timeout: 5m
+
   chart:
     spec:
       chart: metallb
@@ -14,6 +15,31 @@ spec:
         name: metallb
         namespace: flux-system
       interval: 5m
+
   releaseName: metallb
+
   install:
     crds: Create
+
+  values:
+    controller:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://metallb-controller.system-addon.svc:7472/metrics"
+        uptime-kuma.io/name: "metallb"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Network & Connectivity"
+
+    speaker:
+      podAnnotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://metallb-speaker.system-addon.svc:7472/metrics"
+        uptime-kuma.io/name: "metallb-speaker"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Network & Connectivity"
