@@ -25,9 +25,10 @@ spec:
     controller:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
-        uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://metallb-controller.system-addon.svc:7472/metrics"
-        uptime-kuma.io/name: "metallb"
+        uptime-kuma.io/type: "tcp"
+        uptime-kuma.io/url: "metallb-webhook-service.system-addon.svc"
+        uptime-kuma.io/port: "443"
+        uptime-kuma.io/name: "metallb-controller"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
         uptime-kuma.io/notifications: "Monitoring Bot"
@@ -36,9 +37,10 @@ spec:
     speaker:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
-        uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://metallb-speaker.system-addon.svc:7472/metrics"
-        uptime-kuma.io/name: "metallb-speaker"
+        uptime-kuma.io/type: "tcp"
+        uptime-kuma.io/url: "metallb-webhook-service.system-addon.svc"
+        uptime-kuma.io/port: "443"
+        uptime-kuma.io/name: "metallb-frr"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
         uptime-kuma.io/notifications: "Monitoring Bot"
