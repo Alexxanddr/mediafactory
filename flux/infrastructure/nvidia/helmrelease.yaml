@@ -14,6 +14,8 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
+    driver:
+      enabled: false
     podAnnotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "http"
@@ -24,6 +26,7 @@ spec:
       uptime-kuma.io/notifications: "Monitoring Bot"
       uptime-kuma.io/group: "Monitoring & Observability"
     toolkit:
+      enabled: true
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
