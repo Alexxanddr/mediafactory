@@ -5,6 +5,18 @@ metadata:
   namespace: database
 spec:
   instances: 1
+  podMetadata:
+    annotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "port"
+      uptime-kuma.io/url: "postgres-r.database.svc"
+      uptime-kuma.io/port: "5432"
+      uptime-kuma.io/name: "postgres database"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage & Databases"
+
   storage:
     storageClass: local-path
     size: 50Gi
