@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uptime-kuma-operator
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "ping"
+    uptime-kuma.io/url: "uptime-kuma-operator.extra-tools.svc.cluster.local"
+    uptime-kuma.io/name: "uptime-kuma-operator"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Monitoring & Observability"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: uptime-kuma-operator
+  template:
+    metadata:
+      labels:
+        app: uptime-kuma-operator
+    spec:
+      serviceAccountName: uptime-kuma-operator
+      automountServiceAccountToken: true
+      containers:
+      - name: operator
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:latest
+        imagePullPolicy: Always
+        command: ["kopf"]
+        args: ["run", "--all-namespaces", "--standalone", "operator.py"]
+        env:
+        - name: KUMA_URL
+          valueFrom: { secretKeyRef: { name: uptime-kuma-creds, key: url } }
+        - name: KUMA_USER
+          valueFrom: { secretKeyRef: { name: uptime-kuma-creds, key: user } }
+        - name: KUMA_PASS
+          valueFrom: { secretKeyRef: { name: uptime-kuma-creds, key: pass } }
+        - name: LOG_LEVEL
+          value: "DEBUG"
