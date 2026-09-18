@@ -102,7 +102,7 @@ When the user provides a repository or asks to add a product:
 2. determine whether the product provides an official Helm chart, an operator, a `Deployment`, a `StatefulSet`, or another controller;
 3. compare it with at least one similar existing application in this repository;
 4. create `flux/apps/<product>/`;
-5. add at least the workload (`Deployment`, `StatefulSet`, `HelmRelease`, or equivalent CR), the `Service`, and the `HTTPRoute` when the product exposes HTTP;
+5. add at least the workload (`Deployment`, `StatefulSet`, `HelmRelease`, or equivalent CR) and the `Service`; add an `HTTPRoute` only when the product exposes a user-facing web interface;
 6. add `PersistentVolume` and `PersistentVolumeClaim` resources only when the product persists data;
 7. add ConfigMaps, SOPS Secrets, RBAC, and database resources only when required;
 8. configure Keel and Uptime Kuma according to the rules below;
@@ -158,7 +158,7 @@ The following values are the canonical Uptime Kuma macro-groups. Select the most
 
 ## Internal HTTP exposure
 
-Every new HTTP service must be exposed internally through Gateway API and an `HTTPRoute` stored in `httproute.enc.yaml`.
+Every new service that exposes a user-facing web interface must be exposed internally through Gateway API and an `HTTPRoute` stored in `httproute.enc.yaml`. Do not create an `HTTPRoute` merely because a Service uses HTTP: backend APIs used only by other workloads, ingestion endpoints, metrics endpoints, health endpoints, webhooks, and other machine-to-machine interfaces must remain cluster-internal unless the user explicitly requests direct access or the product requires it. When a product has separate API and UI Services, create a route only for the UI.
 
 Follow the existing pattern:
 

@@ -1,41 +1,6 @@
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
-    name: falcosidekick
-    namespace: system-addon
-spec:
-    parentRefs:
-        - name: traefik-gateway
-          namespace: system-addon
-    hostnames:
-        - ENC[AES256_GCM,data:ylvOWeXQS0Ecf7vcSSbMrvbihlCh91tqy/3yLF8HzFYYwng=,iv:09agyRhPdsxQPh0y5bePB29G0LGDnAXFgfGgJQxBAag=,tag:ZSEbEgyY+SKAAt5AEDJfDQ==,type:str]
-    rules:
-        - matches:
-            - path:
-                type: PathPrefix
-                value: /
-          backendRefs:
-            - name: falcosidekick
-              port: 2801
-sops:
-    age:
-        - enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBESmo5YmljK1NxMEFYcTg3
-            d1BGUitESE5GOUl6c1lyRXJjeThuazBaQzNrCjh6bmc0aytHck8zMmRuMWNOaXdU
-            dTI3VGRyRlRUSjd5U3FWbklNUjVLMzgKLS0tIHdvcjR5U3JGNWc0bFNYS2tqSllF
-            ZGxUT3QzaGhuN3NmV3o5VXNZcDFSdk0K9J2bu7x68kHz8dvlED4MYKt4G+UMlp7J
-            ZmoNQGig+rwJ/YWVDqWbmpGdtdeZI/ygJ0dLszPai3O6ZYYr8PCDXA==
-            -----END AGE ENCRYPTED FILE-----
-          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
-    encrypted_regex: hostnames|0
-    lastmodified: "2026-09-18T18:05:42Z"
-    mac: ENC[AES256_GCM,data:Gffut+LqGyYiSRvd4mHwKUOF+8IHB33rcDRSTwxoGgu9yAnnoQjAIRJFAeGqAAitsWCY7/Xw6Uvz0IWOpecUF0Ph7M4JXpgEnHg+e+bQqQqH8PuAFL0Z4pC58D8zu25JCkNP8bFrBqMCfJzqYddn2RPhungEnl/vcS9Rum7vtYc=,iv:JutPYgua2upama0fP+Jd97mtFpUCCY5C+aYPZp187sM=,tag:MrDmla4Vxa+NWj43BbtTiw==,type:str]
-    version: 3.13.3
----
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: HTTPRoute
-metadata:
     name: falcosidekick-ui
     namespace: system-addon
 spec:
@@ -43,7 +8,7 @@ spec:
         - name: traefik-gateway
           namespace: system-addon
     hostnames:
-        - ENC[AES256_GCM,data:xsO7tpSTNEaqdhZMUWLjCUz+ecl7jeSf2PB6I8rn+kNtKWduwfo=,iv:vpGBsh2I8J1HjSF8TnJFu07Z/XUni6EWNb+wFioh7bM=,tag:UsDyyVsvkABDa4WnqEKdIw==,type:str]
+        - ENC[AES256_GCM,data:ASG7bZGYW25/VaVPh34EsawL9kV6igkBLU+UD5EK5QFqg/Vkg/k=,iv:N2vZXj3dxxlPorKvGAHyn/DC8Q6Gd4gy2SxYZyva8X4=,tag:8IZTANjruX5U5eiankxdmQ==,type:str]
     rules:
         - matches:
             - path:
@@ -56,14 +21,14 @@ sops:
     age:
         - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBESmo5YmljK1NxMEFYcTg3
-            d1BGUitESE5GOUl6c1lyRXJjeThuazBaQzNrCjh6bmc0aytHck8zMmRuMWNOaXdU
-            dTI3VGRyRlRUSjd5U3FWbklNUjVLMzgKLS0tIHdvcjR5U3JGNWc0bFNYS2tqSllF
-            ZGxUT3QzaGhuN3NmV3o5VXNZcDFSdk0K9J2bu7x68kHz8dvlED4MYKt4G+UMlp7J
-            ZmoNQGig+rwJ/YWVDqWbmpGdtdeZI/ygJ0dLszPai3O6ZYYr8PCDXA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtWUJWbi8xV3FVZ3RiYXNn
+            QldubG1UdlRzWG1rSHZ6bUwwQ1VOb0RPZjJzCmlhQ2wzd0hFS0c4RytXS3JLQTZq
+            bXVLdFN1aGxvQ3NwSmJncmovV1JvaEkKLS0tIEFlSGRMNUIvZlBqY1kyYndYZ1B5
+            RDFPOG0xWTlMOW9lNEhVc1oxSUpMdzAK4ls7XQ2OFlPp/oGfDVx6ksyisELLvWxs
+            O2+rU7Tx0PFjIiY3DBTPPP9BIH6t07tn+XVCfOTe7vyIfAGfyQEYzg==
             -----END AGE ENCRYPTED FILE-----
           recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: hostnames|0
-    lastmodified: "2026-09-18T18:05:42Z"
-    mac: ENC[AES256_GCM,data:Gffut+LqGyYiSRvd4mHwKUOF+8IHB33rcDRSTwxoGgu9yAnnoQjAIRJFAeGqAAitsWCY7/Xw6Uvz0IWOpecUF0Ph7M4JXpgEnHg+e+bQqQqH8PuAFL0Z4pC58D8zu25JCkNP8bFrBqMCfJzqYddn2RPhungEnl/vcS9Rum7vtYc=,iv:JutPYgua2upama0fP+Jd97mtFpUCCY5C+aYPZp187sM=,tag:MrDmla4Vxa+NWj43BbtTiw==,type:str]
+    lastmodified: "2026-09-18T19:10:51Z"
+    mac: ENC[AES256_GCM,data:FmjZOZOAlIRtevsaZSiUMfy2n015bkJqUnsKhRS+zaakKUXEBavk54tK21qBoGTEXbfE8R+klh7AwPJhII1YXdFdo3OCyvrbXkj1vXVvQd83XqCGz530DJxzfdcpPnGkjOvIZh89a+bIRW7/ihkjtcIEZp/PHk1kbC8Maz9yftU=,iv:3Ge5srEyjrXb0DPJ5rK1URX+tvyhelZed3/n1SuwyX0=,tag:22MHM8JetKL439+/LSv5PA==,type:str]
     version: 3.13.3
