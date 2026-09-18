@@ -28,6 +28,19 @@ spec:
           env:
             - name: WEBUI_URL
               value: http://falcosidekick-ui.system-addon.svc:2802
+            - name: REDIS_ADDRESS
+              value: redis-master.database.svc.cluster.local:6379
+            - name: REDIS_DATABASE
+              value: "5"
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: redis-password
+            - name: REDIS_STORAGETYPE
+              value: list
+            - name: REDIS_KEY
+              value: falco
 ---
 apiVersion: instance.falcosecurity.dev/v1alpha1
 kind: Component

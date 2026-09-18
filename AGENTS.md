@@ -146,15 +146,15 @@ uptime-kuma.io/group: "<group>"
 
 Use the internal Service DNS address, not the public hostname. For non-HTTP protocols, use the type already established in the repository (`port` or `tcp`) and include `uptime-kuma.io/port`. If a healthy endpoint returns a special status code, add `uptime-kuma.io/status-codes` as shown by existing examples.
 
-Allowed groups, selected according to the product's purpose:
+The following values are the canonical Uptime Kuma macro-groups. Select the most appropriate one for the product and use the value exactly as written, including capitalization, spaces, and `&`. Do not introduce new groups without explicit user approval:
 
-- `Media Acquisition`;
 - `Media & Streaming`;
-- `Monitoring & Observability`;
+- `Media Acquisition`;
 - `Storage & Databases`;
 - `Network & Connectivity`;
-- `Utilities`;
-- `Security & Cluster`.
+- `Monitoring & Observability`;
+- `Security & Cluster`;
+- `Utilities`.
 
 ## Internal HTTP exposure
 
