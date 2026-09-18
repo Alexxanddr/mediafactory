@@ -60,9 +60,9 @@ variable "cloudflare_idp_google" {
 variable "services" {
   description = "Values for the services to be exposed via Cloudflare Tunnel"
   type = map(object({
-    hostname  = string
-    service   = string
-    protected = bool
+    hostname          = string
+    internal_hostname = string
+    protected         = bool
   }))
 }
 variable "whitelist_email" {

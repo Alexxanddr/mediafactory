@@ -90,9 +90,10 @@ locals {
     for service in var.services : {
       hostname = "${service.hostname}.${data.cloudflare_zone.cfzone.name}"
       origin_request = {
-        no_tls_verify = true
+        http_host_header   = "${service.internal_hostname}.internal.${data.cloudflare_zone.cfzone.name}"
+        origin_server_name = "${service.internal_hostname}.internal.${data.cloudflare_zone.cfzone.name}"
       }
-      service = service.service
+      service = "https://traefik.system-addon.svc:443"
     }
   ]
 }

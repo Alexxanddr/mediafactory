@@ -38,7 +38,20 @@ spec:
     additionalArguments:
       - '--log.level=INFO'
       - '--providers.kubernetesingress=false'
+      - '--entrypoints.websecure.http.middlewares=system-addon-crowdsec-bouncer@kubernetescrd'
+    experimental:
+      plugins:
+        bouncer:
+          moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+          version: v1.4.5
+    volumes:
+      - name: crowdsec-keys
+        mountPath: /etc/traefik/crowdsec
+        type: secret
+        secretName: crowdsec-keys
     providers:
+      kubernetesCRD:
+        enabled: true
       kubernetesGateway:
         enabled: true
     gateway:
@@ -68,6 +81,10 @@ spec:
             - 104.24.0.0/14
             - 172.64.0.0/13
             - 131.0.72.0/22
+      websecure:
+        forwardedHeaders:
+          trustedIPs:
+            - 10.42.0.0/16
     api:
       dashboard: true
     accessLog:
