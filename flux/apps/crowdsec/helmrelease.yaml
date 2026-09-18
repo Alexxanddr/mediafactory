@@ -140,6 +140,13 @@ spec:
     # Questa sezione mappa 1:1 con il file config.yaml.local di CrowdSec
     # --------------------------------------------------------------------------
     config:
+      # Seerr carica molti endpoint API legittimi in parallelo. Manteniamo lo
+      # scenario visibile nelle metriche, ma senza applicare decisioni di ban.
+      simulation.yaml: |
+        simulation: false
+        exclusions:
+          - crowdsecurity/http-crawl-non_statics
+
       config.yaml.local: |
         api:
           client:
