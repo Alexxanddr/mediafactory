@@ -13,3 +13,33 @@ spec:
     registry:
       name: ghcr.io
   priority: 50
+---
+apiVersion: artifact.falcosecurity.dev/v1alpha1
+kind: Rulesfile
+metadata:
+  name: falco-local-rules
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  inlineRules:
+    - macro: known_drop_and_execute_activities
+      condition: >
+        or (
+          container.image.repository = "docker.io/dartsteven/nutify"
+          and container.image.tag = "latest-amd64"
+          and container.name = "nutify"
+          and k8s.ns.name = "extra-tools"
+          and user.uid = 0
+          and proc.name = "upsc"
+          and proc.exepath = "/usr/bin/upsc"
+          and proc.pname = "python3"
+          and proc.cwd = "/app/nutify/"
+          and proc.cmdline in (
+            "upsc ups@127.0.0.1",
+            "upsc ups@localhost ups.status"
+          )
+        )
+      override:
+        condition: append
+  priority: 60
