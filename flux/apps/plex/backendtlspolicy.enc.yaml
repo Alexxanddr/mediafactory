@@ -1,0 +1,28 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: BackendTLSPolicy
+metadata:
+    name: plex
+    namespace: multimedia-factory
+spec:
+    targetRefs:
+        - group: ""
+          kind: Service
+          name: plex-media-server
+    validation:
+        wellKnownCACertificates: System
+        hostname: ENC[AES256_GCM,data:g3iDv4gbGi7tajZ3kItWW65pXwAiDuiW4VqDgoUKixuQglLOPzOOArsz2uo1QCEuig==,iv:8kZPSGBogfj/PWOqHy5LCQUzJ0Ug4aUZzDH4i3z+0GY=,tag:h/Z5+NUD+UVkwpuPnWOG2Q==,type:str]
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzdmlWNnlXZVBBU2tjQTRW
+            eWpveDM0SUl1N0VHenNDL0xLTVNVZ2N3cENNCnRFN1hLWmhkZ3RtWkJIWjFGTnU3
+            bWVMdStLNU9KK3JGclJBREtFTHo4Q00KLS0tIDZXbkFvZWNyRzUyWEE1U3B5WURX
+            K0FMcWVOcWNFZnVCbjdvQ1NycGFvWGcKC8cig7T8VqAxPWiifPIIsdF2K+GenJ7Q
+            ycdkX9wMbucAH3pTonvK/OEjl+TIQSWsj0Tu6oAqd6d1Ec+rFDMOlQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(hostname)$
+    lastmodified: "2026-09-18T20:02:16Z"
+    mac: ENC[AES256_GCM,data:RGhErgdEYl1b/kWCacw/c943YKX6j/XsXabs+PA7WyaqcpuVzImalAkN0AWDiMbJa9IGcCmJw1PRspIicCoLS/+K9mJyloTnzD5prrXYxPrzbKyNUu2LuOapQ4Hd4rHUFr41nXLQQoMyYwZM3bEfRoT1fF/2qqW7bqWXySxeO08=,iv:SMeXFWFovNIcN3rioD3ra6ZRrETNvCQtbmHM8K0eGd8=,tag:7h/TbSZbPgrjg1v1iWWdrg==,type:str]
+    version: 3.13.3
