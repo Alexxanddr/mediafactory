@@ -1,0 +1,25 @@
+apiVersion: instance.falcosecurity.dev/v1alpha1
+kind: Falco
+metadata:
+  name: falco
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  version: latest
+  podTemplateSpec:
+    metadata:
+      annotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://falco.system-addon.svc:8765/healthz"
+        uptime-kuma.io/name: "falco"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster"
+    spec:
+      containers:
+        - name: falco
+          imagePullPolicy: Always
+          tty: true

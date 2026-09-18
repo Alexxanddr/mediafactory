@@ -1,0 +1,17 @@
+apiVersion: artifact.falcosecurity.dev/v1alpha1
+kind: Config
+metadata:
+  name: falco-output
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  config:
+    json_output: true
+    json_include_output_property: true
+    stdout_output:
+      enabled: true
+    http_output:
+      enabled: true
+      url: http://falcosidekick.system-addon.svc:2801
+  priority: 60

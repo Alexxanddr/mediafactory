@@ -1,0 +1,98 @@
+apiVersion: instance.falcosecurity.dev/v1alpha1
+kind: Component
+metadata:
+  name: falcosidekick
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  component:
+    type: falcosidekick
+    version: latest
+  replicas: 1
+  podTemplateSpec:
+    metadata:
+      annotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://falcosidekick.system-addon.svc:2801/healthz"
+        uptime-kuma.io/name: "falcosidekick"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster"
+    spec:
+      containers:
+        - name: falcosidekick
+          imagePullPolicy: Always
+          env:
+            - name: WEBUI_URL
+              value: http://falcosidekick-ui.system-addon.svc:2802
+---
+apiVersion: instance.falcosecurity.dev/v1alpha1
+kind: Component
+metadata:
+  name: metacollector
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  component:
+    type: metacollector
+    version: latest
+  replicas: 1
+  podTemplateSpec:
+    metadata:
+      annotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "port"
+        uptime-kuma.io/url: "metacollector.system-addon.svc"
+        uptime-kuma.io/port: "45000"
+        uptime-kuma.io/name: "falco-k8s-metacollector"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster"
+---
+apiVersion: instance.falcosecurity.dev/v1alpha1
+kind: Component
+metadata:
+  name: falcosidekick-ui
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/managed-by: falco-operator
+spec:
+  component:
+    type: falcosidekick-ui
+    version: latest
+  replicas: 1
+  podTemplateSpec:
+    metadata:
+      annotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "http"
+        uptime-kuma.io/url: "http://falcosidekick-ui.system-addon.svc:2802/api/v1/healthz"
+        uptime-kuma.io/name: "falcosidekick-ui"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Security & Cluster"
+    spec:
+      containers:
+        - name: falcosidekick-ui
+          imagePullPolicy: Always
+          env:
+            - name: FALCOSIDEKICK_UI_REDIS_URL
+              value: redis-master.database.svc.cluster.local:6379
+            - name: FALCOSIDEKICK_UI_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: redis-password
+            - name: FALCOSIDEKICK_UI_USER
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: ui-user
+            - name: FALCOSIDEKICK_UI_TTL
+              value: 30d
