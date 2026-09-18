@@ -91,12 +91,23 @@ spec:
         uptime-kuma.io/notifications: "Monitoring Bot"
         uptime-kuma.io/group: "Security & Cluster"
     spec:
+      initContainers:
+        - name: wait-redis
+          env:
+            - name: REDIS_ADDR
+              value: redis-master.database.svc.cluster.local:6379
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: redis-password
       containers:
         - name: falcosidekick-ui
           imagePullPolicy: Always
+          args:
+            - -r
+            - redis-master.database.svc.cluster.local:6379
           env:
-            - name: FALCOSIDEKICK_UI_REDIS_URL
-              value: redis-master.database.svc.cluster.local:6379
             - name: FALCOSIDEKICK_UI_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
