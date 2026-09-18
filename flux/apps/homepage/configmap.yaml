@@ -457,6 +457,14 @@ data:
           app: keel
           namespace: system-addon
           podSelector: app in ( keel )
+      - Falco Sidekick:
+          icon: https://repository-images.githubusercontent.com/148756498/427ed700-e6c7-11e9-92dc-995f65aca2e8
+          href: https://falcosidekick-ui.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://falcosidekick-ui.system-addon.svc:2802
+          showStats: false
+          app: falcosidekick-ui
+          namespace: system-addon
+          podSelector: app.kubernetes.io/name in ( falcosidekick-ui )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
