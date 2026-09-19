@@ -140,12 +140,27 @@ spec:
     # Questa sezione mappa 1:1 con il file config.yaml.local di CrowdSec
     # --------------------------------------------------------------------------
     config:
-      # Seerr carica molti endpoint API legittimi in parallelo. Manteniamo lo
-      # scenario visibile nelle metriche, ma senza applicare decisioni di ban.
+      # Mantieni attivi tutti gli scenari. Le esclusioni per traffico legittimo
+      # sono definite come whitelist puntuali nei parser s02-enrich sottostanti.
       simulation.yaml: |
         simulation: false
-        exclusions:
-          - crowdsecurity/http-crawl-non_statics
+
+      parsers:
+        s02-enrich:
+          # Il prefisso zz garantisce che la whitelist venga valutata dopo i
+          # parser HTTP standard che popolano evt.Meta.*.
+          zz-homepage-kubernetes-status-whitelist.yaml: |
+            name: local/homepage-kubernetes-status-whitelist
+            description: Ignore legitimate Homepage Kubernetes status polling
+            filter: "evt.Meta.log_type == 'http_access-log'"
+            whitelist:
+              reason: Homepage Kubernetes status polling
+              expression:
+                - >-
+                  evt.Meta.traefik_router_name startsWith
+                  'httproute-multimedia-factory-homepage-' and
+                  evt.Meta.http_verb == 'GET' and
+                  evt.Meta.http_path startsWith '/api/kubernetes/status/'
 
       config.yaml.local: |
         api:
