@@ -40,6 +40,34 @@ spec:
             "upsc ups@localhost ups.status"
           )
         )
+        or (
+          container.image.repository = "docker.io/pihole/pihole"
+          and container.image.tag = "latest"
+          and container.name = "pihole"
+          and k8s.ns.name = "extra-tools"
+          and user.uid = 0
+          and proc.name = "pihole-FTL"
+          and proc.exepath = "/usr/bin/pihole-FTL"
+          and proc.pname = "bash"
+          and proc.sname = "start.sh"
+          and proc.cwd = "/root/"
+          and proc.cmdline startswith "pihole-FTL "
+          and proc.tty = 0
+        )
+        or (
+          container.image.repository = "ghcr.io/flaresolverr/flaresolverr"
+          and container.image.tag = "latest"
+          and container.name = "flaresolverr"
+          and k8s.ns.name = "multimedia-factory"
+          and user.uid = 1000
+          and proc.name = "chromedriver"
+          and proc.exepath = "/app/chromedriver"
+          and proc.pname = "python"
+          and proc.sname = "python"
+          and proc.cwd = "/app/"
+          and proc.cmdline startswith "chromedriver --port="
+          and proc.tty = 0
+        )
       override:
         condition: append
     - macro: user_known_stand_streams_redirect_activities
