@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: falco-critical-test
+  namespace: system-addon
+  labels:
+    app.kubernetes.io/name: falco-critical-test
+    app.kubernetes.io/part-of: falco
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: falco-critical-test
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: falco-critical-test
+        app.kubernetes.io/part-of: falco
+    spec:
+      automountServiceAccountToken: false
+      restartPolicy: Always
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: event-generator
+          image: alpine:latest
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              set -eu
+              mkdir -p /tmp/falco-test
+              cp /bin/busybox /tmp/falco-test/sh
+              chmod 0700 /tmp/falco-test/sh
+              /tmp/falco-test/sh -c \
+                'echo "Falco critical test event generated"'
+              exec /bin/sleep 2147483647
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

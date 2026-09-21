@@ -41,6 +41,20 @@ spec:
               value: list
             - name: REDIS_KEY
               value: falco
+            - name: TELEGRAM_CHATID
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: telegram-chat-id
+                  optional: true
+            - name: TELEGRAM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: falcosidekick-ui
+                  key: telegram-token
+                  optional: true
+            - name: TELEGRAM_MINIMUMPRIORITY
+              value: critical
 ---
 apiVersion: instance.falcosecurity.dev/v1alpha1
 kind: Component
