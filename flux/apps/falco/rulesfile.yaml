@@ -68,6 +68,21 @@ spec:
           and proc.cmdline startswith "chromedriver --port="
           and proc.tty = 0
         )
+        or (
+          container.image.repository = "docker.io/revenz/fileflows"
+          and container.image.tag = "latest"
+          and container.name = "fileflows-node"
+          and k8s.ns.name = "multimedia-factory"
+          and user.uid = 1000
+          and proc.name = "ffmpeg"
+          and proc.exe = "/usr/local/bin/ffmpeg"
+          and proc.exepath = "/usr/lib/jellyfin-ffmpeg/ffmpeg"
+          and proc.pname = "dotnet"
+          and proc.aname[2] = "dotnet"
+          and proc.cwd = "/app/FlowRunner/"
+          and proc.cmdline startswith "ffmpeg "
+          and proc.tty = 0
+        )
       override:
         condition: append
     - macro: user_known_stand_streams_redirect_activities
