@@ -38,6 +38,8 @@ spec:
           env:
             - name: TZ
               value: "Europe/Rome"
+            - name: ALLOW_IANA_RESTRICTED_ADDRESSES
+              value: "true"
       volumes:
         - name: changedetection-config
           persistentVolumeClaim:
