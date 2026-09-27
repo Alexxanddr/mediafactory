@@ -113,18 +113,17 @@ spec:
     - macro: known_memfd_execution_processes
       condition: >
         or (
-          container.image.repository = "docker.io/revenz/fileflows"
-          and container.image.tag = "latest"
-          and container.name = "fileflows-node"
-          and k8s.ns.name = "multimedia-factory"
-          and user.uid = 0
-          and proc.exepath startswith "memfd:runc_cloned:/run/nvidia-ctk-hook/"
-          and proc.exepath endswith "/ldconfig"
+          user.uid = 0
           and proc.pname = "nvidia-cdi-hook"
           and proc.sname = "runc:[1:CHILD]"
           and proc.aname[2] = "runc:[1:CHILD]"
           and proc.cwd = "/"
-          and proc.cmdline = "11 -f /etc/ld.so.conf -C /etc/ld.so.cache"
+          and proc.exepath startswith "memfd:runc_cloned:"
+          and proc.exepath endswith "ldconfig"
+          and proc.cmdline in (
+            "11 -f /etc/ld.so.conf -C /etc/ld.so.cache",
+            "memfd:runc_clon -f /etc/ld.so.conf -C /etc/ld.so.cache"
+          )
           and proc.tty = 0
         )
       override:
