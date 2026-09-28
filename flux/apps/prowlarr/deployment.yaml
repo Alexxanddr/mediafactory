@@ -30,97 +30,24 @@ spec:
         app: prowlarr
     spec:
       containers:
-        # =========================
-        # GLUETUN (VPN gateway)
-        # =========================
-        - name: gluetun
-          image: ghcr.io/qdm12/gluetun:latest
-          imagePullPolicy: Always
-          securityContext:
-            capabilities:
-              add: ["NET_ADMIN"]
-          ports:
-            - name: http-proxy
-              containerPort: 8888
-          envFrom:
-            - secretRef:
-                name: gluetun-options
-          volumeMounts:
-            - name: wireguard-proxy-secret
-              mountPath: /gluetun/wireguard/
-              readOnly: true
-          readinessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 5
-            periodSeconds: 3
-            timeoutSeconds: 2
-            failureThreshold: 3
-          livenessProbe:
-            exec:
-              command:
-                - sh
-                - -c
-                - "ping -c 1 $(echo $WIREGUARD_ADDRESSES | cut -d'/' -f1)"
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 2
-            failureThreshold: 3
-        # =========================
-        # PROWLARR
-        # =========================
-        - name: prowlarr
-          image: lscr.io/linuxserver/prowlarr:latest
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 9696
-          env:
-            - name: PUID
-              value: "1000"
-            - name: PGID
-              value: "1000"
-            - name: UMASK
-              value: "002"
-            - name: TZ
-              value: Etc/UTC
-          volumeMounts:
-            - name: prowlarr-config
-              mountPath: /config
-        # =========================
-        # FLARESOLVERR
-        # =========================
-        - name: flaresolverr
-          image: ghcr.io/flaresolverr/flaresolverr
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8191
-          env:
-            - name: LOG_LEVEL
-              value: info
+      - name: prowlarr
+        image: lscr.io/linuxserver/prowlarr:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9696
+        env:
+        - name: PUID
+          value: '1000'
+        - name: PGID
+          value: '1000'
+        - name: UMASK
+          value: '002'
+        - name: TZ
+          value: Etc/UTC
+        volumeMounts:
+        - mountPath: /config
+          name: prowlarr-config
       volumes:
-        - name: prowlarr-config
-          persistentVolumeClaim:
-            claimName: prowlarr-config
-        - name: wireguard-proxy-secret
-          secret:
-            secretName: wireguard-proxy-secret
-        - name: gluetun-options
-          secret:
-            secretName: gluetun-options
-      dnsPolicy: None
-      dnsConfig:
-        nameservers:
-          - 127.0.0.1
-      hostAliases:
-        - ip: "10.43.98.59"
-          hostnames:
-            - "qbittorrent-wg.multimedia-factory.svc"
-        - ip: "10.43.67.209"
-          hostnames:
-            - "sonarr.multimedia-factory.svc"
-        - ip: "10.43.26.74"
-          hostnames:
-            - "radarr.multimedia-factory.svc"
+      - name: prowlarr-config
+        persistentVolumeClaim:
+          claimName: prowlarr-config
