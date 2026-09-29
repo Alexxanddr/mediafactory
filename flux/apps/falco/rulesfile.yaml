@@ -31,13 +31,31 @@ spec:
           and container.name = "nutify"
           and k8s.ns.name = "extra-tools"
           and user.uid = 0
-          and proc.name = "upsc"
-          and proc.exepath = "/usr/bin/upsc"
           and proc.pname = "python3"
+          and proc.sname = "start-services."
           and proc.cwd = "/app/nutify/"
-          and proc.cmdline in (
-            "upsc ups@127.0.0.1",
-            "upsc ups@localhost ups.status"
+          and proc.tty = 0
+          and (
+            (
+              proc.name = "upsc"
+              and proc.exepath = "/usr/bin/upsc"
+              and proc.cmdline in (
+                "upsc ups@127.0.0.1",
+                "upsc ups@localhost ups.status"
+              )
+            )
+            or (
+              proc.name = "upsrw"
+              and proc.exepath = "/usr/bin/upsrw"
+              and proc.cmdline startswith "upsrw -u "
+              and proc.cmdline endswith " ups@localhost"
+            )
+            or (
+              proc.name = "upscmd"
+              and proc.exepath = "/usr/bin/upscmd"
+              and proc.cmdline startswith "upscmd -u "
+              and proc.cmdline endswith " -l ups@localhost"
+            )
           )
         )
         or (
