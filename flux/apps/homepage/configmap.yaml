@@ -515,14 +515,14 @@ data:
               username: {{HOMEPAGE_VAR_GRIMMORY_USER}}
               password: {{HOMEPAGE_VAR_GRIMMORY_PASSWORD}}
     - OtherMedia:
-        - YamTrack:
-            icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/yamtrack-light.png
-            href: https://yamtrack.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://yamtrack.multimedia-factory.svc:8000
+        - Floppy:
+            icon: mdi-floppy
+            href: https://floppy.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://floppy.multimedia-factory.svc:8000
             showStats: false
-            app: yamtrack
+            app: floppy
             namespace: multimedia-factory
-            podSelector: app in ( yamtrack )
+            podSelector: app in ( floppy )
         - Shelfmark:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/shelfmark.png
             href: https://shelfmark.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}

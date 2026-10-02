@@ -34,11 +34,11 @@ spec:
 apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
-  name: yamtrack
+  name: floppy
   namespace: database
 spec:
-  name: yamtrack
-  owner: yamtrack
+  name: floppy
+  owner: floppy
   cluster:
     name: postgres
 ---
