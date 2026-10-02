@@ -23,7 +23,7 @@ spec:
   template:
     metadata:
       annotations:
-        config.floppy/revision: "1"
+        config.floppy/revision: "2"
       labels:
         app: floppy
     spec:
