@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: yamtrack
+  name: floppy
   namespace: multimedia-factory
 spec:
   selector:
-    app: yamtrack
+    app: floppy
   ports:
     - protocol: TCP
       port: 8000

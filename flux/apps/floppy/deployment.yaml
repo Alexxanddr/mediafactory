@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: yamtrack
+  name: floppy
   namespace: multimedia-factory
   annotations:
     keel.sh/policy: force
@@ -9,8 +9,8 @@ metadata:
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://yamtrack.multimedia-factory.svc:8000"
-    uptime-kuma.io/name: "yamtrack"
+    uptime-kuma.io/url: "http://floppy.multimedia-factory.svc:8000"
+    uptime-kuma.io/name: "floppy"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
@@ -19,20 +19,25 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: yamtrack
+      app: floppy
   template:
     metadata:
       labels:
-        app: yamtrack
+        app: floppy
     spec:
       enableServiceLinks: false
       containers:
-        - name: yamtrack
-          image: ghcr.io/fuzzygrim/yamtrack
+        - name: floppy
+          image: ghcr.io/dannyvfilms/floppy:latest
           imagePullPolicy: Always
+          env:
+            - name: DEMO_ACCOUNT_ENABLED
+              value: "False"
+            - name: FLOPPY_REDIS_MAXMEMORY
+              value: "0"
           envFrom:
             - secretRef:
-                name: yamtrack-secret
+                name: floppy-secret
           ports:
             - containerPort: 8000
       initContainers:
