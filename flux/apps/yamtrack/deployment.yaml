@@ -10,7 +10,7 @@ metadata:
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://yamtrack.multimedia-factory.svc:8000"
-    uptime-kuma.io/name: "yamtrack"
+    uptime-kuma.io/name: "floppy"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
@@ -27,9 +27,29 @@ spec:
     spec:
       enableServiceLinks: false
       containers:
-        - name: yamtrack
-          image: ghcr.io/fuzzygrim/yamtrack
+        - name: floppy
+          image: ghcr.io/dannyvfilms/floppy:latest
           imagePullPolicy: Always
+          env:
+            - name: DEMO_ACCOUNT_ENABLED
+              value: "False"
+            - name: FLOPPY_REDIS_MAXMEMORY
+              value: "0"
+            - name: REDIS_CACHE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: yamtrack-secret
+                  key: REDIS_URL
+            - name: CELERY_BROKER_URL
+              valueFrom:
+                secretKeyRef:
+                  name: yamtrack-secret
+                  key: CELERY_REDIS_URL
+            - name: CELERY_RESULT_BACKEND
+              valueFrom:
+                secretKeyRef:
+                  name: yamtrack-secret
+                  key: CELERY_REDIS_URL
           envFrom:
             - secretRef:
                 name: yamtrack-secret
