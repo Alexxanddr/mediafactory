@@ -12,6 +12,7 @@ metadata:
     uptime-kuma.io/url: "http://floppy.multimedia-factory.svc:8000"
     uptime-kuma.io/name: "floppy"
     uptime-kuma.io/interval: "60"
+    uptime-kuma.io/status-codes: "404"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
@@ -23,7 +24,7 @@ spec:
   template:
     metadata:
       annotations:
-        config.floppy/revision: "2"
+        config.floppy/revision: "3"
       labels:
         app: floppy
     spec:
