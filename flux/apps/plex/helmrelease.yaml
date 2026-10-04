@@ -30,7 +30,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://plex-media-server.multimedia-factory.svc:32400"
+        uptime-kuma.io/url: "https://plex-media-server.multimedia-factory.svc:32400"
         uptime-kuma.io/name: "plex"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
