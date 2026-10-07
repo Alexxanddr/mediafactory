@@ -34,7 +34,12 @@ spec:
           image: homebridge/homebridge:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8581
+            - name: ui
+              containerPort: 8581
+              protocol: TCP
+            - name: webhook
+              containerPort: 3210
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /
