@@ -11,3 +11,17 @@ spec:
       port: 5000
       targetPort: 5000
   type: ClusterIP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: browser-sockpuppet-chrome
+  namespace: extra-tools
+spec:
+  selector:
+    app: browser-sockpuppet-chrome
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
