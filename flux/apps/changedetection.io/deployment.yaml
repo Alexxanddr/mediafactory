@@ -40,7 +40,53 @@ spec:
               value: "Europe/Rome"
             - name: ALLOW_IANA_RESTRICTED_ADDRESSES
               value: "true"
+            - name: PLAYWRIGHT_DRIVER_URL
+              value: ws://browser-sockpuppet-chrome.extra-tools.svc:3000
       volumes:
         - name: changedetection-config
           persistentVolumeClaim:
             claimName: changedetection-config
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: browser-sockpuppet-chrome
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "port"
+    uptime-kuma.io/url: "browser-sockpuppet-chrome.extra-tools.svc"
+    uptime-kuma.io/port: "3000"
+    uptime-kuma.io/name: "changedetection-browser"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: browser-sockpuppet-chrome
+  template:
+    metadata:
+      labels:
+        app: browser-sockpuppet-chrome
+    spec:
+      containers:
+        - name: browser-sockpuppet-chrome
+          image: dgtlmoon/sockpuppetbrowser:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: SCREEN_WIDTH
+              value: "1920"
+            - name: SCREEN_HEIGHT
+              value: "1024"
+            - name: SCREEN_DEPTH
+              value: "16"
+            - name: MAX_CONCURRENT_CHROME_PROCESSES
+              value: "10"
