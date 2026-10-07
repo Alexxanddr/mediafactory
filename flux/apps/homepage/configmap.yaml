@@ -403,7 +403,7 @@ data:
       - Violarr:
           icon: https://xbit18.github.io/violarr/logo.png
           href: https://violarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://violarr.multimedia-factory.svc:8000
+          siteMonitor: http://violarr.multimedia-factory.svc:8000/webapi/status
           description: Violarr
           showStats: false
           app: violarr
