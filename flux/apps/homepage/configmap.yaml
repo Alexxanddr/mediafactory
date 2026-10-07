@@ -400,6 +400,15 @@ data:
           app: maintainerr
           namespace: multimedia-factory
           podSelector: app in ( maintainerr )
+      - Violarr:
+          icon: https://xbit18.github.io/violarr/logo.png
+          href: https://violarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://violarr.multimedia-factory.svc:8000
+          description: Violarr
+          showStats: false
+          app: violarr
+          namespace: multimedia-factory
+          podSelector: app in ( violarr )
       - Lingarr:
           icon: https://cdn.jsdelivr.net/gh/selfhst/icons/png/lingarr.png
           href: https://lingarr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
