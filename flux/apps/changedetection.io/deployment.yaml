@@ -41,7 +41,7 @@ spec:
             - name: ALLOW_IANA_RESTRICTED_ADDRESSES
               value: "true"
             - name: PLAYWRIGHT_DRIVER_URL
-              value: ws://browser-sockpuppet-chrome.extra-tools.svc:3000
+              value: ws://browser-sockpuppet-chrome.extra-tools.svc:3000/?headful=true
       volumes:
         - name: changedetection-config
           persistentVolumeClaim:
