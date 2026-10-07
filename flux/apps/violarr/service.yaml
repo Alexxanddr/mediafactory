@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: violarr
+  namespace: multimedia-factory
+spec:
+  type: ClusterIP
+  selector:
+    app: violarr
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8000
+      targetPort: 8000

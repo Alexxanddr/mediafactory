@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: violarr
+    namespace: multimedia-factory
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:57gF96bNYf55MEQ8YsRUDgJTxWT/CqrAKgHvnNs=,iv:Z/q4SPrbN5nVQbti33xYzxs7FpVIubTA/V0jz6Smce4=,tag:xu4LAgPM9d6ilS/TaEN4PA==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: violarr
+              port: 8000
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB4Si85MnpVZFJNRnNLQk43
+            aDZYOVlJRS9udjhQZmVNSGtkODhqaVNvMTM0CnIvZzdueUh2WWc4RzJRY1ZEalRV
+            Y0hCM3pualk3cWRVMXpwdFR6RkFFOWsKLS0tIHpIcThiZGp5eG9TaTJOcVp3SlQw
+            TFBYRjU5Rm1SQWU0eE04cTQ1MGFuSWMKsbyB7PBCE3vUn/v1/ZiZgfyMLd2eIU9k
+            bHDAY2AMVBzk/KBKyS+KORzIn7j/SZYtJ1J4/s3P2Y4E9JV+Mmpuzw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: hostnames|0
+    lastmodified: "2026-10-07T12:29:05Z"
+    mac: ENC[AES256_GCM,data:PYkKxVo4Sz3J5FfUCA3MLBEJe2K5VPsOWcefWlQblhjdoxqR87+/GaFlDcxY2Uy+7crLlt62or+2w8WUnpZFw5D6mZSt+gxr/vlkwtXWx65pvmUMUBx0BNUUM5x7+aR3K2YcHhICAzCjgL6G2W+/6RIG99/NNVCd8D4dgo7g8g4=,iv:7kxYfVnaROjtkh/TPMEVgiohAMY/a9ehiUo1a8o68Fg=,tag:nygbzpGbDfUZCDvgVYx4yQ==,type:str]
+    version: 3.13.3

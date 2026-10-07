@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: violarr
+  namespace: multimedia-factory
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://violarr.multimedia-factory.svc:8000"
+    uptime-kuma.io/name: "violarr"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Media Acquisition"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: violarr
+  template:
+    metadata:
+      labels:
+        app: violarr
+    spec:
+      enableServiceLinks: false
+      containers:
+        - name: violarr
+          image: ghcr.io/xbit18/violarr:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - name: violarr-data
+              mountPath: /data
+      volumes:
+        - name: violarr-data
+          persistentVolumeClaim:
+            claimName: violarr-data
