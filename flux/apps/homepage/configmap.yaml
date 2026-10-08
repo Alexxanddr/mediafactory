@@ -283,15 +283,8 @@ data:
       }
 
       #information-widgets {
-        height: auto;
-        min-height: fit-content;
         margin-bottom: 1.25rem;
         padding: 0.65rem;
-        overflow: visible;
-      }
-
-      #widgets-wrap {
-        align-items: flex-start;
       }
 
       #services .services-group {
