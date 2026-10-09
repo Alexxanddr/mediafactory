@@ -36,6 +36,8 @@ spec:
           env:
             - name: NOBLE_BINDINGS
               value: dbus
+            - name: DBUS_SYSTEM_BUS_ADDRESS
+              value: unix:path=/run/host-dbus/system_bus_socket
           ports:
             - name: ui
               containerPort: 8581
@@ -58,7 +60,7 @@ spec:
           volumeMounts:
             - mountPath: /homebridge
               name: homebridge-pvc
-            - mountPath: /run/dbus/system_bus_socket
+            - mountPath: /run/host-dbus/system_bus_socket
               name: system-dbus
               readOnly: true
       volumes:
