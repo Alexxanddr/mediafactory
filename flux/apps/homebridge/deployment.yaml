@@ -36,7 +36,7 @@ spec:
           env:
             - name: NOBLE_BINDINGS
               value: dbus
-            - name: DBUS_SYSTEM_BUS_ADDRESS
+            - name: PITPAT_DBUS_SYSTEM_BUS_ADDRESS
               value: unix:path=/run/host-dbus/system_bus_socket
           ports:
             - name: ui
