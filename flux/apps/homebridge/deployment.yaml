@@ -33,6 +33,9 @@ spec:
         - name: homebridge
           image: homebridge/homebridge:latest
           imagePullPolicy: Always
+          env:
+            - name: NOBLE_BINDINGS
+              value: dbus
           ports:
             - name: ui
               containerPort: 8581
@@ -55,7 +58,14 @@ spec:
           volumeMounts:
             - mountPath: /homebridge
               name: homebridge-pvc
+            - mountPath: /run/dbus/system_bus_socket
+              name: system-dbus
+              readOnly: true
       volumes:
         - name: homebridge-pvc
           persistentVolumeClaim:
             claimName: homebridge-pvc
+        - name: system-dbus
+          hostPath:
+            path: /run/dbus/system_bus_socket
+            type: Socket
