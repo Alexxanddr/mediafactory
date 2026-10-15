@@ -33,9 +33,6 @@ spec:
       automountServiceAccountToken: false
       enableServiceLinks: false
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 10000
-        runAsGroup: 10000
         fsGroup: 10000
         fsGroupChangePolicy: OnRootMismatch
         seccompProfile:
@@ -53,6 +50,9 @@ spec:
                 chmod 0640 /opt/data/config.yaml
               fi
           securityContext:
+            runAsNonRoot: true
+            runAsUser: 10000
+            runAsGroup: 10000
             allowPrivilegeEscalation: false
             capabilities:
               drop:
@@ -107,10 +107,21 @@ spec:
               cpu: "2"
               memory: 4Gi
           securityContext:
+            # The official image starts s6-overlay as root, prepares /run and
+            # /opt/data, then drops to the unprivileged hermes user (UID 10000).
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
             allowPrivilegeEscalation: false
             capabilities:
               drop:
                 - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+                - SETGID
+                - SETUID
             readOnlyRootFilesystem: true
           volumeMounts:
             - name: data
