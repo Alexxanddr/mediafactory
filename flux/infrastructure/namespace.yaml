@@ -43,7 +43,9 @@ kind: Namespace
 metadata:
   name: hermes-agent
   labels:
-    pod-security.kubernetes.io/enforce: restricted
+    # The official Hermes image starts s6-overlay as root, then drops to UID
+    # 10000. Baseline admits that bootstrap while audit/warn remain restricted.
+    pod-security.kubernetes.io/enforce: baseline
     pod-security.kubernetes.io/enforce-version: latest
     pod-security.kubernetes.io/audit: restricted
     pod-security.kubernetes.io/audit-version: latest
