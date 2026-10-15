@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hermes-agent-config
+  namespace: hermes-agent
+data:
+  config.yaml: |
+    model:
+      provider: openrouter
+      default: z-ai/glm-5.2
+      base_url: ""
+      api_mode: chat_completions
+    terminal:
+      backend: local
+    security:
+      website_blocklist:
+        enabled: true
+        domains:
+          - "*.cluster.local"
+          - "localhost"
+          - "127.0.0.1"
