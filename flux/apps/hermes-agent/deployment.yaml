@@ -1,0 +1,139 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hermes-agent
+  namespace: hermes-agent
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "port"
+    uptime-kuma.io/url: "hermes-agent.hermes-agent.svc"
+    uptime-kuma.io/port: "8642"
+    uptime-kuma.io/name: "hermes-agent"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  # Keep disabled until the SOPS placeholders in secret.enc.yaml are replaced.
+  replicas: 0
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: hermes-agent
+  template:
+    metadata:
+      labels:
+        app: hermes-agent
+    spec:
+      serviceAccountName: hermes-agent
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        fsGroup: 10000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: seed-config
+          image: busybox:latest
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -ec
+            - |
+              if [ ! -s /opt/data/config.yaml ]; then
+                cp /bootstrap/config.yaml /opt/data/config.yaml
+                chmod 0640 /opt/data/config.yaml
+              fi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 50m
+              memory: 32Mi
+          volumeMounts:
+            - name: data
+              mountPath: /opt/data
+            - name: bootstrap-config
+              mountPath: /bootstrap
+              readOnly: true
+      containers:
+        - name: hermes-agent
+          image: nousresearch/hermes-agent:latest
+          imagePullPolicy: Always
+          args:
+            - gateway
+            - run
+          env:
+            - name: OPENROUTER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-agent-secret
+                  key: OPENROUTER_API_KEY
+            - name: API_SERVER_ENABLED
+              value: "true"
+            - name: API_SERVER_HOST
+              value: "0.0.0.0"
+            - name: API_SERVER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-agent-secret
+                  key: API_SERVER_KEY
+            - name: TZ
+              value: Europe/Rome
+          ports:
+            - name: api
+              containerPort: 8642
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: data
+              mountPath: /opt/data
+            - name: run
+              mountPath: /run
+            - name: tmp
+              mountPath: /tmp
+            - name: shared-memory
+              mountPath: /dev/shm
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: hermes-agent-data
+        - name: bootstrap-config
+          configMap:
+            name: hermes-agent-config
+        - name: run
+          emptyDir: {}
+        - name: tmp
+          emptyDir:
+            sizeLimit: 1Gi
+        - name: shared-memory
+          emptyDir:
+            medium: Memory
+            sizeLimit: 1Gi
