@@ -18,7 +18,7 @@ metadata:
     uptime-kuma.io/group: "Utilities"
 spec:
   # Keep disabled until the SOPS placeholders in secret.enc.yaml are replaced.
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:
