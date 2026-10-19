@@ -1,0 +1,149 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: omniroute
+  namespace: omniroute
+  annotations:
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: http
+    uptime-kuma.io/url: http://omniroute.omniroute.svc:20128/healthz
+    uptime-kuma.io/name: omniroute
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: Monitoring Bot
+    uptime-kuma.io/group: Utilities
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: omniroute
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: omniroute
+    spec:
+      serviceAccountName: omniroute
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: 90
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: omniroute
+          image: diegosouzapw/omniroute:3.8.51
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "20128"
+            - name: DASHBOARD_PORT
+              value: "20128"
+            - name: API_HOST
+              value: 0.0.0.0
+            - name: REQUIRE_API_KEY
+              value: "true"
+            - name: AUTH_COOKIE_SECURE
+              value: "true"
+            - name: DATA_DIR
+              value: /app/data
+            - name: OMNIROUTE_MEMORY_MB
+              value: "8192"
+            - name: NEXT_PUBLIC_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: NEXT_PUBLIC_BASE_URL
+            - name: OMNIROUTE_WS_BRIDGE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: OMNIROUTE_WS_BRIDGE_SECRET
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: JWT_SECRET
+            - name: API_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: API_KEY_SECRET
+            - name: STORAGE_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: STORAGE_ENCRYPTION_KEY
+            - name: MACHINE_ID_SALT
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: MACHINE_ID_SALT
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: omniroute
+                  key: REDIS_URL
+            - name: TZ
+              value: Europe/Rome
+          ports:
+            - name: http
+              containerPort: 20128
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 3
+            timeoutSeconds: 3
+            failureThreshold: 40
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6
+          lifecycle:
+            preStop:
+              exec:
+                command: [/bin/sleep, "15"]
+          resources:
+            requests:
+              cpu: 500m
+              memory: 2Gi
+            limits:
+              cpu: "4"
+              memory: 10Gi
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: omniroute-data
+        - name: tmp
+          emptyDir:
+            sizeLimit: 2Gi

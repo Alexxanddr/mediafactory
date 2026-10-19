@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: omniroute
+  namespace: omniroute
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: 4Gi
+    requests.storage: 12Gi
+    limits.cpu: "5"
+    limits.memory: 11Gi
+    persistentvolumeclaims: "2"
+    pods: "3"

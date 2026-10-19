@@ -192,6 +192,7 @@ The hostname is sensitive and must remain encrypted with SOPS. Do not create a K
 - Follow the rules in `.sops.yaml`; never manually modify `ENC[...]` payloads, MACs, or Age blocks.
 - Create and modify secrets with `sops`, leaving `data` and `stringData` encrypted.
 - Never write passwords, tokens, credential-bearing URIs, or private keys in `AGENTS.md`, ordinary manifests, comments, Terraform output, or documentation.
+- Never write the homelab domain or any hostname derived from it in plaintext. Store application URLs in SOPS-encrypted Secrets and reference them with `secretKeyRef`; encrypt `HTTPRoute.spec.hostnames` with SOPS.
 - Reuse `secretKeyRef` and `envFrom` instead of copying credentials into workloads.
 - Run the available pre-commit and Gitleaks checks before finishing.
 
