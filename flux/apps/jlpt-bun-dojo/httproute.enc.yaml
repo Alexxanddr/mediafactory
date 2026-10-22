@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: jlpt-bun-dojo
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:gsyx79lFVXlOjDw1SOq+Dbp5EK6Agos6gdYWIq2gilRZ7XA=,iv:/CbX26l0NUSnEtzhklBRQyLTzFqyr6873wcT4EfUY+I=,tag:S7B7QZ+twGaPMksjHkYhSQ==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: jlpt-bun-dojo
+              port: 8000
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCb2JjWU5wVjloR2JxSGM5
+            ZExuaHNkNGh3RXNNcFN1aWhHUjdhR1NROUFZCmh1YVlRTkpGTk8rRk5iaDRmY0lL
+            UmxlQ0F4V3F6Ymw5eDRUT28wakpGVFEKLS0tIHMxWmQ2V3g0Wm9YWkQzMG5XY3hM
+            ZDhkMTBQVDhqRVdPTlB4cWxidTdKdkEKlwvPkzugucfQ1G4DU7KBxjyrElLHKS9V
+            EfgplsrJTrN4yPxVgNZlaP4tbFHClfZ8Ms/S+ujpCiRSsjQySt8/LA==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: hostnames|0
+    lastmodified: "2026-10-22T15:59:41Z"
+    mac: ENC[AES256_GCM,data:yqjikqC/7Oqiby1Qg0GlW5bdiOq8Ts89c9EtuFzhzU19lUrT0OqspPrj9+WYrEUBnWmIM/+jTFU6yyicGa60N9D0ZUhe/fEMsg0t+1mfjDxq7PQ0WV4I0Lo3mM5lh3Y1UsziCfYcrWXQRkffTNTvh9TlfMM0TReJf5r/XMBbWcg=,iv:9vmGV55dEQoLMnzs0W/isQNsDHgxcFYY6dB7YevhY+E=,tag:k4LcymvSfvEAOF0R8+BQEw==,type:str]
+    version: 3.13.3

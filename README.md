@@ -87,6 +87,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td><img src="https://img.icons8.com/ios_filled/512/spotify.png" width="16" height="16" alt="RomM"></td><td><b><a href="https://github.com/Yooooomi/your_spotify">Your Spotify</a></b></td><td>Self hosted Spotify tracking dashboard</td></tr>
 <tr><td><img src="https://filebrowserquantum.com/logo.svg" width="16"></td><td><b><a href="https://filebrowserquantum.com/en/">FileBrowser Quantum</a></b></td><td>File Browser</td></tr>
 <tr><td>🪽</td><td><b><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></b></td><td>Isolated personal AI agent</td></tr>
+<tr><td>文</td><td><b><a href="https://github.com/Alexxanddr/jlpt-bun-dojo">JLPT Bun Dojo</a></b></td><td>Japanese writing trainer for JLPT N5</td></tr>
 </table>
 
 ## 📋 Key Features

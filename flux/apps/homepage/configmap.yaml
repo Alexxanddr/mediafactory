@@ -789,6 +789,14 @@ data:
           app: it-tools
           namespace: extra-tools
           podSelector: app in ( it-tools )
+      - JLPT Bun Dojo:
+          icon: mdi-syllabary-hiragana
+          href: https://jlpt-bun-dojo.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://jlpt-bun-dojo.extra-tools.svc:8000/health
+          showStats: false
+          app: jlpt-bun-dojo
+          namespace: extra-tools
+          podSelector: app in ( jlpt-bun-dojo )
   widgets.yaml: |
     - greeting:
         text_size: xl
