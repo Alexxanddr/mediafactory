@@ -1,0 +1,29 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: paperclip-postgres
+  namespace: database
+spec:
+  instances: 1
+  inheritedMetadata:
+    annotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "tcp"
+      uptime-kuma.io/url: "paperclip-postgres-rw.database.svc"
+      uptime-kuma.io/port: "5432"
+      uptime-kuma.io/name: "paperclip postgres database"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage & Databases"
+  storage:
+    storageClass: local-path
+    size: 10Gi
+  managed:
+    roles:
+      - name: paperclip
+        login: true
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: paperclip-db-credentials
