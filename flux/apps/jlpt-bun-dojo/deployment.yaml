@@ -37,10 +37,19 @@ spec:
           type: RuntimeDefault
       containers:
         - name: jlpt-bun-dojo
-          image: ghcr.io/alexxanddr/jlpt-bun-dojo:latest
+          image: ghcr.io/alexxanddr/jlpt-bun-dojo:latest-mcp
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
+          env:
+            - name: BUNPRO_MCP_COMMAND
+              value: /usr/local/bin/bunpro-mcp-server
+            - name: BUNPRO_MCP_ARGS
+              value: "[]"
+            - name: WANIKANI_MCP_COMMAND
+              value: /usr/local/bin/kani-mcp-server
+            - name: WANIKANI_MCP_ARGS
+              value: "[]"
           envFrom:
             - secretRef:
                 name: jlpt-bun-dojo
