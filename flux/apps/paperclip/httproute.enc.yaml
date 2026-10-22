@@ -1,0 +1,34 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: paperclip
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:nQEYMHbmMlXWSMyKjFzyVNKAV3KD4Mwb0v2xKGr4/g==,iv:tKW70rhkhFQNLPlyeyvqF5/J7UkTh/ml8xwfafmMD6A=,tag:h8kU4SNdSh5IAABycptsyg==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: paperclip
+              port: 3100
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGc1dPWGk0cWUrTjhaMTln
+            ZU9LRWFKb2tWR1JlWU15VktVQjRFeWNGWEZNCndadTVTYXBLT3djQmRNUFBseWRm
+            T2ptZkp6dXU5MjI2cmhxUXVtVUREK00KLS0tIHVyZktGYW9PTEhOMnpJY2J0cTJl
+            QmsvWkRRMzR4WnJyZGgvY0pGOVJKencKAJ37rjGOWF61r1oPDmEgvmOj9DfsIhB6
+            tg2fO98TTvB+Vs0GBLEbPN9sF1jE6xUT+Bkft4nalxuj++DLL8kgRg==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: hostnames|0
+    lastmodified: "2026-10-22T18:55:31Z"
+    mac: ENC[AES256_GCM,data:N2faV5necurN26nDPvJwIOsAJtx+9ic6tkos33emOoagaSr/KZEIUzfDt9eSr6bY8Ouonn2vdO09xi9YbJ1/a1CIvYUmOke9YNKlh4a0edzj2aHP/TKsESOci4jpsOvY84pbm2Z+Dcs8mxT2KoTOBvimfgMXGiMLYfNXWbSYJ4U=,iv:ZBWkYxri7b3XdKVMxxfN0p1W8MdSJ6Yfi6ldbCo1QAM=,tag:GL7OrTS2CsQCTKzA8QLwxA==,type:str]
+    version: 3.13.3
