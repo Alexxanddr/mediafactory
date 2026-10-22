@@ -26,6 +26,8 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: paperclip
+      annotations:
+        config.paperclip.ai/secret-revision: "7d1e162"
     spec:
       automountServiceAccountToken: false
       securityContext:
