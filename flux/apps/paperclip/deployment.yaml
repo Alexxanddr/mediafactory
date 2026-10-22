@@ -52,6 +52,8 @@ spec:
               value: authenticated
             - name: PAPERCLIP_DEPLOYMENT_EXPOSURE
               value: private
+            - name: PAPERCLIP_ALLOWED_HOSTNAMES
+              value: REDACTED-HOSTNAME
           envFrom:
             - secretRef:
                 name: paperclip
