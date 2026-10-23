@@ -63,6 +63,16 @@ spec:
         - protocol: TCP
           port: 3000
     - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: omniroute
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: omniroute
+      ports:
+        - protocol: TCP
+          port: 20128
+    - to:
         - ipBlock:
             cidr: 0.0.0.0/0
             except:

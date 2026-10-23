@@ -6,10 +6,14 @@ metadata:
 data:
   config.yaml: |
     model:
-      provider: openrouter
-      default: z-ai/glm-5.2
-      base_url: ""
+      provider: custom:omniroute
+      default: auto
       api_mode: chat_completions
+    custom_providers:
+      - name: omniroute
+        base_url: http://omniroute.omniroute.svc:20128/v1
+        key_env: OMNIROUTE_API_KEY
+        api_mode: chat_completions
     terminal:
       backend: local
     security:
