@@ -7,7 +7,7 @@ data:
   config.yaml: |
     model:
       provider: custom:omniroute
-      default: auto
+      default: auto/best-coding
       api_mode: chat_completions
     custom_providers:
       - name: omniroute

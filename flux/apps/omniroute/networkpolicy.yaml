@@ -39,6 +39,16 @@ spec:
       ports:
         - protocol: TCP
           port: 20128
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: hermes-agent
+          podSelector:
+            matchLabels:
+              app: hermes-agent
+      ports:
+        - protocol: TCP
+          port: 20128
   egress:
     - to:
         - namespaceSelector:
