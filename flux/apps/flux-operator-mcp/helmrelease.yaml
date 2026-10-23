@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: flux-operator-mcp
+  namespace: extra-tools
+spec:
+  interval: 30m
+
+  chartRef:
+    kind: OCIRepository
+    name: flux-operator-mcp
+    namespace: flux-system
+
+  values:
+    readonly: false
+
+    rbac:
+      create: false
+
+    serviceAccount:
+      create: true
+      name: flux-operator-mcp
+
+    resources:
+      requests:
+        cpu: 10m
+        memory: 64Mi
+      limits:
+        cpu: 500m
+        memory: 512Mi
