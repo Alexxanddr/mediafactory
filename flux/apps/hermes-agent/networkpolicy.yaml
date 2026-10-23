@@ -29,6 +29,16 @@ spec:
       ports:
         - protocol: TCP
           port: 9119
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: multimedia-factory
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: homepage
+      ports:
+        - protocol: TCP
+          port: 9119
   egress:
     - to:
         - namespaceSelector:

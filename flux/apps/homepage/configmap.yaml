@@ -804,7 +804,7 @@ data:
           showStats: false
           app: mcphub
           namespace: extra-tools
-          podSelector: app in ( mcphub )
+          podSelector: app.kubernetes.io/name in ( mcphub )
       - Nutify:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png
           href: https://nutify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
