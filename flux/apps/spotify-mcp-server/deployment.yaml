@@ -37,7 +37,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: spotify-mcp-server
-          image: ghcr.io/marcelmarais/spotify-mcp-server:latest
+          image: ghcr.io/alexxanddr/spotify-mcp-server:latest
           imagePullPolicy: Always
           env:
             - name: MCP_TRANSPORT
