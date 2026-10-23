@@ -89,6 +89,11 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td>🪽</td><td><b><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></b></td><td>Isolated personal AI agent</td></tr>
 <tr><td>文</td><td><b><a href="https://github.com/Alexxanddr/jlpt-bun-dojo">JLPT Bun Dojo</a></b></td><td>Japanese writing trainer for JLPT N5</td></tr>
 <tr><td>🔌</td><td><b><a href="https://github.com/samanhappy/mcphub">MCPHub</a></b></td><td>Self-hosted MCP gateway and control plane</td></tr>
+<tr><td>🩺</td><td><b><a href="https://github.com/the-momentum/open-wearables">Open Wearables</a></b></td><td>Open wearable data platform</td></tr>
+<tr><td>🧩</td><td><b><a href="https://github.com/alexxanddr/hinge-mcp">Hinge MCP</a></b></td><td>MCP service for Hinge</td></tr>
+<tr><td>🔎</td><td><b><a href="https://github.com/dinglebear-ai/yarr">Yarr</a></b></td><td>MCP service for homelab services</td></tr>
+<tr><td>💾</td><td><b><a href="https://github.com/Alexxanddr/floppy-mcp">Floppy MCP</a></b></td><td>MCP service for Floppy</td></tr>
+<tr><td>🎵</td><td><b><a href="https://github.com/Alexxanddr/spotify-mcp-server">Spotify MCP Server</a></b></td><td>MCP service for Spotify</td></tr>
 </table>
 
 ## 📋 Key Features

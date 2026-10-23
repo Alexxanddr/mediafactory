@@ -773,6 +773,22 @@ data:
               type: scrutiny
               url: http://scrutiny-web.extra-tools.svc:8080
     - OtherTools:
+      - Open Wearables:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/open-wearables.png
+          href: https://open-wearables.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://open-wearables-frontend.extra-tools.svc:3000
+          showStats: false
+          app: open-wearables-frontend
+          namespace: extra-tools
+          podSelector: app in ( open-wearables-frontend )
+      - MCPHub:
+          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/mcp.png
+          href: https://mcphub.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://mcphub.extra-tools.svc:3000
+          showStats: false
+          app: mcphub
+          namespace: extra-tools
+          podSelector: app in ( mcphub )
       - Nutify:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png
           href: https://nutify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
