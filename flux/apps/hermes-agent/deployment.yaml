@@ -79,35 +79,12 @@ spec:
             - gateway
             - run
           env:
-            - name: OPENROUTER_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hermes-agent-secret
-                  key: OPENROUTER_API_KEY
-            - name: NVIDIA_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hermes-agent-secret
-                  key: NVIDIA_API_KEY
-            - name: OMNIROUTE_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hermes-agent-secret
-                  key: OMNIROUTE_API_KEY
-            - name: GROQ_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hermes-agent-secret
-                  key: GROQ_API_KEY
+            - name: TZ
+              value: Europe/Rome
             - name: API_SERVER_ENABLED
               value: "true"
             - name: API_SERVER_HOST
               value: "0.0.0.0"
-            - name: API_SERVER_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: hermes-agent-secret
-                  key: API_SERVER_KEY
             - name: HERMES_DASHBOARD
               value: "1"
             - name: HERMES_DASHBOARD_HOST
@@ -126,8 +103,9 @@ spec:
                 secretKeyRef:
                   name: hermes-agent-secret
                   key: API_SERVER_KEY
-            - name: TZ
-              value: Europe/Rome
+          envFrom:
+            - secretRef:
+                name: hermes-agent-secret
           ports:
             - name: api
               containerPort: 8642
