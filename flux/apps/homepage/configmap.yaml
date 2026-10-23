@@ -496,7 +496,9 @@ data:
             widget:
               type: fileflows
               url: http://fileflows.multimedia-factory.svc:5000
-              fields: ["queue", "processing", "processed", "time"]
+              version: 2
+              key: {{HOMEPAGE_VAR_FILEFLOWS_API}}
+              fields: ["queue", "processing", "processed", "failed"]
         - Komga:
             icon: komga.svg
             href: https://komga.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
