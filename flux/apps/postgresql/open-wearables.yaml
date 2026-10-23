@@ -1,0 +1,10 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: open-wearables
+  namespace: database
+spec:
+  name: open-wearables
+  owner: open-wearables
+  cluster: {name: postgres}
+---

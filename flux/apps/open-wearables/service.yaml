@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-wearables-backend
+  namespace: extra-tools
+  annotations:
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: http
+    uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/health
+spec:
+  selector: {app: open-wearables-backend}
+  ports: [{name: http, port: 8000, targetPort: http}]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-wearables-frontend
+  namespace: extra-tools
+  annotations:
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: http
+    uptime-kuma.io/url: http://open-wearables-frontend.extra-tools.svc:3000
+spec:
+  selector: {app: open-wearables-frontend}
+  ports: [{name: http, port: 3000, targetPort: http}]

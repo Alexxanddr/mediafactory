@@ -1,0 +1,47 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: open-wearables
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - open-wearables.internal.skypiea.work
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /api
+          filters:
+            - type: URLRewrite
+              urlRewrite:
+                path:
+                    type: ReplacePrefixMatch
+                    replacePrefixMatch: /
+          backendRefs:
+            - name: open-wearables-backend
+              port: 8000
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: open-wearables-frontend
+              port: 3000
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaM050OGdhb2Y1bFh4eTNh
+            Rkltb25OYTMyTE9yOWVsbG5LZW1SR2hCNmdBClZNRVNBZXdGOCtYVTRwTXpCZ0do
+            YlY5STNPNXlRT3U5ZUpKQ2o1dE9OUWsKLS0tIHdlSE1LR2xuWlhPSUNLYkpsalZa
+            R1ZlVSt4Y0hPdnhUQWNuRDRKeUhyVjQKDuOVSmLvBGIFJaNC5HUUpm+GUSX8uOxw
+            Uq0jATjz7hbsE6VLnnvlXs/zTVcdUmNYU7l0WupItUwBJAIH09yMDw==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-10-23T12:29:09Z"
+    mac: ENC[AES256_GCM,data:QF13+n5FeXPJIopTAsXclfo0JXJI4o+o1KRhxvF4bLritRdSFq3M1jnyHn81YFTCZgaXiunA7JXAA1k7l+j2yjWUtaGwc2v/1CC7eiJO/sSU2PGNWorR90XmOA+rbKBdGUS9SXJtrjVuIvfDvUz7aMc+atS5ZXsrDVgivG3bCkk=,iv:+PKLgMFyAJ3/GD7pRNEM8Tw7tUimT2AQK391Dm9/PpI=,tag:/6hONt/8B3J8pRVx5Iyt9g==,type:str]
+    version: 3.13.3
