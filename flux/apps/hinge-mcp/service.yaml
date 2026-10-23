@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hinge-mcp
+  namespace: extra-tools
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: hinge-mcp
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3939
+      targetPort: http

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: hinge-mcp
+  namespace: extra-tools
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: hinge-mcp
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mcphub
+      ports:
+        - protocol: TCP
+          port: 3939
