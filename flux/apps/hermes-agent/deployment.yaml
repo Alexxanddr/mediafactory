@@ -89,6 +89,11 @@ spec:
                 secretKeyRef:
                   name: hermes-agent-secret
                   key: NVIDIA_API_KEY
+            - name: OMNIROUTE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hermes-agent-secret
+                  key: OMNIROUTE_API_KEY
             - name: API_SERVER_ENABLED
               value: "true"
             - name: API_SERVER_HOST
