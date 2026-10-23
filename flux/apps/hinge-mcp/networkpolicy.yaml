@@ -17,6 +17,9 @@ spec:
         - podSelector:
             matchLabels:
               app: uptime-kuma-operator
+        - podSelector:
+            matchLabels:
+              app: uptime-kuma
       ports:
         - protocol: TCP
           port: 3939
