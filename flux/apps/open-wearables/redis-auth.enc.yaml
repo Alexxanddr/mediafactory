@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+    redis-password: ENC[AES256_GCM,data:OkB921fbscdgOhQQ2JH45rWompGQOIh6Ygnl9A==,iv:dKBIw0P08x7pa/De5PD3ZEyLhewH6gdfs/h77AcJ4A4=,tag:qfijlL+HVqIm/WM1ixgcJQ==,type:str]
+kind: Secret
+metadata:
+    labels:
+        kustomize.toolkit.fluxcd.io/name: infrastructure
+        kustomize.toolkit.fluxcd.io/namespace: flux-system
+    name: redis-auth
+    namespace: extra-tools
+type: Opaque
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWNmZxallEam1xOFp2a2tZ
+            dVlkMTNwZXNTZXk3NWVrWUUyMXdqQVZIY21JCnZLU0NTdE0yVHN3d1F1NTd6WllL
+            V2E4RjFMblkwV1BQc0dnREk2WHVwcG8KLS0tIFM0dkdMN0FodEsyMmlzYnk3d0tv
+            cnF1MHkreHRkRmpINWQ5VVFmbytYNEUK2Z5BS33USegDtkdu7sKnBlLz5Spu4a8h
+            8BZDYqJawX83vULnHtIHlWpTIB0fkXoB4zVEJv/ukyGnONEMUzcNMQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(data|stringData)$
+    lastmodified: "2026-10-23T12:35:22Z"
+    mac: ENC[AES256_GCM,data:ab+z9Lbqp0CIexKK3Us9zrzprOQ756j/kFryuRcpY45A03qbBjRYxUx5npg3wwiVn1mdn3VA7G+mJ2c0x3XgUfmlfykQTID+TQV5TmJhRGYQlzVffJ1kIkfMSLgjYakMunNiRePt0rUePI6IJdoY56se2epDBjxFP05icBrp2Ak=,iv:aM9F1/dIXSbyqPEPWyNm3D9sG5jYSmkVTZ74o3Nmqlk=,tag:FVqVWMJleo0ci5F4uChGQg==,type:str]
+    version: 3.13.3
