@@ -9,7 +9,7 @@ metadata:
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: http
-    uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/health
+    uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/
     uptime-kuma.io/name: open-wearables backend
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"

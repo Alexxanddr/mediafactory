@@ -6,7 +6,7 @@ metadata:
   annotations:
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: http
-    uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/health
+    uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/
 spec:
   selector: {app: open-wearables-backend}
   ports: [{name: http, port: 8000, targetPort: http}]
