@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spotify-mcp-server
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "tcp"
+    uptime-kuma.io/url: "spotify-mcp-server.extra-tools.svc"
+    uptime-kuma.io/port: "3000"
+    uptime-kuma.io/name: "spotify-mcp-server"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spotify-mcp-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spotify-mcp-server
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: spotify-mcp-server
+          image: ghcr.io/marcelmarais/spotify-mcp-server:latest
+          imagePullPolicy: Always
+          env:
+            - name: MCP_TRANSPORT
+              value: http
+            - name: MCP_AUTH
+              value: spotify
+            - name: MCP_HTTP_HOST
+              value: 0.0.0.0
+            - name: MCP_HTTP_PORT
+              value: "3000"
+            - name: SPOTIFY_RESOURCE_URL
+              value: http://spotify-mcp-server.extra-tools.svc:3000
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
