@@ -773,6 +773,22 @@ data:
               type: scrutiny
               url: http://scrutiny-web.extra-tools.svc:8080
     - OtherTools:
+      - Hermes Agent:
+          icon: mdi-robot
+          href: https://hermes-agent.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://hermes-agent.hermes-agent.svc:9119
+          showStats: false
+          app: hermes-agent
+          namespace: hermes-agent
+          podSelector: app in ( hermes-agent )
+      - OmniRoute:
+          icon: mdi-routes
+          href: https://omniroute.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://omniroute.omniroute.svc:20128/healthz
+          showStats: false
+          app: omniroute
+          namespace: omniroute
+          podSelector: app.kubernetes.io/name in ( omniroute )
       - Open Wearables:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/open-wearables.png
           href: https://open-wearables.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
