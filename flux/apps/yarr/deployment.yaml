@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: yarr
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://yarr.extra-tools.svc:40070/ready"
+    uptime-kuma.io/name: "yarr"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: yarr
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: yarr
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: yarr
+          image: ghcr.io/dinglebear-ai/yarr:latest
+          imagePullPolicy: Always
+          command: ["yarr", "serve"]
+          envFrom:
+            - secretRef:
+                name: yarr
+          env:
+            - name: YARR_SERVICES
+              value: sonarr,radarr,prowlarr,bazarr,plex,overseerr,tracearr,qbittorrent
+            - name: YARR_MCP_HOST
+              value: 0.0.0.0
+            - name: YARR_MCP_PORT
+              value: "40070"
+            - name: YARR_MCP_TOOL_MODE
+              value: codemode
+            - name: YARR_MCP_STATIC_TOKEN_SCOPES
+              value: yarr:read,yarr:write
+            - name: YARR_MCP_ALLOWED_HOSTS
+              value: yarr.extra-tools.svc,yarr.extra-tools.svc.cluster.local
+            - name: YARR_MCP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: yarr
+                  key: mcp-token
+          ports:
+            - name: http
+              containerPort: 40070
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 2Gi
