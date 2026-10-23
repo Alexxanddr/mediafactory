@@ -53,6 +53,16 @@ spec:
         - protocol: TCP
           port: 53
     - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: extra-tools
+          podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mcphub
+      ports:
+        - protocol: TCP
+          port: 3000
+    - to:
         - ipBlock:
             cidr: 0.0.0.0/0
             except:
