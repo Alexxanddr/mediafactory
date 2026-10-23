@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: floppy-mcp
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/type: "tcp"
+    uptime-kuma.io/url: "floppy-mcp.extra-tools.svc"
+    uptime-kuma.io/port: "3000"
+    uptime-kuma.io/name: "floppy-mcp"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: floppy-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: floppy-mcp
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: floppy-mcp
+          image: ghcr.io/alexxanddr/floppy-mcp:latest
+          imagePullPolicy: Always
+          env:
+            - name: FLOPPY_URL
+              value: http://floppy.multimedia-factory.svc:8000
+            - name: FLOPPY_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: floppy-mcp
+                  key: token
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          startupProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
