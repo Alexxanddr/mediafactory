@@ -792,7 +792,7 @@ data:
           namespace: omniroute
           podSelector: app.kubernetes.io/name in ( omniroute )
       - Open Wearables:
-          icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/open-wearables.png
+          icon: mdi-watch
           href: https://open-wearables.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
           siteMonitor: http://open-wearables-frontend.extra-tools.svc:3000
           showStats: false
