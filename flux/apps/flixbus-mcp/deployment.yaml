@@ -33,7 +33,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: flixbus-mcp
-          image: ghcr.io/adambenhassen/flixbus-mcp:latest
+          image: ghcr.io/Alexxanddr/flixbus-mcp:latest
           imagePullPolicy: Always
           args:
             - -transport
