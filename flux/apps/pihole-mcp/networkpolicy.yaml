@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: pihole-mcp
+  namespace: extra-tools
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: pihole-mcp
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: mcphub
+        - podSelector:
+            matchLabels:
+              app: uptime-kuma
+      ports:
+        - protocol: TCP
+          port: 8080
