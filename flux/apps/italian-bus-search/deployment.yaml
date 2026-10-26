@@ -42,6 +42,8 @@ spec:
           imagePullPolicy: Always
           command: ["node", "dist/rail/update.js"]
           env:
+            - name: NODE_OPTIONS
+              value: --max-old-space-size=768
             - name: TRENITALIA_NETEX_PATH
               value: /app/data/trenitalia-timetable.json.gz
             - name: ITALO_NETEX_PATH
