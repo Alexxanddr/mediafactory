@@ -43,7 +43,7 @@ spec:
           command: ["node", "dist/rail/update.js"]
           env:
             - name: NODE_OPTIONS
-              value: --max-old-space-size=768
+              value: --max-old-space-size=1536
             - name: TRENITALIA_NETEX_PATH
               value: /app/data/trenitalia-timetable.json.gz
             - name: ITALO_NETEX_PATH
@@ -51,10 +51,10 @@ spec:
           resources:
             requests:
               cpu: 100m
-              memory: 256Mi
+              memory: 512Mi
             limits:
               cpu: "1"
-              memory: 1Gi
+              memory: 2Gi
           volumeMounts:
             - name: data
               mountPath: /app/data
