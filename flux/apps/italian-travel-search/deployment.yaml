@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: italian-bus-search
+  name: italian-travel-search
   namespace: extra-tools
   annotations:
     keel.sh/policy: force
@@ -9,8 +9,8 @@ metadata:
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://italian-bus-search.extra-tools.svc:3000/health"
-    uptime-kuma.io/name: "italian-bus-search"
+    uptime-kuma.io/url: "http://italian-travel-search.extra-tools.svc:3000/health"
+    uptime-kuma.io/name: "italian-travel-search"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"
     uptime-kuma.io/notifications: "Monitoring Bot"
@@ -21,11 +21,11 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/name: italian-bus-search
+      app.kubernetes.io/name: italian-travel-search
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: italian-bus-search
+        app.kubernetes.io/name: italian-travel-search
     spec:
       automountServiceAccountToken: false
       securityContext:
@@ -59,7 +59,7 @@ spec:
             - name: data
               mountPath: /app/data
       containers:
-        - name: italian-bus-search
+        - name: italian-travel-search
           image: ghcr.io/alexxanddr/italian-travel-search:latest
           imagePullPolicy: Always
           env:
@@ -106,4 +106,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: italian-bus-search
+            claimName: italian-travel-search

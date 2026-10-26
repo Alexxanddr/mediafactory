@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: italian-bus-search
+  name: italian-travel-search
   namespace: extra-tools
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: italian-bus-search
+      app.kubernetes.io/name: italian-travel-search
   policyTypes: [Ingress]
   ingress:
     - from:

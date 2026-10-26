@@ -4,7 +4,7 @@ The service runs `ghcr.io/alexxanddr/italian-travel-search:latest` in
 `extra-tools` and is intentionally cluster-internal. MCPHub connects to:
 
 ```text
-http://italian-bus-search.extra-tools.svc:3000/mcp
+http://italian-travel-search.extra-tools.svc:3000/mcp
 ```
 
 The retained local volume stores only the two compact timetable caches. The
@@ -16,17 +16,17 @@ Before the first reconciliation, create the local-volume directory on
 `k3s-server`:
 
 ```sh
-sudo install -d -o 1000 -g 1000 /var/lib/rancher/k3s/storage/italian-bus-search
+sudo install -d -o 1000 -g 1000 /var/lib/rancher/k3s/storage/italian-travel-search
 ```
 
-Replace MCPHub's existing `italian-bus-search` stdio definition with:
+Configure MCPHub's `italian-travel-search` server with:
 
 ```json
 {
   "enabled": true,
   "owner": "admin",
   "type": "streamable-http",
-  "url": "http://italian-bus-search.extra-tools.svc:3000/mcp",
+  "url": "http://italian-travel-search.extra-tools.svc:3000/mcp",
   "visibility": "private",
   "enableKeepAlive": false
 }
@@ -35,8 +35,8 @@ Replace MCPHub's existing `italian-bus-search` stdio definition with:
 Verify the service and MCP transport after Flux reconciliation:
 
 ```sh
-KUBECONFIG=~/.kube/k3s kubectl get pod,service,pvc -n extra-tools -l app.kubernetes.io/name=italian-bus-search
-KUBECONFIG=~/.kube/k3s kubectl exec -n extra-tools deploy/mcphub -- node -e "fetch('http://italian-bus-search.extra-tools.svc:3000/health').then(async r => { console.log(r.status, await r.text()); process.exit(r.ok ? 0 : 1) })"
+KUBECONFIG=~/.kube/k3s kubectl get pod,service,pvc -n extra-tools -l app.kubernetes.io/name=italian-travel-search
+KUBECONFIG=~/.kube/k3s kubectl exec -n extra-tools deploy/mcphub -- node -e "fetch('http://italian-travel-search.extra-tools.svc:3000/health').then(async r => { console.log(r.status, await r.text()); process.exit(r.ok ? 0 : 1) })"
 ```
 
 Finally reconnect the server in MCPHub and confirm that it discovers all eight
