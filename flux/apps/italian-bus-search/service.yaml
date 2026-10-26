@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: italian-bus-search
+  namespace: extra-tools
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: italian-bus-search
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: http

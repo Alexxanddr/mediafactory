@@ -90,6 +90,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td>🪽</td><td><b><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></b></td><td>Isolated personal AI agent</td></tr>
 <tr><td>文</td><td><b><a href="https://github.com/Alexxanddr/jlpt-bun-dojo">JLPT Bun Dojo</a></b></td><td>Japanese writing trainer for JLPT N5</td></tr>
 <tr><td>🔌</td><td><b><a href="https://github.com/samanhappy/mcphub">MCPHub</a></b></td><td>Self-hosted MCP gateway and control plane</td></tr>
+<tr><td>🚆</td><td><b><a href="https://github.com/Alexxanddr/italian-bus-search">Italian Bus and Rail Search</a></b></td><td>Containerized bus and train search MCP service</td></tr>
 <tr><td>🚌</td><td><b><a href="https://github.com/adambenhassen/flixbus-mcp">FlixBus MCP</a></b></td><td>FlixBus trip search MCP server</td></tr>
 <tr><td>🛣️</td><td><b><a href="https://github.com/diegosouzapw/OmniRoute">OmniRoute</a></b></td><td>Unified AI provider routing and management</td></tr>
 <tr><td>🩺</td><td><b><a href="https://github.com/the-momentum/open-wearables">Open Wearables</a></b></td><td>Open wearable data platform</td></tr>
