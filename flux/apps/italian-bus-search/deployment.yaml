@@ -38,7 +38,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: update-rail-timetables
-          image: ghcr.io/alexxanddr/italian-bus-search:latest
+          image: ghcr.io/alexxanddr/italian-travel-search:latest
           imagePullPolicy: Always
           command: ["node", "dist/rail/update.js"]
           env:
@@ -60,7 +60,7 @@ spec:
               mountPath: /app/data
       containers:
         - name: italian-bus-search
-          image: ghcr.io/alexxanddr/italian-bus-search:latest
+          image: ghcr.io/alexxanddr/italian-travel-search:latest
           imagePullPolicy: Always
           env:
             - name: HOST

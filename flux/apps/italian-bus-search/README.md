@@ -1,6 +1,6 @@
 # Italian Bus and Rail Search
 
-The service runs `ghcr.io/alexxanddr/italian-bus-search:latest` in
+The service runs `ghcr.io/alexxanddr/italian-travel-search:latest` in
 `extra-tools` and is intentionally cluster-internal. MCPHub connects to:
 
 ```text
