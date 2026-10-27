@@ -12,36 +12,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: tranga-manga
-
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: tranga-settings
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: tranga-settings
-
----
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-tranga-settings
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 4Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-tranga-settings
