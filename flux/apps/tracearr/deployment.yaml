@@ -49,4 +49,4 @@ spec:
       volumes:
         - name: backup
           persistentVolumeClaim:
-            claimName: tracearr-config
+            claimName: tracearr-config-longhorn

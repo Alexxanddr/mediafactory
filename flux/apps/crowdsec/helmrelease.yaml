@@ -52,7 +52,15 @@ spec:
         uptime-kuma.io/notifications: "Monitoring Bot"
         uptime-kuma.io/status-codes: "404"
         uptime-kuma.io/group: "Security & Cluster"
-      replicas: 0
+      replicas: 1
+
+      persistentVolume:
+        config:
+          enabled: true
+          existingClaim: crowdsec-config-longhorn
+        data:
+          enabled: true
+          existingClaim: crowdsec-db-longhorn
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
 

@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media Acquisition"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: dispatcharr-web
@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: dispatcharr-data
+            claimName: dispatcharr-data-longhorn
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -63,7 +63,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: celery
@@ -97,4 +97,4 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: dispatcharr-data
+            claimName: dispatcharr-data-longhorn
