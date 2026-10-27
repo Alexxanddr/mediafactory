@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: grimmory
@@ -79,4 +79,4 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z mariadb.database.svc.cluster.local 3306; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z mariadb-longhorn.database.svc.cluster.local 3306; do echo waiting for db; sleep 2; done;']
