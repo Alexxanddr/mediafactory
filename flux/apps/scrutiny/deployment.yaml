@@ -59,7 +59,7 @@ spec:
       volumes:
         - name: scrutiny-config
           persistentVolumeClaim:
-            claimName: scrutiny-config
+            claimName: scrutiny-config-longhorn
 ---
 apiVersion: apps/v1
 kind: Deployment

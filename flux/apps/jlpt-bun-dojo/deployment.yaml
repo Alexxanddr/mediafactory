@@ -89,7 +89,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: jlpt-bun-dojo
+            claimName: jlpt-bun-dojo-longhorn
         - name: tmp
           emptyDir:
             sizeLimit: 64Mi
