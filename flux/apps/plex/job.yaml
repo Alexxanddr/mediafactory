@@ -54,3 +54,40 @@ spec:
         - name: target
           persistentVolumeClaim:
             claimName: migration-plex-config
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: verify-plex-config
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: verify
+          image: plexinc/pms-docker:latest
+          imagePullPolicy: Always
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              sqlite='/usr/lib/plexmediaserver/Plex SQLite'
+              [ -x "$sqlite" ]
+              for db in \
+                '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db' \
+                '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.blobs.db' \
+                '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/tv.plex.providers.epg.cloud-a4ac9ae9-e28a-4517-90e1-fdd851e40044.db'; do
+                [ -s "$db" ]
+                result="$("$sqlite" "$db" 'PRAGMA integrity_check;')"
+                [ "$result" = ok ] || { echo "SQLite integrity failure: $db: $result"; exit 1; }
+                echo "PLEX_SQLITE_INTEGRITY_OK $db"
+              done
+          volumeMounts:
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-plex-config
