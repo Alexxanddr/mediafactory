@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migrate-violarr-data-to-longhorn
+  name: fix-violarr-longhorn-permissions
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -11,44 +11,20 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: k3s-server
       containers:
-        - name: copy-and-verify
+        - name: fix-permissions
           image: ghcr.io/xbit18/violarr:latest
           command: ["bash", "-ceu"]
           args:
             - |
-              src=/source
-              dst=/target
-              state=$(pg_controldata "$src/postgres" | awk -F: '/Database cluster state/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
-              test "$state" = 'shut down'
-              source_system_id=$(pg_controldata "$src/postgres" | awk -F: '/Database system identifier/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
-              checksum_version=$(pg_controldata "$src/postgres" | awk -F: '/Data page checksum version/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
-              cd "$src"
-              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/source.sha256
-              cp -a "$src"/. "$dst"/
-              cd "$dst"
-              sha256sum -c /tmp/source.sha256
-              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/target.sha256
-              diff -u /tmp/source.sha256 /tmp/target.sha256
-              test "$(cat "$dst/postgres/PG_VERSION")" = 16
-              target_system_id=$(pg_controldata "$dst/postgres" | awk -F: '/Database system identifier/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
-              test "$source_system_id" = "$target_system_id"
-              if [ "$checksum_version" -gt 0 ]; then
-                pg_checksums --check -D "$dst/postgres"
-              else
-                echo 'PG_CHECKSUMS_DISABLED'
-              fi
-              echo "VIOLARR_POSTGRES_COPY_OK system_identifier=$target_system_id"
+              stat -c '%a %u:%g %n' /data/postgres
+              chmod 700 /data/postgres
+              test "$(stat -c '%a' /data/postgres)" = 700
+              pg_controldata /data/postgres | grep -E 'Database cluster state|Database system identifier|Data page checksum version'
+              echo 'VIOLARR_LONGHORN_PERMISSIONS_OK'
           volumeMounts:
-            - name: source
-              mountPath: /source
-              readOnly: true
             - name: target
-              mountPath: /target
+              mountPath: /data
       volumes:
-        - name: source
-          hostPath:
-            path: /var/lib/rancher/k3s/storage/violarr
-            type: Directory
         - name: target
           persistentVolumeClaim:
             claimName: migration-violarr-data
