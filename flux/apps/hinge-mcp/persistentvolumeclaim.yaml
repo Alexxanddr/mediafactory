@@ -9,5 +9,6 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: longhorn-retain
+  storageClassName: longhorn-static
   volumeMode: Filesystem
+  volumeName: hinge-mcp
