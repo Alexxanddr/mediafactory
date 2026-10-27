@@ -1,0 +1,52 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-metoro-redis-to-longhorn
+  namespace: monitoring
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/hostname: k3s-server
+      containers:
+        - name: copy-and-verify
+          image: quay.io/metoro/redis:7.4.0-debian-12-r4
+          command: ["bash", "-ceu"]
+          args:
+            - |
+              src=/source
+              dst=/target
+              cd "$src"
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/source.sha256
+              cp -a "$src"/. "$dst"/
+              cd "$dst"
+              sha256sum -c /tmp/source.sha256
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/target.sha256
+              diff -u /tmp/source.sha256 /tmp/target.sha256
+              set -- "$dst"/appendonlydir/*.base.rdb
+              test -f "$1"
+              redis-check-rdb "$1"
+              set -- "$dst"/appendonlydir/*.incr.aof
+              test -f "$1"
+              redis-check-aof "$1"
+              chown 1001:1001 "$dst"
+              chmod 775 "$dst"
+              echo 'METORO_REDIS_AOF_COPY_AND_INTEGRITY_OK'
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          hostPath:
+            path: /var/lib/rancher/k3s/storage/pvc-bcad00bf-5da0-4444-af4b-497da04279fb_monitoring_redis-data-metoro-redis-master-0
+            type: Directory
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-metoro-redis

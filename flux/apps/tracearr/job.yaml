@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: migrate-tracearr-timescale-to-longhorn
+  name: copy-tracearr-timescale-to-longhorn-root
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -13,6 +13,8 @@ spec:
       containers:
         - name: copy-and-verify
           image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+          securityContext:
+            runAsUser: 0
           command: ["bash", "-ceu"]
           args:
             - |
@@ -22,6 +24,7 @@ spec:
               test "$state" = 'shut down'
               source_system_id=$(pg_controldata "$src" | awk -F: '/Database system identifier/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
               checksum_version=$(pg_controldata "$src" | awk -F: '/Data page checksum version/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
+              find "$dst" -mindepth 1 -maxdepth 1 ! -name lost+found -exec rm -rf -- {} +
               cd "$src"
               find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/source.sha256
               cp -a "$src"/. "$dst"/
