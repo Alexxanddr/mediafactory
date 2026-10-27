@@ -73,3 +73,28 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: migration-duplicati-config
+  finalizers:
+    - kubernetes.io/pv-protection
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 4Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: duplicati-config
