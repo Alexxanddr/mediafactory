@@ -30,7 +30,7 @@ spec:
     image:
       tag: "latest"
       pullPolicy: Always
-    replicaCount: 0
+    replicaCount: 1
     ingress:
       enabled: false
     serviceWeb:
@@ -50,4 +50,4 @@ spec:
         DOH_UPSTREAM: 'https://1.1.1.1/dns-query'
     persistentVolumeClaim:
       enabled: true
-      existingClaim: pihole-config
+      existingClaim: pihole-config-longhorn
