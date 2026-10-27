@@ -26,31 +26,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: grimmory-bookdrop
-  finalizers:
-    - kubernetes.io/pv-protection
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 10Gi
-  local:
-    path: /var/lib/rancher/k3s/storage/grimmory/bookdrop
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - k3s-server
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
   name: grimmory-data
 spec:
   capacity:

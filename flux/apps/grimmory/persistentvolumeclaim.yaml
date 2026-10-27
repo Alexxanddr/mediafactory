@@ -16,21 +16,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: grimmory-bookdrop
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: grimmory-bookdrop
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: grimmory-data-longhorn
   namespace: multimedia-factory
 spec:

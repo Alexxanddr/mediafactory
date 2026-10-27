@@ -52,31 +52,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: animeworld-script
-  finalizers:
-    - kubernetes.io/pv-protection
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 100Gi
-  local:
-    path: "/var/lib/rancher/k3s/storage/animeworld/src/script"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - k3s-server
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-path
-  volumeMode: Filesystem
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
   name: animeworld-database
 spec:
   capacity:
