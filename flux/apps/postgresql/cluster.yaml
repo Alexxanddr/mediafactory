@@ -65,3 +65,38 @@ spec:
         createdb: true
         passwordSecret:
           name: open-wearables-db-credentials
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-longhorn
+  namespace: database
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie
+  bootstrap:
+    pg_basebackup:
+      source: postgres
+  replica:
+    enabled: true
+    source: postgres
+  externalClusters:
+    - name: postgres
+      connectionParameters:
+        host: postgres-rw.database.svc
+        user: streaming_replica
+        dbname: postgres
+        sslmode: verify-full
+      sslKey:
+        name: postgres-replication
+        key: tls.key
+      sslCert:
+        name: postgres-replication
+        key: tls.crt
+      sslRootCert:
+        name: postgres-ca
+        key: ca.crt
+  storage:
+    storageClass: longhorn-retain
+    size: 50Gi
