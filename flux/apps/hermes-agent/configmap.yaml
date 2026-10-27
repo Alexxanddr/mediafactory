@@ -18,6 +18,9 @@ data:
       enabled: true
       provider: groq
       language: it
+    skills:
+      auto_load:
+        - italian-transport-search
     terminal:
       backend: local
     security:
