@@ -26,6 +26,27 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: romm-library-nfs
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions:
+    - nfsvers=4.1
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/game_library#romm-library-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/game_library
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   name: romm-resources
 spec:
   capacity:

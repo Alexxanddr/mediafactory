@@ -50,7 +50,7 @@ spec:
             claimName: romm-resources-longhorn
         - name: romm-library
           persistentVolumeClaim:
-            claimName: romm-library
+            claimName: romm-library-nfs
         - name: romm-assets
           persistentVolumeClaim:
             claimName: romm-assets-longhorn

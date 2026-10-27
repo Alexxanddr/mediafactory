@@ -16,6 +16,21 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: romm-library-nfs
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: romm-library-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: romm-resources-longhorn
   namespace: gaming
 spec:
