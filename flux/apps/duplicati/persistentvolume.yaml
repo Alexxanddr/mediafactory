@@ -31,7 +31,7 @@ metadata:
     - kubernetes.io/pv-protection
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   capacity:
     storage: 4Gi
   persistentVolumeReclaimPolicy: Retain

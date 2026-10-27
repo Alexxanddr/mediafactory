@@ -4,7 +4,7 @@ metadata:
   name: violarr-data
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   capacity:
     storage: 8Gi
   csi:

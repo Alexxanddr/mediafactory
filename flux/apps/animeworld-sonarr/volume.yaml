@@ -7,7 +7,7 @@ metadata:
     backup-target: default
     recurring-job-group.longhorn.io/default: enabled
 spec:
-  accessMode: rwx
+  accessMode: rwo
   backupBlockSize: "2097152"
   backupCompressionMethod: lz4
   backupTargetName: default
@@ -28,7 +28,7 @@ metadata:
     backup-target: default
     recurring-job-group.longhorn.io/default: enabled
 spec:
-  accessMode: rwx
+  accessMode: rwo
   backupBlockSize: "2097152"
   backupCompressionMethod: lz4
   backupTargetName: default
