@@ -17,6 +17,21 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  name: migration-scrutiny-influxdb-data
+  namespace: extra-tools
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-scrutiny-influxdb-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
   name: scrutiny-config-longhorn
   namespace: extra-tools
 spec:

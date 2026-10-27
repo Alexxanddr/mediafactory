@@ -12,3 +12,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: violarr-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-violarr-data
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-violarr-data

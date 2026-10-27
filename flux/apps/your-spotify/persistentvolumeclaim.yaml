@@ -12,3 +12,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: spotify-mongo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-spotify-mongo
+  namespace: extra-tools
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-spotify-mongo
