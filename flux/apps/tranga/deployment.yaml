@@ -17,7 +17,7 @@ metadata:
     uptime-kuma.io/status-codes: "404"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: tranga-api
@@ -71,7 +71,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: tranga-website
