@@ -1,0 +1,20 @@
+apiVersion: longhorn.io/v1beta2
+kind: Volume
+metadata:
+  name: animeworld-database
+  namespace: longhorn-system
+  labels:
+    backup-target: default
+    recurring-job-group.longhorn.io/default: enabled
+spec:
+  accessMode: rwx
+  backupBlockSize: "2097152"
+  backupCompressionMethod: lz4
+  backupTargetName: default
+  dataEngine: v1
+  dataLocality: disabled
+  frontend: blockdev
+  numberOfReplicas: 1
+  revisionCounterDisabled: true
+  size: "1073741824"
+  staleReplicaTimeout: 2880

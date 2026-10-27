@@ -30,3 +30,18 @@ spec:
   volumeName: shelfmark-config
 
 ---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-shelfmark-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-shelfmark-config
