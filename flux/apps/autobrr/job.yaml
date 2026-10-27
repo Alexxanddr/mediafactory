@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: copy-autobrr-config
+  name: verify-autobrr-config
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -9,32 +9,26 @@ spec:
     spec:
       restartPolicy: Never
       containers:
-        - name: copy-and-check
+        - name: sqlite-check
           image: python:3.13-alpine
-          command: ["/bin/sh", "-ec"]
+          command: ["python3", "-c"]
           args:
             - |
-              set -eu
-              cp -a /source/. /target/
-              sync
-              (cd /source && find . -type f -exec sha256sum {} + | sort) > /tmp/source.sha
-              (cd /target && find . -type f -exec sha256sum {} + | sort) > /tmp/target.sha
-              diff -u /tmp/source.sha /tmp/target.sha
-              echo COPY_SHA256_OK
-              for database in /source/autobrr.db /target/autobrr.db; do
-                python3 -c 'import sqlite3,sys; p=sys.argv[1]; c=sqlite3.connect("file:"+p+"?mode=ro",uri=True); r=c.execute("PRAGMA integrity_check").fetchone()[0]; c.close(); print("SQLITE_INTEGRITY_OK",p); sys.exit(r != "ok")' "$database"
-              done
+              import sqlite3
+              from pathlib import Path
+              database = Path("/target/autobrr.db")
+              if not database.is_file():
+                  raise RuntimeError(f"SQLite database missing: {database}")
+              connection = sqlite3.connect(database.as_uri() + "?mode=ro", uri=True)
+              result = connection.execute("PRAGMA integrity_check").fetchone()[0]
+              connection.close()
+              if result != "ok":
+                  raise RuntimeError(f"SQLite integrity failed: {result}")
+              print(f"SQLITE_INTEGRITY_OK {database}")
           volumeMounts:
-            - name: source
-              mountPath: /source
-              readOnly: true
             - name: target
               mountPath: /target
       volumes:
-        - name: source
-          persistentVolumeClaim:
-            claimName: autobrr-config
-            readOnly: true
         - name: target
           persistentVolumeClaim:
             claimName: migration-autobrr-config
