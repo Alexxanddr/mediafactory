@@ -43,3 +43,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: duplicati-das-volume
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-duplicati-config
+  namespace: system-addon
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-duplicati-config
