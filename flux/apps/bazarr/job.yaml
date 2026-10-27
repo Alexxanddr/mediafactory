@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: copy-bazarr-config
+  name: copy-bazarr-config-retry
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -15,6 +15,10 @@ spec:
           args:
             - |
               set -eu
+              if [ -e /target/lost+found ]; then
+                if [ ! -d /target/lost+found ] || [ -n "$(find /target/lost+found -mindepth 1 -print -quit)" ]; then echo "Target lost+found is not empty" >&2; exit 1; fi
+                rmdir /target/lost+found
+              fi
               if [ -n "$(find /target -mindepth 1 -print -quit)" ]; then echo "Target is not empty" >&2; exit 1; fi
               cp -a /source/. /target/
               sync
