@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-redis-to-longhorn
+  namespace: database
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/hostname: k3s-server
+      containers:
+        - name: snapshot-and-verify
+          image: registry-1.docker.io/bitnami/redis:latest
+          command: ["bash", "-ceu"]
+          args:
+            - |
+              src=/source
+              dst=/target
+              cd "$src"
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/source.sha256
+              cp -a "$src"/. "$dst"/
+              cd "$dst"
+              sha256sum -c /tmp/source.sha256
+              REDISCLI_AUTH="$REDISCLI_AUTH" redis-cli -h redis-master.database.svc.cluster.local CLIENT PAUSE 300000 WRITE
+              redis-cli -h redis-master.database.svc.cluster.local --rdb "$dst/dump.rdb"
+              redis-check-rdb "$dst/dump.rdb"
+              sha256sum "$dst/dump.rdb"
+              chown 1001:1001 "$dst" "$dst/dump.rdb"
+              chmod 775 "$dst"
+              chmod 600 "$dst/dump.rdb"
+              echo 'REDIS_RDB_SNAPSHOT_AND_COPY_OK'
+          env:
+            - name: REDISCLI_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: redis-auth
+                  key: redis-password
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          hostPath:
+            path: /var/lib/rancher/k3s/storage/redis
+            type: Directory
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-redis

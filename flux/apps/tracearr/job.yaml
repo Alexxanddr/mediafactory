@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-tracearr-timescale-to-longhorn
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/hostname: k3s-server
+      containers:
+        - name: copy-and-verify
+          image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+          command: ["bash", "-ceu"]
+          args:
+            - |
+              src=/source
+              dst=/target
+              state=$(pg_controldata "$src" | awk -F: '/Database cluster state/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
+              test "$state" = 'shut down'
+              source_system_id=$(pg_controldata "$src" | awk -F: '/Database system identifier/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
+              checksum_version=$(pg_controldata "$src" | awk -F: '/Data page checksum version/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
+              cd "$src"
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/source.sha256
+              cp -a "$src"/. "$dst"/
+              cd "$dst"
+              sha256sum -c /tmp/source.sha256
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 sha256sum > /tmp/target.sha256
+              diff -u /tmp/source.sha256 /tmp/target.sha256
+              test "$(cat "$dst/PG_VERSION")" = 18
+              target_system_id=$(pg_controldata "$dst" | awk -F: '/Database system identifier/ {gsub(/^[[:space:]]+/, "", $2); print $2}')
+              test "$source_system_id" = "$target_system_id"
+              if [ "$checksum_version" -gt 0 ]; then
+                pg_checksums --check -D "$dst"
+              else
+                echo 'PG_CHECKSUMS_DISABLED'
+              fi
+              chown 1000:1000 "$dst"
+              chmod 700 "$dst"
+              echo "TRACEARR_TIMESCALE_COPY_OK system_identifier=$target_system_id"
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          hostPath:
+            path: /var/lib/rancher/k3s/storage/tracearr/timescale
+            type: Directory
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-tracearr-timescale
