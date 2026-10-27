@@ -29,3 +29,4 @@ spec:
     controller:
       replicas: 1
       runOnControlPlane: true
+      enableSnapshotter: false
