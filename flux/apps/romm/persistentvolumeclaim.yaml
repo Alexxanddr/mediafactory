@@ -12,3 +12,48 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: romm-library
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: romm-resources-longhorn
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: romm-resources
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: romm-assets-longhorn
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: romm-assets
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: romm-config-longhorn
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: romm-config

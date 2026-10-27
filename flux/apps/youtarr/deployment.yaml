@@ -71,13 +71,13 @@ spec:
             claimName: youtarr-data
         - name: youtarr-images
           persistentVolumeClaim:
-            claimName: youtarr-images
+            claimName: youtarr-images-longhorn
         - name: youtarr-config
           persistentVolumeClaim:
-            claimName: youtarr-config
+            claimName: youtarr-config-longhorn
         - name: youtarr-jobs
           persistentVolumeClaim:
-            claimName: youtarr-jobs
+            claimName: youtarr-jobs-longhorn
       initContainers:
         - name: wait-for-db
           image: busybox:1.28

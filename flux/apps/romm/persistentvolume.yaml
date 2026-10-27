@@ -22,3 +22,72 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: local-path
   volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: romm-resources
+spec:
+  capacity:
+    storage: 16Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: romm-resources
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: romm-assets
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: romm-assets
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: romm-config
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: romm-config

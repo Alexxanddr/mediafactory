@@ -47,7 +47,7 @@ spec:
             claimName: tranga-manga
         - name: tranga-settings
           persistentVolumeClaim:
-            claimName: tranga-settings
+            claimName: tranga-settings-longhorn
       initContainers:
         - name: wait-for-db
           image: busybox:1.28

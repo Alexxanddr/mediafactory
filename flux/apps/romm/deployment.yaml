@@ -47,16 +47,16 @@ spec:
       volumes:
         - name: romm-resources
           persistentVolumeClaim:
-            claimName: romm-resources
+            claimName: romm-resources-longhorn
         - name: romm-library
           persistentVolumeClaim:
             claimName: romm-library
         - name: romm-assets
           persistentVolumeClaim:
-            claimName: romm-assets
+            claimName: romm-assets-longhorn
         - name: romm-config
           persistentVolumeClaim:
-            claimName: romm-config
+            claimName: romm-config-longhorn
       initContainers:
         - name: wait-for-db
           image: busybox:1.28

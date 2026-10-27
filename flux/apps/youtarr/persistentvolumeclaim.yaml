@@ -12,3 +12,48 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: youtarr-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtarr-images-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: youtarr-images
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtarr-config-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: youtarr-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: youtarr-jobs-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: youtarr-jobs

@@ -27,3 +27,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: grimmory-bookdrop
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grimmory-data-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: grimmory-data

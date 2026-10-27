@@ -69,7 +69,7 @@ spec:
       volumes:
         - name: grimmory-data
           persistentVolumeClaim:
-            claimName: grimmory-data
+            claimName: grimmory-data-longhorn
         - name: grimmory-books
           persistentVolumeClaim:
             claimName: grimmory-books
