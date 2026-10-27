@@ -63,3 +63,69 @@ spec:
   owner: crowdsec
   cluster:
     name: postgres
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: sparkyfitness-longhorn
+  namespace: database
+spec:
+  name: sparkyfitness
+  owner: sparkyfitness
+  cluster:
+    name: postgres-longhorn
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: dispatcharr-longhorn
+  namespace: database
+spec:
+  name: dispatcharr
+  owner: dispatcharr
+  cluster:
+    name: postgres-longhorn
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: speedtesttracker-longhorn
+  namespace: database
+spec:
+  name: speedtesttracker
+  owner: speedtesttracker
+  cluster:
+    name: postgres-longhorn
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: floppy-longhorn
+  namespace: database
+spec:
+  name: floppy
+  owner: floppy
+  cluster:
+    name: postgres-longhorn
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: tranga-longhorn
+  namespace: database
+spec:
+  name: tranga
+  owner: tranga
+  cluster:
+    name: postgres-longhorn
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: crowdsec-longhorn
+  namespace: database
+spec:
+  name: crowdsec
+  owner: crowdsec
+  cluster:
+    name: postgres-longhorn

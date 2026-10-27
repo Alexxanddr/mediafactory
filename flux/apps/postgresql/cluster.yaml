@@ -90,7 +90,7 @@ spec:
     pg_basebackup:
       source: postgres
   replica:
-    enabled: true
+    enabled: false
     source: postgres
   externalClusters:
     - name: postgres

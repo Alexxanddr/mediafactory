@@ -8,3 +8,13 @@ spec:
   owner: open-wearables
   cluster: {name: postgres}
 ---
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: open-wearables-longhorn
+  namespace: database
+spec:
+  name: open-wearables
+  owner: open-wearables
+  cluster: {name: postgres-longhorn}
+---

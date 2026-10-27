@@ -23,6 +23,8 @@ spec:
       app: speedtest-tracker
   template:
     metadata:
+      annotations:
+        config.mediafactory.io/postgres-service: postgres-longhorn-rw.database.svc.cluster.local
       labels:
         app: speedtest-tracker
     spec:

@@ -23,6 +23,8 @@ spec:
       app: tranga-api
   template:
     metadata:
+      annotations:
+        config.mediafactory.io/postgres-service: postgres-longhorn-rw.database.svc.cluster.local
       labels:
         app: tranga-api
     spec:
@@ -51,7 +53,7 @@ spec:
       initContainers:
         - name: wait-for-db
           image: busybox:1.28
-          command: ['sh', '-c', 'until nc -z postgres-rw.database.svc.cluster.local 5432; do echo waiting for db; sleep 2; done;']
+          command: ['sh', '-c', 'until nc -z postgres-longhorn-rw.database.svc.cluster.local 5432; do echo waiting for db; sleep 2; done;']
 ---
 apiVersion: apps/v1
 kind: Deployment

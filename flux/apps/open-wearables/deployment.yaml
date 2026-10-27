@@ -21,13 +21,15 @@ spec:
     matchLabels: {app: open-wearables-backend}
   template:
     metadata:
+      annotations:
+        config.mediafactory.io/postgres-service: postgres-longhorn-rw.database.svc.cluster.local
       labels: {app: open-wearables-backend}
     spec:
       enableServiceLinks: false
       initContainers:
         - name: wait-for-postgres
           image: busybox:1.36
-          command: [sh, -c, 'until nc -z postgres-rw.database.svc.cluster.local 5432; do sleep 2; done']
+          command: [sh, -c, 'until nc -z postgres-longhorn-rw.database.svc.cluster.local 5432; do sleep 2; done']
         - name: wait-for-redis
           image: busybox:1.36
           command: [sh, -c, 'until nc -z redis-master.database.svc.cluster.local 6379; do sleep 2; done']
