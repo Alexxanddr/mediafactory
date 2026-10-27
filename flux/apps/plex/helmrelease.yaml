@@ -25,7 +25,7 @@ spec:
             patch: |-
               - op: replace
                 path: /spec/replicas
-                value: 0
+                value: 1
   chart:
     spec:
       chart: plex-media-server
