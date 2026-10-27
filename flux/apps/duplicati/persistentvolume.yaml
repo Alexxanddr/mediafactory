@@ -21,4 +21,4 @@ spec:
       fsType: ext4
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
-  volumeHandle: duplicati-config
+    volumeHandle: duplicati-config
