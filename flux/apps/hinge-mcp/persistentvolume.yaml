@@ -20,3 +20,26 @@ spec:
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
     volumeHandle: pvc-5ae05803-c9a6-40ff-8364-c1b34083798d
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: migration-hinge-mcp
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: hinge-mcp

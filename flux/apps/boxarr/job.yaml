@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-config-to-named-volume
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: copy
+          image: busybox:1.37.0
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              cp -a /source/. /target/
+              sync
+              (cd /source && find . -type f -exec sha256sum {} + | sort) > /tmp/source.sha
+              (cd /target && find . -type f -exec sha256sum {} + | sort) > /tmp/target.sha
+              diff -u /tmp/source.sha /tmp/target.sha
+              echo COPY_SHA256_OK
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          persistentVolumeClaim:
+            claimName: boxarr-config-longhorn
+            readOnly: true
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-boxarr-config

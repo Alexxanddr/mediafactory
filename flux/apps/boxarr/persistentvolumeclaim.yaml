@@ -12,3 +12,18 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: boxarr-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-boxarr-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-boxarr-config
