@@ -26,6 +26,29 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
+  name: migration-tracearr-timescale
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 2Gi
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: tracearr-timescale
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
   finalizers:
   - kubernetes.io/pv-protection
   name: tracearr-config

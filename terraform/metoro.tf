@@ -21,5 +21,9 @@ resource "helm_release" "metoro_exporter" {
     value = var.metoro_bearer_token
   }
 
+  set {
+    name  = "redis.master.count"
+    value = "0"
+  }
 
 }

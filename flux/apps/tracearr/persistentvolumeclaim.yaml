@@ -27,3 +27,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: tracearr-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-tracearr-timescale
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-tracearr-timescale
