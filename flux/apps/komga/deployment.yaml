@@ -46,7 +46,7 @@ spec:
       volumes:
         - name: komga-config
           persistentVolumeClaim:
-            claimName: komga-config
+            claimName: komga-config-longhorn
         - name: komga-data
           persistentVolumeClaim:
             claimName: komga-data

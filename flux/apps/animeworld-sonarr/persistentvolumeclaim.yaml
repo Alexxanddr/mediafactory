@@ -43,3 +43,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: animeworld-script
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: animeworld-database-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: animeworld-database

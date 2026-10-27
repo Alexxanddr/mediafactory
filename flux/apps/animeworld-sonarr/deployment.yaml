@@ -64,7 +64,7 @@ spec:
       volumes:
         - name: animeworld-database
           persistentVolumeClaim:
-            claimName: animeworld-database
+            claimName: animeworld-database-longhorn
         - name: animeworld-script
           persistentVolumeClaim:
             claimName: animeworld-script

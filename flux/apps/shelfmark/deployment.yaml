@@ -47,4 +47,4 @@ spec:
             claimName: shelfmark-books
         - name: shelfmark-config
           persistentVolumeClaim:
-            claimName: shelfmark-config
+            claimName: shelfmark-config-longhorn

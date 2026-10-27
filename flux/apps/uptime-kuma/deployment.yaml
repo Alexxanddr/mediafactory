@@ -49,4 +49,4 @@ spec:
       volumes:
         - name: uptime-kuma-data
           persistentVolumeClaim:
-            claimName: uptime-kuma-data
+            claimName: uptime-kuma-data-longhorn

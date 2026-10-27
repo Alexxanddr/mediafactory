@@ -82,7 +82,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: nutify-data
+            claimName: nutify-data-longhorn
         - name: dev
           hostPath:
             path: /dev
