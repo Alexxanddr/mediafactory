@@ -17,7 +17,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Network & Connectivity"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: speedtest-tracker
