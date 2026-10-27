@@ -13,3 +13,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: maintainerr-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-maintainerr-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-maintainerr-config
