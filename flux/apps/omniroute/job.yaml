@@ -1,16 +1,29 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: copy-omniroute
+  name: copy-omniroute-data
   namespace: omniroute
 spec:
   backoffLimit: 0
   template:
     spec:
       restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: copy
           image: python:3.13-alpine
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
           command:
             - /bin/sh
             - -ec
