@@ -20,6 +20,7 @@ spec:
       existingSecretPasswordKey: redis-password
 
     master:
+      count: 0
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "port"
