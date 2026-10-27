@@ -49,4 +49,4 @@ spec:
       volumes:
         - name: maintainerr-config
           persistentVolumeClaim:
-            claimName: maintainerr-config
+            claimName: maintainerr-config-longhorn

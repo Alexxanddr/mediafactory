@@ -62,4 +62,4 @@ spec:
       volumes:
         - name: anibridge-config
           persistentVolumeClaim:
-            claimName: anibridge-config
+            claimName: anibridge-config-longhorn

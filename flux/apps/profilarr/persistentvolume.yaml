@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: profilarr-config
+spec:
+  capacity:
+    storage: 3Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: disabled
+      fsType: ext4
+      numberOfReplicas: "1"
+      staleReplicaTimeout: "2880"
+    volumeHandle: profilarr-config

@@ -63,4 +63,4 @@ spec:
       volumes:
         - name: seerr-config
           persistentVolumeClaim:
-            claimName: seerr-config
+            claimName: seerr-config-longhorn

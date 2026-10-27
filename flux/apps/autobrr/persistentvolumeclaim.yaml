@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: autobrr-config-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: autobrr-config
