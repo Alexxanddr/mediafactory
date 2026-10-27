@@ -13,6 +13,11 @@ environment variables or volume mounts are needed. The existing retained
 PV/PVC manifests remain for rollback; do not delete the old volume or data.
 No credentials or public HTTPRoute are required.
 
+Bus results use the requested Europe/Rome departure day and preserve
+Itabus city-wide stop coverage. Actual Albatross stop names/addresses and
+rail warnings for excluded urban-transfer fares are exposed through both
+HTTP and MCP. Preserve these optional details in client reports.
+
 Configure MCPHub's `italian-travel-search` server with:
 
 ```json
