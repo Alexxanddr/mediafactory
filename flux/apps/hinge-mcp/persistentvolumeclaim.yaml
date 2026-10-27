@@ -12,18 +12,3 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: hinge-mcp
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-hinge-mcp
-  namespace: extra-tools
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-hinge-mcp

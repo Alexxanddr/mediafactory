@@ -20,26 +20,3 @@ spec:
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
     volumeHandle: pvc-fa69984e-e523-4a93-9925-9c48c54a46b4
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: migration-changedetection-config
-spec:
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteMany
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  csi:
-    driver: driver.longhorn.io
-    fsType: ext4
-    volumeAttributes:
-      dataEngine: v1
-      dataLocality: disabled
-      fsType: ext4
-      numberOfReplicas: "1"
-      staleReplicaTimeout: "2880"
-    volumeHandle: changedetection-config

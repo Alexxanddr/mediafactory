@@ -12,18 +12,3 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: changedetection-config
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-changedetection-config
-  namespace: extra-tools
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 10Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-changedetection-config
