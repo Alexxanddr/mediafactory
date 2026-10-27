@@ -52,7 +52,7 @@ spec:
         uptime-kuma.io/notifications: "Monitoring Bot"
         uptime-kuma.io/status-codes: "404"
         uptime-kuma.io/group: "Security & Cluster"
-      replicas: 1
+      replicas: 0
       # Per HA con più repliche serve PostgreSQL (non SQLite)
       # replicas: 2
 

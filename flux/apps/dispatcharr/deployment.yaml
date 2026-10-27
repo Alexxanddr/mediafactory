@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media Acquisition"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: dispatcharr-web
@@ -63,7 +63,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: celery
