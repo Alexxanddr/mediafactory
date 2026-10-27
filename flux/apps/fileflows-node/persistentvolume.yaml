@@ -27,7 +27,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: migration-fileflows-node-common
+  name: fileflows-node-common
   finalizers:
     - kubernetes.io/pv-protection
 spec:
@@ -52,7 +52,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: migration-fileflows-node-data
+  name: fileflows-node-data
   finalizers:
     - kubernetes.io/pv-protection
 spec:
@@ -77,7 +77,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: migration-fileflows-node-temp
+  name: fileflows-node-temp
   finalizers:
     - kubernetes.io/pv-protection
 spec:

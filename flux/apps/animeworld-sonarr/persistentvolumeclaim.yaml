@@ -47,7 +47,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: migration-animeworld-script
+  name: animeworld-script-longhorn
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -57,4 +57,4 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: migration-animeworld-script
+  volumeName: animeworld-script

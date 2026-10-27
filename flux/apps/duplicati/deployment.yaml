@@ -18,7 +18,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Storage & Databases"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: duplicati
@@ -77,7 +77,7 @@ spec:
       volumes:
         - name: duplicati-config
           persistentVolumeClaim:
-            claimName: duplicati-config
+            claimName: duplicati-config-longhorn
 
         - name: duplicati-data
           persistentVolumeClaim:

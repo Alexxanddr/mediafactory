@@ -17,7 +17,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: migration-fileflows-node-common
+  name: fileflows-node-common-longhorn
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -27,12 +27,12 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: migration-fileflows-node-common
+  volumeName: fileflows-node-common
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: migration-fileflows-node-data
+  name: fileflows-node-data-longhorn
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -42,12 +42,12 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: migration-fileflows-node-data
+  volumeName: fileflows-node-data
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: migration-fileflows-node-temp
+  name: fileflows-node-temp-longhorn
   namespace: multimedia-factory
 spec:
   accessModes:
@@ -57,4 +57,4 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: migration-fileflows-node-temp
+  volumeName: fileflows-node-temp

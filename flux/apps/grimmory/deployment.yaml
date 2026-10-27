@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: grimmory
@@ -75,7 +75,7 @@ spec:
             claimName: mediafactory-books-nfs
         - name: grimmory-bookdrop
           persistentVolumeClaim:
-            claimName: grimmory-bookdrop
+            claimName: bookdrop-longhorn
       initContainers:
         - name: wait-for-db
           image: busybox:1.28

@@ -32,7 +32,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: migration-duplicati-config
+  name: duplicati-config-longhorn
   namespace: system-addon
 spec:
   accessModes:
@@ -42,4 +42,4 @@ spec:
       storage: 4Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: migration-duplicati-config
+  volumeName: duplicati-config

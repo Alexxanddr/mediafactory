@@ -11,7 +11,7 @@ metadata:
     keel.sh/matchTag: "true"
 spec:
   serviceName: fileflows-node
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: fileflows-node
@@ -63,16 +63,16 @@ spec:
       volumes:
         - name: fileflows-node-common
           persistentVolumeClaim:
-            claimName: fileflows-node-common
+            claimName: fileflows-node-common-longhorn
         - name: fileflows-node-data
           persistentVolumeClaim:
-            claimName: fileflows-node-data
+            claimName: fileflows-node-data-longhorn
         - name: fileflows-node-media
           persistentVolumeClaim:
             claimName: mediafactory-root-nfs
         - name: fileflows-node-temp
           persistentVolumeClaim:
-            claimName: fileflows-node-temp
+            claimName: fileflows-node-temp-longhorn
         - name: dri
           hostPath:
             path: /dev/dri
