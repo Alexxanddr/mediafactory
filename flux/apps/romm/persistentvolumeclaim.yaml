@@ -62,3 +62,48 @@ spec:
   volumeName: romm-config
 
 ---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-romm-resources
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-romm-resources
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-romm-assets
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-romm-assets
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-romm-config
+  namespace: gaming
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-romm-config

@@ -1,0 +1,128 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-romm-longhorn
+  namespace: gaming
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 14400
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: copy
+          image: python:3.13-alpine
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              source=/source/romm-resources
+              target=/target/romm-resources
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-resources-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-resources-target.sha256
+              diff -u /tmp/romm-resources-source.sha256 /tmp/romm-resources-target.sha256
+              echo COPY_SHA256_OK romm-resources
+              source=/source/romm-assets
+              target=/target/romm-assets
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-assets-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-assets-target.sha256
+              diff -u /tmp/romm-assets-source.sha256 /tmp/romm-assets-target.sha256
+              echo COPY_SHA256_OK romm-assets
+              source=/source/romm-config
+              target=/target/romm-config
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-config-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/romm-config-target.sha256
+              diff -u /tmp/romm-config-source.sha256 /tmp/romm-config-target.sha256
+              echo COPY_SHA256_OK romm-config
+              python3 - <<'PYSQL'
+              import glob, sqlite3
+              paths = []
+              for root in [
+              ]:
+                  for pattern in ("**/*.db", "**/*.sqlite", "**/*.sqlite3"):
+                      paths.extend(glob.glob(root + "/" + pattern, recursive=True))
+              for path in sorted(set(paths)):
+                  with sqlite3.connect("file:" + path + "?mode=ro", uri=True) as db:
+                      result = db.execute("PRAGMA integrity_check").fetchone()[0]
+                  if result != "ok":
+                      raise SystemExit(f"SQLite integrity failure: {path}: {result}")
+                  print(f"SQLITE_INTEGRITY_OK {path}")
+              if not paths:
+                  print("NO_SQLITE_DATABASES_IN_COPY")
+              PYSQL
+          volumeMounts:
+            - name: source-romm-resources
+              mountPath: /source/romm-resources
+              readOnly: true
+            - name: target-romm-resources
+              mountPath: /target/romm-resources
+            - name: source-romm-assets
+              mountPath: /source/romm-assets
+              readOnly: true
+            - name: target-romm-assets
+              mountPath: /target/romm-assets
+            - name: source-romm-config
+              mountPath: /source/romm-config
+              readOnly: true
+            - name: target-romm-config
+              mountPath: /target/romm-config
+      volumes:
+        - name: source-romm-resources
+          persistentVolumeClaim:
+            claimName: romm-resources
+            readOnly: true
+        - name: target-romm-resources
+          persistentVolumeClaim:
+            claimName: migration-romm-resources
+        - name: source-romm-assets
+          persistentVolumeClaim:
+            claimName: romm-assets
+            readOnly: true
+        - name: target-romm-assets
+          persistentVolumeClaim:
+            claimName: migration-romm-assets
+        - name: source-romm-config
+          persistentVolumeClaim:
+            claimName: romm-config
+            readOnly: true
+        - name: target-romm-config
+          persistentVolumeClaim:
+            claimName: migration-romm-config

@@ -30,3 +30,18 @@ spec:
   volumeName: tranga-settings
 
 ---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-tranga-settings
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 4Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-tranga-settings

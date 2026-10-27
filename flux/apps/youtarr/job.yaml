@@ -1,0 +1,128 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-youtarr-longhorn
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 14400
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: copy
+          image: python:3.13-alpine
+          securityContext:
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - DAC_OVERRIDE
+                - FOWNER
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              source=/source/youtarr-images
+              target=/target/youtarr-images
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-images-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-images-target.sha256
+              diff -u /tmp/youtarr-images-source.sha256 /tmp/youtarr-images-target.sha256
+              echo COPY_SHA256_OK youtarr-images
+              source=/source/youtarr-config
+              target=/target/youtarr-config
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-config-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-config-target.sha256
+              diff -u /tmp/youtarr-config-source.sha256 /tmp/youtarr-config-target.sha256
+              echo COPY_SHA256_OK youtarr-config
+              source=/source/youtarr-jobs
+              target=/target/youtarr-jobs
+              if [ -d "$target/lost+found" ]; then
+                [ -z "$(find "$target/lost+found" -mindepth 1 -print -quit)" ]
+                rmdir "$target/lost+found"
+              fi
+              [ -z "$(find "$target" -mindepth 1 -print -quit)" ]
+              cp -a "$source/." "$target/"
+              sync
+              (cd "$source" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-jobs-source.sha256
+              (cd "$target" && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/youtarr-jobs-target.sha256
+              diff -u /tmp/youtarr-jobs-source.sha256 /tmp/youtarr-jobs-target.sha256
+              echo COPY_SHA256_OK youtarr-jobs
+              python3 - <<'PYSQL'
+              import glob, sqlite3
+              paths = []
+              for root in [
+              ]:
+                  for pattern in ("**/*.db", "**/*.sqlite", "**/*.sqlite3"):
+                      paths.extend(glob.glob(root + "/" + pattern, recursive=True))
+              for path in sorted(set(paths)):
+                  with sqlite3.connect("file:" + path + "?mode=ro", uri=True) as db:
+                      result = db.execute("PRAGMA integrity_check").fetchone()[0]
+                  if result != "ok":
+                      raise SystemExit(f"SQLite integrity failure: {path}: {result}")
+                  print(f"SQLITE_INTEGRITY_OK {path}")
+              if not paths:
+                  print("NO_SQLITE_DATABASES_IN_COPY")
+              PYSQL
+          volumeMounts:
+            - name: source-youtarr-images
+              mountPath: /source/youtarr-images
+              readOnly: true
+            - name: target-youtarr-images
+              mountPath: /target/youtarr-images
+            - name: source-youtarr-config
+              mountPath: /source/youtarr-config
+              readOnly: true
+            - name: target-youtarr-config
+              mountPath: /target/youtarr-config
+            - name: source-youtarr-jobs
+              mountPath: /source/youtarr-jobs
+              readOnly: true
+            - name: target-youtarr-jobs
+              mountPath: /target/youtarr-jobs
+      volumes:
+        - name: source-youtarr-images
+          persistentVolumeClaim:
+            claimName: youtarr-images
+            readOnly: true
+        - name: target-youtarr-images
+          persistentVolumeClaim:
+            claimName: migration-youtarr-images
+        - name: source-youtarr-config
+          persistentVolumeClaim:
+            claimName: youtarr-config
+            readOnly: true
+        - name: target-youtarr-config
+          persistentVolumeClaim:
+            claimName: migration-youtarr-config
+        - name: source-youtarr-jobs
+          persistentVolumeClaim:
+            claimName: youtarr-jobs
+            readOnly: true
+        - name: target-youtarr-jobs
+          persistentVolumeClaim:
+            claimName: migration-youtarr-jobs

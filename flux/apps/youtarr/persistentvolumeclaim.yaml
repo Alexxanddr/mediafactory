@@ -62,3 +62,48 @@ spec:
   volumeName: youtarr-jobs
 
 ---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-youtarr-images
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-youtarr-images
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-youtarr-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-youtarr-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-youtarr-jobs
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-youtarr-jobs
