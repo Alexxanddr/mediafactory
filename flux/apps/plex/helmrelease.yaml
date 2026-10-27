@@ -18,6 +18,14 @@ spec:
               - op: add
                 path: /spec/ports/0/appProtocol
                 value: https
+          - target:
+              version: v1
+              kind: StatefulSet
+              name: plex-media-server
+            patch: |-
+              - op: replace
+                path: /spec/replicas
+                value: 0
   chart:
     spec:
       chart: plex-media-server
