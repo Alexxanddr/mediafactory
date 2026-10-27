@@ -17,7 +17,7 @@ metadata:
     uptime-kuma.io/group: "Storage & Databases"
 spec:
   serviceName: tracearr-timescale
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: tracearr-timescale
