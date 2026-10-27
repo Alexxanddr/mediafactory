@@ -42,18 +42,3 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: grimmory-data
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-bookdrop
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-bookdrop
