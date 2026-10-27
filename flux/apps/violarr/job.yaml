@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: fix-violarr-longhorn-permissions-as-owner
+  name: fix-violarr-longhorn-permissions-final
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -21,6 +21,7 @@ spec:
             - |
               stat -c '%a %u:%g %n' /data/postgres
               chmod 700 /data/postgres
+              chmod g-s /data/postgres
               test "$(stat -c '%a' /data/postgres)" = 700
               pg_controldata /data/postgres | grep -E 'Database cluster state|Database system identifier|Data page checksum version'
               echo 'VIOLARR_LONGHORN_PERMISSIONS_OK'
