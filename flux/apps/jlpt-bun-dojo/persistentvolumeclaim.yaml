@@ -12,3 +12,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: jlpt-bun-dojo
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-jlpt-bun-dojo
+  namespace: extra-tools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-jlpt-bun-dojo

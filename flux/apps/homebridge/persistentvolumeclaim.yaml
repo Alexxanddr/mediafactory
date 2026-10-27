@@ -13,3 +13,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: homebridge-pv
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-homebridge-pv
+  namespace: home-automation
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-homebridge-pv

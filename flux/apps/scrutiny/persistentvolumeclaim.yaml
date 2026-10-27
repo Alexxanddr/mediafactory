@@ -28,3 +28,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: scrutiny-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-scrutiny-config
+  namespace: extra-tools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-scrutiny-config

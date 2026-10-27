@@ -11,3 +11,18 @@ spec:
       storage: 10Gi
   storageClassName: local-path
   volumeName: mcphub
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-mcphub
+  namespace: extra-tools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-mcphub

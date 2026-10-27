@@ -1,0 +1,56 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: copy-plex-config
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: copy
+          image: python:3.13-alpine
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              if [ -d /target/lost+found ]; then
+                [ -z "$(find /target/lost+found -mindepth 1 -print -quit)" ]
+                rmdir /target/lost+found
+              fi
+              [ -z "$(find /target -mindepth 1 -print -quit)" ]
+              cp -a /source/. /target/
+              sync
+              (cd /source && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/source.sha256
+              (cd /target && find . -type f -print0 | sort -z | xargs -0 sha256sum) > /tmp/target.sha256
+              diff -u /tmp/source.sha256 /tmp/target.sha256
+              echo COPY_SHA256_OK
+
+              python3 - <<'PYSQL'
+              import sqlite3
+              for path in [
+                  '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.db',
+                  '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/com.plexapp.plugins.library.blobs.db',
+                  '/target/Library/Application Support/Plex Media Server/Plug-in Support/Databases/tv.plex.providers.epg.cloud-a4ac9ae9-e28a-4517-90e1-fdd851e40044.db',
+              ]:
+                  with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as db:
+                      result = db.execute("PRAGMA integrity_check").fetchone()[0]
+                  if result != "ok":
+                      raise SystemExit(f"SQLite integrity failure: {path}: {result}")
+                  print(f"SQLITE_INTEGRITY_OK {path}")
+              PYSQL
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          persistentVolumeClaim:
+            claimName: plex-config
+            readOnly: true
+        - name: target
+          persistentVolumeClaim:
+            claimName: migration-plex-config
