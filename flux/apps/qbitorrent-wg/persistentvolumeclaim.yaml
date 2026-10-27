@@ -28,3 +28,17 @@ spec:
   volumeMode: Filesystem
   volumeName: qbittorrent-wg-config
 ---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-qbittorrent-wg-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-qbittorrent-wg-config
