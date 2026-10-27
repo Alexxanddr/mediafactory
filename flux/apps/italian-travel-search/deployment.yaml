@@ -36,28 +36,6 @@ spec:
         runAsGroup: 1000
         seccompProfile:
           type: RuntimeDefault
-      initContainers:
-        - name: update-rail-timetables
-          image: ghcr.io/alexxanddr/italian-travel-search:latest
-          imagePullPolicy: Always
-          command: ["node", "dist/rail/update.js"]
-          env:
-            - name: NODE_OPTIONS
-              value: --max-old-space-size=1536
-            - name: TRENITALIA_NETEX_PATH
-              value: /app/data/trenitalia-timetable.json.gz
-            - name: ITALO_NETEX_PATH
-              value: /app/data/italo-timetable.json.gz
-          resources:
-            requests:
-              cpu: 100m
-              memory: 512Mi
-            limits:
-              cpu: "1"
-              memory: 2Gi
-          volumeMounts:
-            - name: data
-              mountPath: /app/data
       containers:
         - name: italian-travel-search
           image: ghcr.io/alexxanddr/italian-travel-search:latest
@@ -67,10 +45,6 @@ spec:
               value: 0.0.0.0
             - name: PORT
               value: "3000"
-            - name: TRENITALIA_NETEX_PATH
-              value: /app/data/trenitalia-timetable.json.gz
-            - name: ITALO_NETEX_PATH
-              value: /app/data/italo-timetable.json.gz
           ports:
             - name: http
               containerPort: 3000
@@ -100,10 +74,3 @@ spec:
             limits:
               cpu: "1"
               memory: 1Gi
-          volumeMounts:
-            - name: data
-              mountPath: /app/data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: italian-travel-search

@@ -7,17 +7,11 @@ The service runs `ghcr.io/alexxanddr/italian-travel-search:latest` in
 http://italian-travel-search.extra-tools.svc:3000/mcp
 ```
 
-The retained local volume stores only the two compact timetable caches. The
-init container refreshes both authorized Italian NAP distributions before the
-application starts; the runtime receives only `TRENITALIA_NETEX_PATH` and
-`ITALO_NETEX_PATH`. No credentials or public HTTPRoute are required.
-
-Before the first reconciliation, create the local-volume directory on
-`k3s-server`:
-
-```sh
-sudo install -d -o 1000 -g 1000 /var/lib/rancher/k3s/storage/italian-travel-search
-```
+Stations, journey times, availability and prices come from live Trenitalia
+and Italo booking APIs. No timetable download, init container, dataset
+environment variables or volume mounts are needed. The existing retained
+PV/PVC manifests remain for rollback; do not delete the old volume or data.
+No credentials or public HTTPRoute are required.
 
 Configure MCPHub's `italian-travel-search` server with:
 
@@ -36,7 +30,10 @@ Verify the service and MCP transport after Flux reconciliation:
 
 ```sh
 KUBECONFIG=~/.kube/k3s kubectl get pod,service,pvc -n extra-tools -l app.kubernetes.io/name=italian-travel-search
-KUBECONFIG=~/.kube/k3s kubectl exec -n extra-tools deploy/mcphub -- node -e "fetch('http://italian-travel-search.extra-tools.svc:3000/health').then(async r => { console.log(r.status, await r.text()); process.exit(r.ok ? 0 : 1) })"
+KUBECONFIG=~/.kube/k3s kubectl port-forward -n extra-tools service/italian-travel-search 3099:3000
+# In another local terminal:
+curl --fail http://127.0.0.1:3099/health
+HTTP_BASE_URL=http://127.0.0.1:3099 SMOKE_DATE=YYYY-MM-DD node scripts/live-smoke.mjs
 ```
 
 Finally reconnect the server in MCPHub and confirm that it discovers all eight
