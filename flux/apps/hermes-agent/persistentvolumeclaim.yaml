@@ -12,3 +12,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: hermes-agent-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-hermes-agent-data
+  namespace: hermes-agent
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 16Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-hermes-agent-data

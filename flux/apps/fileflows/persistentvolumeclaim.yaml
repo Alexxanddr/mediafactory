@@ -43,3 +43,33 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: fileflows-media
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-fileflows-common
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-fileflows-common
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-fileflows-data
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-fileflows-data

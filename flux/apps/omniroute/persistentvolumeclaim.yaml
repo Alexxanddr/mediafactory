@@ -12,3 +12,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: omniroute-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-omniroute-data
+  namespace: omniroute
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-omniroute-data

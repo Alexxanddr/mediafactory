@@ -28,3 +28,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: lingarr-media
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-lingarr-config
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-lingarr-config

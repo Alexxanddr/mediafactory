@@ -14,3 +14,18 @@ spec:
   volumeMode: Filesystem
   volumeName: speedtest-tracker
 ---
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-speedtest-tracker
+  namespace: extra-tools
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: migration-speedtest-tracker
