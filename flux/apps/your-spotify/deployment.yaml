@@ -17,7 +17,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: your-spotify-server
@@ -54,7 +54,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: your-spotify-web
@@ -94,7 +94,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Storage & Databases"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: mongo
@@ -114,4 +114,4 @@ spec:
       volumes:
         - name: mongo-storage
           persistentVolumeClaim:
-            claimName: spotify-mongo
+            claimName: migration-spotify-mongo
