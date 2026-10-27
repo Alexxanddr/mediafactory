@@ -13,33 +13,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: plex-media
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: plex-config
-  namespace: multimedia-factory
-spec:
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: plex-config
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-plex-config
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 12Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-plex-config
