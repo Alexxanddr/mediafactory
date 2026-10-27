@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: fix-violarr-longhorn-permissions
+  name: fix-violarr-longhorn-permissions-as-owner
   namespace: multimedia-factory
 spec:
   backoffLimit: 0
@@ -13,6 +13,9 @@ spec:
       containers:
         - name: fix-permissions
           image: ghcr.io/xbit18/violarr:latest
+          securityContext:
+            runAsUser: 100
+            runAsGroup: 102
           command: ["bash", "-ceu"]
           args:
             - |
