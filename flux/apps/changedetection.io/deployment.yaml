@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Utilities"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: changedetection
@@ -45,7 +45,7 @@ spec:
       volumes:
         - name: changedetection-config
           persistentVolumeClaim:
-            claimName: changedetection-config
+            claimName: changedetection-config-longhorn
 ---
 apiVersion: apps/v1
 kind: Deployment
