@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-dispatcharr-to-longhorn
+  namespace: multimedia-factory
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      nodeSelector:
+        kubernetes.io/hostname: k3s-server
+      containers:
+        - name: copy-and-verify
+          image: timescale/timescaledb-ha:pg18.1-ts2.25.0
+          securityContext:
+            runAsUser: 0
+          command: ["bash", "-ceu"]
+          args:
+            - |
+              src=/source
+              dst=/target
+              find "$dst" -mindepth 1 -maxdepth 1 ! -name lost+found -exec rm -rf -- {} +
+              cd "$src"
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 -r sha256sum > /tmp/source.sha256
+              cp -a "$src"/. "$dst"/
+              cd "$dst"
+              if [ -s /tmp/source.sha256 ]; then sha256sum -c /tmp/source.sha256; fi
+              find . -type f -not -path './lost+found/*' -print0 | sort -z | xargs -0 -r sha256sum > /tmp/target.sha256
+              diff -u /tmp/source.sha256 /tmp/target.sha256
+              echo DISPATCHARR_LONGHORN_COPY_OK
+          volumeMounts:
+            - name: source
+              mountPath: /source
+              readOnly: true
+            - name: target
+              mountPath: /target
+      volumes:
+        - name: source
+          persistentVolumeClaim:
+            claimName: dispatcharr-data
+        - name: target
+          persistentVolumeClaim:
+            claimName: dispatcharr-data-longhorn
