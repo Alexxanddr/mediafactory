@@ -81,7 +81,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Monitoring & Observability"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: scrutiny-collector
@@ -160,7 +160,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Monitoring & Observability"
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   selector:
@@ -198,4 +198,4 @@ spec:
       volumes:
         - name: scrutiny-influxdb-data
           persistentVolumeClaim:
-            claimName: migration-scrutiny-influxdb-data
+            claimName: scrutiny-influxdb-data-longhorn
