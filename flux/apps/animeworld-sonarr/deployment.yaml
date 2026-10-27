@@ -18,7 +18,7 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media Acquisition"
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: animeworld

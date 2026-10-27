@@ -11,7 +11,7 @@ metadata:
     keel.sh/matchTag: "true"
 spec:
   serviceName: fileflows-node
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: fileflows-node
