@@ -68,7 +68,7 @@ spec:
       volumes:
         - name: youtarr-data
           persistentVolumeClaim:
-            claimName: youtarr-data
+            claimName: mediafactory-youtarr-nfs
         - name: youtarr-images
           persistentVolumeClaim:
             claimName: youtarr-images-longhorn

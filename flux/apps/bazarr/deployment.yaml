@@ -54,4 +54,4 @@ spec:
             claimName: bazarr-config-longhorn
         - name: bazarr-data
           persistentVolumeClaim:
-            claimName: bazarr-data
+            claimName: mediafactory-root-nfs

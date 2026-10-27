@@ -69,7 +69,7 @@ spec:
             claimName: fileflows-node-data
         - name: fileflows-node-media
           persistentVolumeClaim:
-            claimName: fileflows-node-media
+            claimName: mediafactory-root-nfs
         - name: fileflows-node-temp
           persistentVolumeClaim:
             claimName: fileflows-node-temp

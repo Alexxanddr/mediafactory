@@ -85,4 +85,4 @@ spec:
 
         - name: duplicati-das-volume
           persistentVolumeClaim:
-            claimName: duplicati-das-volume
+            claimName: duplicati-backup-nfs

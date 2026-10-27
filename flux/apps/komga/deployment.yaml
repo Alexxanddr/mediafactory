@@ -49,4 +49,4 @@ spec:
             claimName: komga-config-longhorn
         - name: komga-data
           persistentVolumeClaim:
-            claimName: komga-data
+            claimName: mediafactory-manga-nfs

@@ -61,4 +61,4 @@ spec:
             claimName: fileflows-data-longhorn
         - name: fileflows-media
           persistentVolumeClaim:
-            claimName: fileflows-media
+            claimName: mediafactory-root-nfs

@@ -44,7 +44,7 @@ spec:
       volumes:
         - name: tranga-manga
           persistentVolumeClaim:
-            claimName: tranga-manga
+            claimName: mediafactory-manga-nfs
         - name: tranga-settings
           persistentVolumeClaim:
             claimName: tranga-settings-longhorn

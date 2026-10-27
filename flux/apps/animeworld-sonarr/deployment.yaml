@@ -70,7 +70,7 @@ spec:
             claimName: animeworld-script
         - name: animeworld-data
           persistentVolumeClaim:
-            claimName: animeworld-data
+            claimName: mediafactory-root-nfs
         - name: animeworld-downloads
           persistentVolumeClaim:
-            claimName: animeworld-downloads
+            claimName: mediafactory-downloads-nfs

@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: radarr-data
           persistentVolumeClaim:
-            claimName: radarr-data
+            claimName: mediafactory-root-nfs
         - name: radarr-config
           persistentVolumeClaim:
             claimName: radarr-config-longhorn

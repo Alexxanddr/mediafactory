@@ -52,4 +52,4 @@ spec:
             claimName: lingarr-config-longhorn
         - name: media
           persistentVolumeClaim:
-            claimName: lingarr-media
+            claimName: mediafactory-media-nfs

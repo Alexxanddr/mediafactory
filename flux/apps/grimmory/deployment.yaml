@@ -72,7 +72,7 @@ spec:
             claimName: grimmory-data-longhorn
         - name: grimmory-books
           persistentVolumeClaim:
-            claimName: grimmory-books
+            claimName: mediafactory-books-nfs
         - name: grimmory-bookdrop
           persistentVolumeClaim:
             claimName: grimmory-bookdrop

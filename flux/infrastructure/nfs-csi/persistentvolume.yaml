@@ -1,0 +1,132 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-root-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory#mediafactory-root-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-downloads-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/custom-downloader/downloads#mediafactory-downloads-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/custom-downloader/downloads
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-manga-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/books/manga#mediafactory-manga-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/books/manga
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-books-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/books/books#mediafactory-books-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/books/books
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-youtarr-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/custom-downloader/youtarr#mediafactory-youtarr-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/custom-downloader/youtarr
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mediafactory-media-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/MediaFactory/media#mediafactory-media-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /MediaFactory/media
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: duplicati-backup-nfs
+spec:
+  accessModes: [ReadWriteMany]
+  capacity:
+    storage: 100Gi
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-csi
+  mountOptions: [nfsvers=4.1]
+  volumeMode: Filesystem
+  csi:
+    driver: nfs.csi.k8s.io
+    volumeHandle: 192.168.20.3#/Documents/backup-k3s#duplicati-backup-nfs
+    volumeAttributes:
+      server: 192.168.20.3
+      share: /Documents/backup-k3s

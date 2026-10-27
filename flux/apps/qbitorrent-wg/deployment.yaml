@@ -105,7 +105,7 @@ spec:
             secretName: qbittorrent-wg-wireguard-conf
         - name: qbittorrent-wg-data
           persistentVolumeClaim:
-            claimName: qbittorrent-wg-data
+            claimName: mediafactory-root-nfs
         - name: qbittorrent-wg-config
           persistentVolumeClaim:
             claimName: qbittorrent-wg-config-longhorn

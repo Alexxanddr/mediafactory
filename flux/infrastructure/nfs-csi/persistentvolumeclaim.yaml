@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-root-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-root-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-downloads-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-downloads-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-manga-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-manga-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-books-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-books-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-youtarr-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-youtarr-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mediafactory-media-nfs
+  namespace: multimedia-factory
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: mediafactory-media-nfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: duplicati-backup-nfs
+  namespace: system-addon
+spec:
+  accessModes: [ReadWriteMany]
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: nfs-csi
+  volumeMode: Filesystem
+  volumeName: duplicati-backup-nfs

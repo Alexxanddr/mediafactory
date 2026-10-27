@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: sonarr-data
           persistentVolumeClaim:
-            claimName: sonarr-data
+            claimName: mediafactory-root-nfs
         - name: sonarr-config
           persistentVolumeClaim:
             claimName: sonarr-config-longhorn
