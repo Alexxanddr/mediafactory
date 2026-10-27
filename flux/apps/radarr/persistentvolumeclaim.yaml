@@ -13,33 +13,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: radarr-data
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: radarr-config
-  namespace: multimedia-factory
-spec:
-  accessModes:
-  - ReadWriteMany
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: radarr-config
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: migration-radarr-config
-  namespace: multimedia-factory
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 3Gi
-  storageClassName: longhorn-static
-  volumeMode: Filesystem
-  volumeName: migration-radarr-config
