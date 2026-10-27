@@ -54,4 +54,4 @@ spec:
             claimName: radarr-data
         - name: radarr-config
           persistentVolumeClaim:
-            claimName: radarr-config
+            claimName: radarr-config-longhorn

@@ -13,3 +13,18 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: sonarr-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: sonarr-config-longhorn
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 3Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: sonarr-config

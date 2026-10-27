@@ -54,4 +54,4 @@ spec:
             claimName: sonarr-data
         - name: sonarr-config
           persistentVolumeClaim:
-            claimName: sonarr-config
+            claimName: sonarr-config-longhorn

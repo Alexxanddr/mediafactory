@@ -51,7 +51,7 @@ spec:
       volumes:
         - name: bazarr-config
           persistentVolumeClaim:
-            claimName: bazarr-config
+            claimName: bazarr-config-longhorn
         - name: bazarr-data
           persistentVolumeClaim:
             claimName: bazarr-data

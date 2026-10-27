@@ -108,4 +108,4 @@ spec:
             claimName: qbittorrent-wg-data
         - name: qbittorrent-wg-config
           persistentVolumeClaim:
-            claimName: qbittorrent-wg-config
+            claimName: qbittorrent-wg-config-longhorn
