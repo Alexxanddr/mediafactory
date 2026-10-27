@@ -24,6 +24,96 @@ spec:
   managed:
     roles:
       - name: sparkyfitness
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: sparkyfitness-db-credentials
+      - name: dispatcharr
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: dispatcharr-db-credentials
+      - name: speedtesttracker
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: speedtesttracker-db-credentials
+      - name: floppy
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: floppy-db-credentials
+      - name: tranga
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: tranga-db-credentials
+      - name: crowdsec
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: crowdsec-db-credentials
+      - name: open-wearables
+        login: false
+        superuser: false
+        createdb: true
+        passwordSecret:
+          name: open-wearables-db-credentials
+
+---
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres-longhorn
+  namespace: database
+spec:
+  instances: 1
+  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie
+  inheritedMetadata:
+    annotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "tcp"
+      uptime-kuma.io/url: "postgres-longhorn-rw.database.svc"
+      uptime-kuma.io/port: "5432"
+      uptime-kuma.io/name: "postgres database (longhorn migration)"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Storage & Databases"
+  bootstrap:
+    pg_basebackup:
+      source: postgres
+  replica:
+    enabled: true
+    source: postgres
+  externalClusters:
+    - name: postgres
+      connectionParameters:
+        host: postgres-rw.database.svc
+        user: streaming_replica
+        dbname: postgres
+        sslmode: verify-full
+      sslKey:
+        name: postgres-replication
+        key: tls.key
+      sslCert:
+        name: postgres-replication
+        key: tls.crt
+      sslRootCert:
+        name: postgres-ca
+        key: ca.crt
+  storage:
+    storageClass: longhorn-retain
+    size: 50Gi
+  managed:
+    roles:
+      - name: sparkyfitness
         login: true
         superuser: false
         createdb: true
@@ -65,38 +155,3 @@ spec:
         createdb: true
         passwordSecret:
           name: open-wearables-db-credentials
-
----
-apiVersion: postgresql.cnpg.io/v1
-kind: Cluster
-metadata:
-  name: postgres-longhorn
-  namespace: database
-spec:
-  instances: 1
-  imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie
-  bootstrap:
-    pg_basebackup:
-      source: postgres
-  replica:
-    enabled: true
-    source: postgres
-  externalClusters:
-    - name: postgres
-      connectionParameters:
-        host: postgres-rw.database.svc
-        user: streaming_replica
-        dbname: postgres
-        sslmode: verify-full
-      sslKey:
-        name: postgres-replication
-        key: tls.key
-      sslCert:
-        name: postgres-replication
-        key: tls.crt
-      sslRootCert:
-        name: postgres-ca
-        key: ca.crt
-  storage:
-    storageClass: longhorn-retain
-    size: 50Gi
