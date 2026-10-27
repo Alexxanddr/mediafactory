@@ -13,6 +13,54 @@ spec:
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Database
 metadata:
+  name: grimmory-longhorn
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb-longhorn
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: lingarr-longhorn
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb-longhorn
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: romm-longhorn
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb-longhorn
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
+  name: youtarr-longhorn
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb-longhorn
+  characterSet: utf8mb4
+  collate: utf8mb4_unicode_ci
+
+---
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Database
+metadata:
   name: lingarr
   namespace: database
 spec:
