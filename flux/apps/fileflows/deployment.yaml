@@ -55,10 +55,10 @@ spec:
       volumes:
         - name: fileflows-common
           persistentVolumeClaim:
-            claimName: fileflows-common
+            claimName: fileflows-common-longhorn
         - name: fileflows-data
           persistentVolumeClaim:
-            claimName: fileflows-data
+            claimName: fileflows-data-longhorn
         - name: fileflows-media
           persistentVolumeClaim:
             claimName: fileflows-media

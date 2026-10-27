@@ -51,4 +51,4 @@ spec:
       volumes:
         - name: speedtest-tracker
           persistentVolumeClaim:
-            claimName: speedtest-tracker
+            claimName: speedtest-tracker-longhorn

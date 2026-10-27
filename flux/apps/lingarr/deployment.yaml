@@ -49,7 +49,7 @@ spec:
       volumes:
         - name: config
           persistentVolumeClaim:
-            claimName: lingarr-config
+            claimName: lingarr-config-longhorn
         - name: media
           persistentVolumeClaim:
             claimName: lingarr-media

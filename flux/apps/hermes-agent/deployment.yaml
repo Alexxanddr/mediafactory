@@ -170,7 +170,7 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: hermes-agent-data
+            claimName: hermes-agent-data-longhorn
         - name: bootstrap-config
           configMap:
             name: hermes-agent-config
