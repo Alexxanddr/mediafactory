@@ -12,3 +12,33 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: crowdsec-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crowdsec-db-longhorn
+  namespace: system-addon
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: crowdsec-db-longhorn
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: crowdsec-config-longhorn
+  namespace: system-addon
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: crowdsec-config-longhorn

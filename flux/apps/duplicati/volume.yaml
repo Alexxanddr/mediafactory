@@ -18,3 +18,24 @@ spec:
   revisionCounterDisabled: true
   size: "4294967296"
   staleReplicaTimeout: 2880
+---
+apiVersion: longhorn.io/v1beta2
+kind: Volume
+metadata:
+  name: duplicati-data-longhorn
+  namespace: longhorn-system
+  labels:
+    backup-target: default
+    recurring-job-group.longhorn.io/default: enabled
+spec:
+  accessMode: rwo
+  backupBlockSize: "2097152"
+  backupCompressionMethod: lz4
+  backupTargetName: default
+  dataEngine: v1
+  dataLocality: disabled
+  frontend: blockdev
+  numberOfReplicas: 1
+  revisionCounterDisabled: true
+  size: "107374182400"
+  staleReplicaTimeout: 2880

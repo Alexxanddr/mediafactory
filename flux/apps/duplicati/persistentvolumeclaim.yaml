@@ -27,3 +27,18 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: duplicati-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: duplicati-data-longhorn
+  namespace: system-addon
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: duplicati-data-longhorn
