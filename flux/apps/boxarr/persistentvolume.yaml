@@ -19,4 +19,4 @@ spec:
       fsType: ext4
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
-    volumeHandle: pvc-ab0b5011-38d7-4a29-a5ba-ced759072f83
+    volumeHandle: boxarr-config

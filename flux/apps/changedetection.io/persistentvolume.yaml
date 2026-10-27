@@ -19,4 +19,4 @@ spec:
       fsType: ext4
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
-    volumeHandle: pvc-fa69984e-e523-4a93-9925-9c48c54a46b4
+    volumeHandle: changedetection-config
