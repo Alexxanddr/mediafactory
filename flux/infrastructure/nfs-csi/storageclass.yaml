@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-csi
+provisioner: nfs.csi.k8s.io
+parameters:
+  # Replace both placeholders with the existing server address and exported path.
+  server: nfs-server.invalid
+  share: /REPLACE_WITH_NFS_EXPORT
+  subDir: "${pvc.metadata.namespace}/${pvc.metadata.name}"
+reclaimPolicy: Retain
+volumeBindingMode: Immediate
+allowVolumeExpansion: true
