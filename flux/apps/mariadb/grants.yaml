@@ -1,62 +1,6 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Grant
 metadata:
-  name: youtarr
-  namespace: database
-spec:
-  mariaDbRef:
-    name: mariadb
-  username: youtarr
-  database: youtarr
-  privileges:
-    - ALL
-
----
-apiVersion: k8s.mariadb.com/v1alpha1
-kind: Grant
-metadata:
-  name: lingarr
-  namespace: database
-spec:
-  mariaDbRef:
-    name: mariadb
-  username: lingarr
-  database: lingarr
-  privileges:
-    - ALL
-
----
-apiVersion: k8s.mariadb.com/v1alpha1
-kind: Grant
-metadata:
-  name: romm
-  namespace: database
-spec:
-  mariaDbRef:
-    name: mariadb
-  username: romm
-  database: romm
-  privileges:
-    - ALL
-
----
-apiVersion: k8s.mariadb.com/v1alpha1
-kind: Grant
-metadata:
-  name: grimmory
-  namespace: database
-spec:
-  mariaDbRef:
-    name: mariadb
-  username: grimmory
-  database: grimmory
-  privileges:
-    - ALL
-
----
-apiVersion: k8s.mariadb.com/v1alpha1
-kind: Grant
-metadata:
   name: grimmory-longhorn
   namespace: database
 spec:
@@ -66,7 +10,6 @@ spec:
   database: grimmory
   privileges:
     - ALL
-
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Grant
@@ -80,7 +23,6 @@ spec:
   database: lingarr
   privileges:
     - ALL
-
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Grant
@@ -94,7 +36,6 @@ spec:
   database: romm
   privileges:
     - ALL
-
 ---
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Grant
