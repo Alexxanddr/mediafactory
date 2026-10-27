@@ -4,8 +4,8 @@ metadata:
   name: nfs-csi
 provisioner: nfs.csi.k8s.io
 parameters:
-  # Replace both placeholders with the existing server address and exported path.
-  server: nfs-server.invalid
+  # Replace the path placeholder with the existing exported path.
+  server: 192.168.20.3
   share: /REPLACE_WITH_NFS_EXPORT
   subDir: "${pvc.metadata.namespace}/${pvc.metadata.name}"
 reclaimPolicy: Retain
