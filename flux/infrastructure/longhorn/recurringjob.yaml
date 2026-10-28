@@ -1,0 +1,27 @@
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: backup-nfs-daily
+  namespace: longhorn-system
+spec:
+  cron: "0 2 * * *"
+  task: backup
+  groups:
+    - default
+  retentionPolicy: count-based
+  retain: 7
+  concurrency: 1
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: system-backup-daily
+  namespace: longhorn-system
+spec:
+  cron: "0 3 * * *"
+  task: system-backup
+  retentionPolicy: count-based
+  retain: 7
+  concurrency: 1
+  parameters:
+    volume-backup-policy: if-not-present
