@@ -617,6 +617,10 @@ data:
               type: traefik
               url: http://traefik-dashboard.system-addon:8080
               fields: ["routers", "services", "middleware"]
+        - Longhorn:
+            icon: longhorn.png
+            href: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            showStats: false
         - Uptime Kuma:
             icon: https://uptimekuma.org/wp-content/uploads/2025/01/Uptime-Kuma-Logo.png
             href: https://uptime-kuma.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
