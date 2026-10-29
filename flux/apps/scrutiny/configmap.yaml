@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: scrutiny-collector
+  namespace: scrutiny-collector
+data:
+  collector.yaml: |
+    allow_listed_devices:
+      - /dev/sda
+      - /dev/sdb
+      - /dev/sdc
+      - /dev/nvme0

@@ -446,7 +446,7 @@ data:
             siteMonitor: http://qbittorrent-wg.qbittorrent-wg.svc:8080
             showStats: false
             app: qbittorrent-wg
-            namespace: multimedia-factory
+            namespace: qbittorrent-wg
             podSelector: app in ( qbittorrent-wg )
             widget:
               type: qbittorrent
@@ -651,7 +651,7 @@ data:
             href: https://pihole.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/admin
             showStats: false
             app: pihole
-            namespace: extra-tools
+            namespace: pihole
             podSelector: app in ( pihole )
             widget:
               type: pihole
@@ -687,7 +687,7 @@ data:
             href: https://app.crowdsec.net/security-engines
             showStats: false
             app: crowdsec-service
-            namespace: system-addon
+            namespace: crowdsec-system
             podSelector: k8s-app in ( crowdsec )
             widget:
               type: crowdsec
@@ -708,7 +708,7 @@ data:
           siteMonitor: http://duplicati.duplicati.svc:8200
           showStats: false
           app: duplicati
-          namespace: system-addon
+          namespace: duplicati
           podSelector: app in ( duplicati )
       - Keel:
           icon: https://keel.sh/img/logo_small.png
@@ -817,7 +817,7 @@ data:
           siteMonitor: http://nutify.nutify.svc:5050
           showStats: false
           app: nutify
-          namespace: extra-tools
+          namespace: nutify
           podSelector: app in ( nutify )
       - It-Tools:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/it-tools-light.svg

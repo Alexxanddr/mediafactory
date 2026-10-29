@@ -111,6 +111,10 @@ spec:
             - mountPath: /run/udev
               name: udev
               readOnly: true
+            - mountPath: /opt/scrutiny/config/collector.yaml
+              name: collector-config
+              subPath: collector.yaml
+              readOnly: true
             - mountPath: /dev/sda
               name: dev-sda
             - mountPath: /dev/sdb
@@ -120,6 +124,9 @@ spec:
             - mountPath: /dev/nvme0n1
               name: dev-nvme0n1
       volumes:
+        - name: collector-config
+          configMap:
+            name: scrutiny-collector
         - name: udev
           hostPath:
             path: /run/udev
