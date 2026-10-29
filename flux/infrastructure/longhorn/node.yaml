@@ -1,0 +1,14 @@
+apiVersion: longhorn.io/v1beta2
+kind: Node
+metadata:
+  name: p53-talos
+  namespace: longhorn-system
+spec:
+  disks:
+    default-disk-1030700000000:
+      allowScheduling: true
+      diskType: filesystem
+      evictionRequested: false
+      path: /var/lib/longhorn/
+      storageReserved: 107374182400
+      tags: []
