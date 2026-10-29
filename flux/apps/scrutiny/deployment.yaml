@@ -67,7 +67,7 @@ metadata:
   labels:
     app: scrutiny-collector
   name: scrutiny-collector
-  namespace: extra-tools
+  namespace: scrutiny-collector
   annotations:
     keel.sh/policy: force
     keel.sh/trigger: poll
@@ -96,7 +96,7 @@ spec:
           image: ghcr.io/starosdev/scrutiny:latest-collector
           env:
             - name: COLLECTOR_API_ENDPOINT
-              value: http://scrutiny-web:8080
+              value: http://scrutiny-web.extra-tools.svc.cluster.local:8080
             - name: COLLECTOR_HOST_ID
               value: scrutiny
             - name: COLLECTOR_RUN_STARTUP

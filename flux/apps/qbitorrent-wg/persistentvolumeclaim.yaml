@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: qbittorrent-wg-config-longhorn
-  namespace: multimedia-factory
+  namespace: qbittorrent-wg
 spec:
   accessModes:
     - ReadWriteOnce
@@ -11,4 +11,4 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: qbittorrent-wg-config
+  volumeName: qbittorrent-wg-config-dedicated

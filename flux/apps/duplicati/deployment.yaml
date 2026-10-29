@@ -4,14 +4,14 @@ metadata:
   labels:
     app: duplicati
   name: duplicati
-  namespace: system-addon
+  namespace: duplicati
   annotations:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://duplicati.system-addon.svc:8200"
+    uptime-kuma.io/url: "http://duplicati.duplicati.svc:8200"
     uptime-kuma.io/name: "duplicati"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"

@@ -2,7 +2,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Rulesfile
 metadata:
   name: falco-rules
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:
@@ -18,7 +18,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Rulesfile
 metadata:
   name: falco-local-rules
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:

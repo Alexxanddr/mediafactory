@@ -443,14 +443,14 @@ data:
         - qbittorrent:
             icon: qbittorrent.svg
             href: https://qbittorrent-wg.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://qbittorrent-wg.multimedia-factory.svc:8080
+            siteMonitor: http://qbittorrent-wg.qbittorrent-wg.svc:8080
             showStats: false
             app: qbittorrent-wg
             namespace: multimedia-factory
             podSelector: app in ( qbittorrent-wg )
             widget:
               type: qbittorrent
-              url: http://qbittorrent-wg.multimedia-factory.svc:8080
+              url: http://qbittorrent-wg.qbittorrent-wg.svc:8080
               username: {{HOMEPAGE_VAR_QBITTORRENT_USER}}
               password: {{HOMEPAGE_VAR_QBITTORRENT_PASS}}
               enableLeechProgress: true
@@ -655,7 +655,7 @@ data:
             podSelector: app in ( pihole )
             widget:
               type: pihole
-              url: http://pihole-web.extra-tools.svc
+              url: http://pihole-web.pihole.svc
               version: 6
               key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
         - Autobrr:
@@ -691,7 +691,7 @@ data:
             podSelector: k8s-app in ( crowdsec )
             widget:
               type: crowdsec
-              url: http://crowdsec-service.system-addon.svc:8080
+              url: http://crowdsec-service.crowdsec-system.svc:8080
               username: {{HOMEPAGE_VAR_CROWDSEC_USER}}
               password: {{HOMEPAGE_VAR_CROWDSEC_PASS}}
               limit24h: true # optional, limits alerts to last 24h. Default: false
@@ -705,7 +705,7 @@ data:
       - Duplicati:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/duplicati.svg
           href: https://duplicati.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://duplicati.system-addon.svc:8200
+          siteMonitor: http://duplicati.duplicati.svc:8200
           showStats: false
           app: duplicati
           namespace: system-addon
@@ -814,7 +814,7 @@ data:
       - Nutify:
           icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/nutify.png
           href: https://nutify.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-          siteMonitor: http://nutify.extra-tools.svc:5050
+          siteMonitor: http://nutify.nutify.svc:5050
           showStats: false
           app: nutify
           namespace: extra-tools

@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: metallb
-  namespace: system-addon
+  namespace: metallb-system
 spec:
   interval: 15m
   timeout: 5m
@@ -26,7 +26,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "tcp"
-        uptime-kuma.io/url: "metallb-webhook-service.system-addon.svc"
+        uptime-kuma.io/url: "metallb-webhook-service.metallb-system.svc"
         uptime-kuma.io/port: "443"
         uptime-kuma.io/name: "metallb-controller"
         uptime-kuma.io/interval: "60"
@@ -38,7 +38,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "tcp"
-        uptime-kuma.io/url: "metallb-webhook-service.system-addon.svc"
+        uptime-kuma.io/url: "metallb-webhook-service.metallb-system.svc"
         uptime-kuma.io/port: "443"
         uptime-kuma.io/name: "metallb-frr"
         uptime-kuma.io/interval: "60"

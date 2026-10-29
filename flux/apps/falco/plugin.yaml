@@ -2,7 +2,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Plugin
 metadata:
   name: container
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:
@@ -17,7 +17,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Plugin
 metadata:
   name: k8smeta
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:

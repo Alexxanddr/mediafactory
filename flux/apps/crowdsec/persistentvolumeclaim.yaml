@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: crowdsec-db-longhorn
-  namespace: system-addon
+  namespace: crowdsec-system
 spec:
   accessModes:
     - ReadWriteOnce
@@ -11,13 +11,13 @@ spec:
       storage: 1Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: crowdsec-db-longhorn
+  volumeName: crowdsec-db-longhorn-dedicated
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: crowdsec-config-longhorn
-  namespace: system-addon
+  namespace: crowdsec-system
 spec:
   accessModes:
     - ReadWriteOnce
@@ -26,4 +26,4 @@ spec:
       storage: 100Mi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: crowdsec-config-longhorn
+  volumeName: crowdsec-config-longhorn-dedicated

@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
     name: qbittorrent-wg
-    namespace: multimedia-factory
+    namespace: qbittorrent-wg
 spec:
     parentRefs:
         - name: traefik-gateway
@@ -19,8 +19,7 @@ spec:
               port: 8080
 sops:
     age:
-        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxTUVXRGhnaFZHaVR6OWJy
             Q2lpYWErZTVPUy83dTV4NHlQVGx2UGV1U2lFClhGb3l1L09FdDQvZFJkNUxVdndX
@@ -28,7 +27,8 @@ sops:
             cjQ4SkRJVUVvTVZ3aStBaEJXVzVrcUEKNY8vz8LUH4uSo3xQGjzhQZK81eMBkwES
             bKB1aXM9Ry/ymyAgsuPmJziG2rGLZG4SxHh7omfa3XT2hfweiNm39A==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-24T14:49:25Z"
-    mac: ENC[AES256_GCM,data:NQl3myco4exdKGTIgWCWPHkUzjWx0VSnjZEoScFU17et4So/kctxh8o+sSogrt97fD5OQN6bhPvv4ciBQKRY/2Ct0TnKxs7ml/PsadKOQW8IRO3mQq8clYpf5oKiKIwyx8WR8INr5/1rghopHqx0K3aaSKDDQzIo4Z140zhUr08=,iv:bZnPvZuN5vH1ShTEDTjjvB/76Zouk9qqrnXMNFAurG8=,tag:JoPNoGE+fCKXpqb5pg04Yw==,type:str]
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: ^(hostnames)$
+    lastmodified: "2026-10-29T12:56:20Z"
+    mac: ENC[AES256_GCM,data:pbFzJn60nWYmqto6l8+mfpRfQYJRTUnIuWT6uUvEAoh21ktLEbSwP7PSOcxnBG+gBrUTUGDL0k23Waep6TsQWfCwTB/Px7yodRIlPwy+Hsaa9ava4YiiVQU2Fs9RjsiPSLNlvSi+t4Zl2Es1nCPZHnyPBemh55FJ7IkDVYQUhaE=,iv:n23qzyQdc5Hz6zg7MjLOyvdyC++dsSvDHCvALc8+cvM=,tag:WenB7w6XW2XxTTUQXBST8A==,type:str]
     version: 3.12.2

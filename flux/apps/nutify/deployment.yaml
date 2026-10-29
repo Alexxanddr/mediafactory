@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nutify
-  namespace: extra-tools
+  namespace: nutify
   annotations:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://nutify.extra-tools.svc:5050"
+    uptime-kuma.io/url: "http://nutify.nutify.svc:5050"
     uptime-kuma.io/name: "nutify"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"

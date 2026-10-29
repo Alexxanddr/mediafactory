@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: pihole
-  namespace: extra-tools
+  namespace: pihole
 spec:
   releaseName: pihole
   interval: 5m
@@ -20,7 +20,7 @@ spec:
       keel.sh/matchTag: "true"
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "http"
-      uptime-kuma.io/url: "http://pihole-web.extra-tools.svc:80"
+      uptime-kuma.io/url: "http://pihole-web.pihole.svc:80"
       uptime-kuma.io/name: "pihole"
       uptime-kuma.io/interval: "60"
       uptime-kuma.io/retries: "3"

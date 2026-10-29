@@ -2,14 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: qbittorrent-wg
-  namespace: multimedia-factory
+  namespace: qbittorrent-wg
   annotations:
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
     uptime-kuma.io/type: "http"
-    uptime-kuma.io/url: "http://qbittorrent-wg.multimedia-factory.svc:8080"
+    uptime-kuma.io/url: "http://qbittorrent-wg.qbittorrent-wg.svc:8080"
     uptime-kuma.io/name: "qbittorrent-wg"
     uptime-kuma.io/interval: "60"
     uptime-kuma.io/retries: "3"

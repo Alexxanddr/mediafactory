@@ -2,7 +2,7 @@ apiVersion: instance.falcosecurity.dev/v1alpha1
 kind: Falco
 metadata:
   name: falco
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:
@@ -12,7 +12,7 @@ spec:
       annotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://falco.system-addon.svc:8765/healthz"
+        uptime-kuma.io/url: "http://falco.falco-system.svc:8765/healthz"
         uptime-kuma.io/name: "falco"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"

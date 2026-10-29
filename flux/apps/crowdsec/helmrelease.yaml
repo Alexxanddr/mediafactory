@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: crowdsec
-  namespace: system-addon
+  namespace: crowdsec-system
   labels:
     app.kubernetes.io/name: crowdsec
     app.kubernetes.io/managed-by: flux
@@ -45,7 +45,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://crowdsec-service.system-addon.svc:8080"
+        uptime-kuma.io/url: "http://crowdsec-service.crowdsec-system.svc:8080"
         uptime-kuma.io/name: "crowdsec-lapi"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
@@ -110,7 +110,7 @@ spec:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "http"
-        uptime-kuma.io/url: "http://crowdsec-agent-service.system-addon.svc:6060"
+        uptime-kuma.io/url: "http://crowdsec-agent-service.crowdsec-system.svc:6060"
         uptime-kuma.io/name: "crowdsec-agent"
         uptime-kuma.io/interval: "60"
         uptime-kuma.io/retries: "3"
@@ -128,7 +128,7 @@ spec:
       # Acquisizione log dai pod del cluster
       # Aggiungi qui tutti i workload che vuoi monitorare
       acquisition:
-        - namespace: system-addon
+        - namespace: crowdsec-system
           podName: traefik-*
           program: traefik
 

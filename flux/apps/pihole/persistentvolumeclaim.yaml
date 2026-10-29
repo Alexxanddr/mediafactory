@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pihole-config-longhorn
-  namespace: extra-tools
+  namespace: pihole
 spec:
   accessModes:
     - ReadWriteOnce
@@ -11,4 +11,4 @@ spec:
       storage: 2Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: pihole-config
+  volumeName: pihole-config-pihole

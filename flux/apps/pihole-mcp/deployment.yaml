@@ -39,7 +39,7 @@ spec:
           args: ["-transport", "http", "-address", "0.0.0.0:8080"]
           env:
             - name: PIHOLE_URL
-              value: http://pihole-web.extra-tools.svc
+              value: http://pihole-web.pihole.svc
             - name: PIHOLE_PASSWORD
               valueFrom:
                 secretKeyRef:

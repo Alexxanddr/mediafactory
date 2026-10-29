@@ -2,7 +2,7 @@ apiVersion: artifact.falcosecurity.dev/v1alpha1
 kind: Config
 metadata:
   name: falco-output
-  namespace: system-addon
+  namespace: falco-system
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:

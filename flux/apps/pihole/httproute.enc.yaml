@@ -2,7 +2,7 @@ apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
 metadata:
     name: pihole
-    namespace: extra-tools
+    namespace: pihole
 spec:
     parentRefs:
         - name: traefik-gateway
@@ -19,8 +19,7 @@ spec:
               port: 80
 sops:
     age:
-        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
             YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4cTdZK0Zha3llTng1aXY3
             dzQzZEU1Y0xlRENuMDE3bjRwWTRtRkdYMWxzCnZncCswa01OR29tVm42cUlmZFht
@@ -28,7 +27,8 @@ sops:
             YTltTlRjODdrZ0RLdnJURGJ2WEdvVDQKsnmwc2QoQUfB0fTTEbpJUiWzvNqDWOli
             gif0zXuzRKGVCWKpA4s09PFSiVHNNlpWh5+Ad9QIga6Q3CUzlQja3w==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-16T10:50:21Z"
-    mac: ENC[AES256_GCM,data:tuW2wTEwSvaC1eRLtAKN7KFu1mdDkTLc5ONmDEimDODTEeS6QH0T9K4dhykvznPtExkTPhKAKoNkjl9PhxNPjRdXOkEf/i9wsC3UKegcQ3ef6ZzUsd5ASFTM0B6dpZpgIZZzbPEgEwfNj8YpxCFFlHAipWktxIXmOfcdQpcsmOk=,iv:c5juC1Db49Hc5c5+wSP3eHE7/ehaTGYkH/usK4H9UfY=,tag:lGqzEXkninSMYlwGqimHQw==,type:str]
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: hostnames|0
+    lastmodified: "2026-10-29T12:56:20Z"
+    mac: ENC[AES256_GCM,data:WbNPsqhZk3vkRQ1CUbZRh2lOpSbjYX13T5ml0YzTn+ZJ4ovvyFJC13XzcF10iAakmNofY2AyIt8UDoss7epvSi1pRgRwOptovh0FcwQkQL/QvWVKxSw3UxMzc7NDTQKJJrLxoZaBQAW5dEE9ASU6i9HpEjk+T6w09ezcKorGr28=,iv:PISnNzl/nLlPe7j5vvtBmX7WsVTDEsJJKrVLWed2F/0=,tag:Cc0ToNeHKlTj2NUOo0nAbQ==,type:str]
     version: 3.11.0

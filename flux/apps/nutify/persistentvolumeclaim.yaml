@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: nutify-data-longhorn
-  namespace: extra-tools
+  namespace: nutify
 spec:
   accessModes:
     - ReadWriteOnce
@@ -11,4 +11,4 @@ spec:
       storage: 3Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
-  volumeName: nutify-data
+  volumeName: nutify-data-nutify
