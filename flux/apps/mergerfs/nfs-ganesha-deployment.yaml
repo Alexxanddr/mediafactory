@@ -71,7 +71,9 @@ spec:
             capabilities:
               drop: [ALL]
               add:
+                - DAC_OVERRIDE
                 - DAC_READ_SEARCH
+                - FOWNER
                 - SETGID
                 - SETUID
             seccompProfile:
