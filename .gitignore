@@ -13,6 +13,7 @@ backend.tf
 !terraform/backend.tf
 /terraform/kubeconfig
 /terraform/talosconfig
+/terraform/terraform/
 /terraform/talos-thinkpad.raw.zst
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in

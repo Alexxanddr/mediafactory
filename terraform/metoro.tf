@@ -1,3 +1,5 @@
+/*
+# Monitoring/Metoro restano disabilitati durante l'installazione iniziale.
 resource "kubernetes_manifest" "monitoring" {
   manifest = yamldecode(<<YAML
 apiVersion: v1
@@ -7,8 +9,6 @@ metadata:
 YAML
   )
 }
-
-
 resource "helm_release" "metoro_exporter" {
   name       = "metoro-exporter"
   namespace  = "monitoring"
@@ -50,3 +50,4 @@ resource "helm_release" "metoro_exporter" {
     value = "metoro-disabled"
   }
 }
+*/

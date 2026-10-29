@@ -9,7 +9,9 @@ provider "helm" {
 provider "kubernetes" {
   config_path = "${path.module}/kubeconfig"
 }
+/* Cloudflare resta gestito dal workspace k3s-server.
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
+*/
 provider "talos" {}

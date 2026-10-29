@@ -16,7 +16,7 @@ variable "talos_version" {
 variable "install_disk" {
   description = "Disco del ThinkPad da inizializzare per Talos."
   type        = string
-  default     = "/dev/sda"
+  default     = "/dev/nvme0n1"
   nullable    = false
 
   validation {

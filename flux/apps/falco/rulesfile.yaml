@@ -29,11 +29,8 @@ spec:
           container.image.repository = "docker.io/dartsteven/nutify"
           and container.image.tag = "latest-amd64"
           and container.name = "nutify"
-          and k8s.ns.name = "extra-tools"
+          and k8s.ns.name = "nutify"
           and user.uid = 0
-          and proc.pname = "python3"
-          and proc.sname in ("start-services.", "upsmon")
-          and proc.cwd = "/app/nutify/"
           and proc.tty = 0
           and (
             (

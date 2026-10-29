@@ -2,7 +2,6 @@ locals {
   machine_patch = yamlencode({
     machine = merge(
       {
-        nodeLabels = length(var.media_disk_uuids) == 3 ? { "mediafactory/storage-ready" = "true" } : {}
         kernel = {
           modules = [
             { name = "i915" },
@@ -24,7 +23,7 @@ locals {
     }
     provisioning = {
       diskSelector = {
-        match = "disk.dev_path == \"${var.install_disk}\""
+        match = "disk.dev_path == \"${var.install_disk}\" && disk.serial == \"PHHP943100NH512C\""
       }
       wipe = true
     }
@@ -100,10 +99,27 @@ data "talos_machine_configuration" "controlplane" {
       yamlencode({
         apiVersion = "v1alpha1"
         kind       = "KubeNodeConfig"
+        labels     = length(var.media_disk_uuids) == 3 ? { "mediafactory/storage-ready" = "true" } : {}
         taints = {
           "node-role.kubernetes.io/control-plane" = {
             "$patch" = "delete"
           }
+        }
+      }),
+      yamlencode({
+        apiVersion = "v1alpha1"
+        kind       = "KubeletConfig"
+        extraArgs = {
+          "max-pods"               = "200"
+          "allowed-unsafe-sysctls" = "net.ipv4.conf.all.src_valid_mark,net.ipv6.conf.all.disable_ipv6"
+        }
+      }),
+      yamlencode({
+        apiVersion = "v1alpha1"
+        kind       = "ResolverConfig"
+        hostDNS = {
+          enabled              = false
+          forwardKubeDNSToHost = false
         }
       }),
     ],
@@ -120,6 +136,11 @@ data "talos_client_configuration" "this" {
 resource "terraform_data" "initial_config" {
   input = sha256(jsonencode(talos_machine_secrets.this.machine_secrets))
 
+  triggers_replace = sha256(jsonencode({
+    machine_secrets       = talos_machine_secrets.this.machine_secrets
+    machine_configuration = data.talos_machine_configuration.controlplane.machine_configuration
+  }))
+
   lifecycle {
     precondition {
       condition     = trimspace(var.install_disk) != ""
@@ -128,7 +149,7 @@ resource "terraform_data" "initial_config" {
   }
 
   provisioner "local-exec" {
-    command = "printf '%s' \"$TALOS_MACHINE_CONFIGURATION\" | talosctl apply-config --insecure --nodes ${var.master_server_list[0]} --file /dev/stdin"
+    command = "printf '%s' \"$TALOS_MACHINE_CONFIGURATION\" | talosctl --talosconfig ${path.module}/talosconfig --nodes ${var.master_server_list[0]} apply-config --file /dev/stdin"
 
     environment = {
       TALOS_MACHINE_CONFIGURATION = data.talos_machine_configuration.controlplane.machine_configuration

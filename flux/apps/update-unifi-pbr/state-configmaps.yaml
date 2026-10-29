@@ -3,6 +3,9 @@ kind: ConfigMap
 metadata:
   name: unifi-youtube-pbr-state-x
   namespace: system-addon
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    kustomize.toolkit.fluxcd.io/prune: Disabled
 data: {}
 ---
 apiVersion: v1
@@ -10,4 +13,7 @@ kind: ConfigMap
 metadata:
   name: unifi-youtube-pbr-state-y
   namespace: system-addon
+  annotations:
+    kustomize.toolkit.fluxcd.io/ssa: IfNotPresent
+    kustomize.toolkit.fluxcd.io/prune: Disabled
 data: {}
