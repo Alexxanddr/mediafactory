@@ -7,6 +7,6 @@ spec:
   selector:
     app: storage-recovery
   ports:
-    - name: health
-      port: 8080
-      targetPort: health
+  - name: health
+    port: 8080
+    targetPort: health

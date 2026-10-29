@@ -8,3 +8,21 @@ metadata:
     kustomize.toolkit.fluxcd.io/prune: Disabled
 data:
   state: '{}'
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: storage-recovery-config
+  namespace: storage-recovery
+data:
+  STORAGE_NAMESPACE: mergerfs
+  MERGERFS_SELECTOR: app=mergerfs
+  NFS_SELECTOR: app=nfs-ganesha
+  MERGERFS_CONTAINER: mergerfs
+  NFS_CONTAINER: nfs-ganesha
+  MERGERFS_PATH: /mnt/merged/MediaFactory
+  NFS_BACKING_PATH: /export/MediaFactory
+  MERGERFS_HOST_PATH: /run/mergerfs
+  NFS_SERVER: 192.168.20.3
+  NFS_EXPORT_PATH: /MediaFactory
+  EXTRA_PATHS: '["torrents"]'

@@ -23,25 +23,28 @@ spec:
       nodeSelector:
         kubernetes.io/os: linux
       tolerations:
-        - operator: Exists
+      - operator: Exists
       containers:
-        - name: probe
-          image: ghcr.io/alexxanddr/stale-file-controller-k8s:latest
-          imagePullPolicy: Always
-          command: [python, -c, 'import time; time.sleep(2147483647)']
-          securityContext:
-            privileged: true
-            runAsUser: 0
-            readOnlyRootFilesystem: true
-          resources:
-            requests:
-              cpu: 10m
-              memory: 32Mi
-            limits:
-              memory: 256Mi
-          volumeMounts:
-            - name: tmp
-              mountPath: /tmp
-      volumes:
+      - name: probe
+        image: ghcr.io/alexxanddr/stale-file-controller-k8s:latest
+        imagePullPolicy: Always
+        command:
+        - python
+        - -c
+        - import time; time.sleep(2147483647)
+        securityContext:
+          privileged: true
+          runAsUser: 0
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 32Mi
+          limits:
+            memory: 256Mi
+        volumeMounts:
         - name: tmp
-          emptyDir: {}
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}

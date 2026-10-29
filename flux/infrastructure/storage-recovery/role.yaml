@@ -4,14 +4,27 @@ metadata:
   name: storage-recovery
   namespace: storage-recovery
 rules:
-  - apiGroups: ['']
-    resources: [pods/exec]
-    verbs: [get]
-  - apiGroups: ['']
-    resources: [configmaps]
-    resourceNames: [storage-recovery]
-    verbs: [get, patch]
-  - apiGroups: [coordination.k8s.io]
-    resources: [leases]
-    resourceNames: [storage-recovery]
-    verbs: [get, update]
+- apiGroups:
+  - ''
+  resources:
+  - pods/exec
+  verbs:
+  - get
+- apiGroups:
+  - ''
+  resources:
+  - configmaps
+  resourceNames:
+  - storage-recovery
+  verbs:
+  - get
+  - patch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  resourceNames:
+  - storage-recovery
+  verbs:
+  - get
+  - update

@@ -7,6 +7,6 @@ roleRef:
   kind: ClusterRole
   name: storage-recovery
 subjects:
-  - kind: ServiceAccount
-    name: storage-recovery
-    namespace: storage-recovery
+- kind: ServiceAccount
+  name: storage-recovery
+  namespace: storage-recovery

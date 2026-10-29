@@ -3,9 +3,17 @@ kind: ClusterRole
 metadata:
   name: storage-recovery
 rules:
-  - apiGroups: ['']
-    resources: [pods]
-    verbs: [list, delete]
-  - apiGroups: ['']
-    resources: [persistentvolumeclaims, persistentvolumes]
-    verbs: [list]
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  verbs:
+  - list
+  - delete
+- apiGroups:
+  - ''
+  resources:
+  - persistentvolumeclaims
+  - persistentvolumes
+  verbs:
+  - list
