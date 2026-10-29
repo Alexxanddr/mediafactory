@@ -43,3 +43,14 @@ spec:
 
     metrics:
       enabled: true
+      serviceMonitor:
+        enabled: false
+
+    webhook:
+      cert:
+        serviceMonitor:
+          enabled: false
+
+    certController:
+      serviceMonitor:
+        enabled: false
