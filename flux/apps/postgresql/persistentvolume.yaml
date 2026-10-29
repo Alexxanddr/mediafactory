@@ -16,4 +16,4 @@ spec:
   csi:
     driver: driver.longhorn.io
     fsType: ext4
-    volumeHandle: pvc-6b0c3b6c-75ca-4b75-8b44-f1007db2323f
+    volumeHandle: pvc-dfce266f-8107-4c50-9149-780a8408ba04
