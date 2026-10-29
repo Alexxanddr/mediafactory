@@ -72,8 +72,6 @@ spec:
             - mountPath: /data
               name: duplicati-data
               readOnly: true
-            - mountPath: /backup-volume
-              name: duplicati-das-volume
 
       volumes:
         - name: duplicati-config
@@ -84,7 +82,3 @@ spec:
           hostPath:
             path: /var/lib/longhorn
             type: Directory
-
-        - name: duplicati-das-volume
-          persistentVolumeClaim:
-            claimName: duplicati-backup-nfs

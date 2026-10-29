@@ -13,17 +13,11 @@ then presents them at `/run/mergerfs`. `/run` is used because Talos keeps
 starting and exports these NFSv4 paths:
 
 - `/MediaFactory`
-- `/Documents`
-- `/TimeMachine`
-- `/Documents/backup-k3s`
 
-`/MediaFactory` allows the server/pod network `192.168.20.0/24`, plus
-`192.168.10.0/24` and `192.168.99.0/24`. `/Documents` and `/TimeMachine`
-allow only `192.168.10.0/24` and `192.168.99.0/24`. The dedicated
-`/Documents/backup-k3s` export is a legacy Duplicati mount slated for removal;
-it remains until its PV/PVC and application mount are retired. The existing
-PV uses reclaim policy `Retain`; deleting a claim does not ask Kubernetes to
-delete files from an export.
+`/MediaFactory` allows `192.168.20.0/24`, `192.168.10.0/24`, and
+`192.168.99.0/24`. No other directory is exported. The existing PVs use
+reclaim policy `Retain`; deleting a claim does not ask Kubernetes to delete
+files from an export.
 
 For a manual bootstrap on the ThinkPad, from the repository root:
 

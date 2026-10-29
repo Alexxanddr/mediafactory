@@ -115,25 +115,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: duplicati-backup-nfs-dedicated
-spec:
-  accessModes: [ReadWriteMany]
-  capacity:
-    storage: 100Gi
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-csi-mediafactory
-  mountOptions: [nfsvers=4.1]
-  volumeMode: Filesystem
-  csi:
-    driver: nfs.csi.k8s.io
-    volumeHandle: 192.168.20.3#/Documents/backup-k3s#duplicati-backup-nfs-dedicated
-    volumeAttributes:
-      server: 192.168.20.3
-      share: /Documents/backup-k3s
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
   name: mediafactory-root-nfs-fileflows-node
 spec:
   accessModes: [ReadWriteMany]

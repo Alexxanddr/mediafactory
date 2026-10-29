@@ -85,20 +85,6 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: duplicati-backup-nfs
-  namespace: duplicati
-spec:
-  accessModes: [ReadWriteMany]
-  resources:
-    requests:
-      storage: 100Gi
-  storageClassName: nfs-csi-mediafactory
-  volumeMode: Filesystem
-  volumeName: duplicati-backup-nfs-dedicated
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
   name: mediafactory-root-nfs
   namespace: fileflows-node
 spec:
