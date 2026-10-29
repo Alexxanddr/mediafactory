@@ -54,3 +54,8 @@ for password rotation, edit `secret.enc.yaml` with SOPS and restart through a
 pod-template change committed to Git.
 
 Upstream: <https://github.com/crazy-max/docker-samba>.
+
+Verified on 2026-10-29: Flux applied the configuration, Samba is Ready, the
+state PVC is Bound, and an authenticated SMB3 session successfully created,
+read, renamed and deleted a temporary file under `MediaFactory`. TCP 445 is
+reachable from the Mac. Finder end-to-end validation remains client-side.
