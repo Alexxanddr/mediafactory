@@ -28,6 +28,9 @@ spec:
   install:
     crds: Create
   values:
+    defaultBackupStore:
+      backupTarget: "nfs://192.168.10.3:/"
+      pollInterval: 300
     persistence:
       defaultClass: false
       defaultClassReplicaCount: 1
