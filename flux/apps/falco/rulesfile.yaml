@@ -59,7 +59,7 @@ spec:
           container.image.repository = "docker.io/pihole/pihole"
           and container.image.tag = "latest"
           and container.name = "pihole"
-          and k8s.ns.name = "extra-tools"
+          and k8s.ns.name = "pihole"
           and user.uid in (0, 1000)
           and proc.name = "pihole-FTL"
           and proc.exepath = "/usr/bin/pihole-FTL"
@@ -87,7 +87,7 @@ spec:
           container.image.repository = "docker.io/revenz/fileflows"
           and container.image.tag = "latest"
           and container.name = "fileflows-node"
-          and k8s.ns.name = "multimedia-factory"
+          and k8s.ns.name = "fileflows-node"
           and user.uid = 1000
           and proc.name = "ffmpeg"
           and proc.exe = "/usr/local/bin/ffmpeg"
@@ -101,8 +101,16 @@ spec:
         or (
           container.image.repository = "docker.io/revenz/fileflows"
           and container.image.tag = "latest"
-          and container.name in ("fileflows", "fileflows-node")
-          and k8s.ns.name = "multimedia-factory"
+          and (
+            (
+              container.name = "fileflows"
+              and k8s.ns.name = "multimedia-factory"
+            )
+            or (
+              container.name = "fileflows-node"
+              and k8s.ns.name = "fileflows-node"
+            )
+          )
           and user.uid = 0
           and proc.sname = "dpkg"
           and proc.cwd = "/"
