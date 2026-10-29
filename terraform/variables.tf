@@ -68,10 +68,6 @@ variable "sops_age_key" {
   sensitive = true
 }
 
-variable "metoro_bearer_token" {
-  type      = string
-  sensitive = true
-}
 variable "cloudflare_api_token" {
   type        = string
   description = "cloudflare api token"

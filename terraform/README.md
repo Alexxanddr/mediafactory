@@ -1,8 +1,9 @@
 # Talos on the ThinkPad P53
 
-This Terraform root bootstraps the single-node Talos cluster. Flux and
-monitoring resources are enabled only after bootstrap. Cloudflare resources
-have been transferred from `k3s-server` to the `mediafactory-talos` workspace.
+This Terraform root bootstraps the single-node Talos cluster. Flux manages
+infrastructure, application, and monitoring resources after bootstrap.
+Cloudflare resources have been transferred from `k3s-server` to the
+`mediafactory-talos` workspace.
 Terraform Cloud uses the separate `mediafactory-talos` workspace so the
 cluster migration does not share state with the former K3s setup.
 
@@ -55,11 +56,9 @@ from `k3s-server` without deleting the live Cloudflare objects. Do not apply
 the old `k3s-server` Terraform configuration: it still declares these
 resources and would try to create them again after the state transfer.
 
-The Flux `FluxInstance` is configured to sync `master`. After publishing the
-merge and applying this Terraform workspace, Flux will use the `master` branch.
-After the Longhorn backup restore is complete, switch `instance.sync.path`
-back to `flux/clusters/home/` to start reconciling the full infrastructure and
-apps tree.
+The Flux `FluxInstance` syncs `master` at `flux/clusters/home/`; the
+infrastructure and apps trees are active. Application and monitoring resources,
+including Metoro, are managed declaratively by Flux rather than Terraform.
 
 Talos installs onto the configured disk. The image includes
 NVIDIA Turing drivers/toolkit, Intel iGPU

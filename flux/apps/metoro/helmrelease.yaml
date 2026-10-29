@@ -1,0 +1,45 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metoro-exporter
+  namespace: monitoring
+spec:
+  releaseName: metoro-exporter
+  interval: 1h
+  chart:
+    spec:
+      chart: metoro-exporter
+      version: 0.478.0
+      sourceRef:
+        kind: HelmRepository
+        name: metoro
+        namespace: flux-system
+      interval: 12h
+  values:
+    exporter:
+      metadata:
+        podAnnotations:
+          uptime-kuma.io/enabled: "true"
+          uptime-kuma.io/type: "http"
+          uptime-kuma.io/url: "http://metoro-exporter.monitoring.svc:80/health"
+          uptime-kuma.io/name: "metoro-exporter"
+          uptime-kuma.io/interval: "60"
+          uptime-kuma.io/retries: "3"
+          uptime-kuma.io/notifications: "Monitoring Bot"
+          uptime-kuma.io/group: "Monitoring & Observability"
+      replicas: 1
+      autoscaling:
+        horizontalPodAutoscaler:
+          enabled: false
+      secret:
+        externalSecret:
+          enabled: true
+          name: metoro-exporter-secret
+          secretKey: AUTH_TOKEN
+    redis:
+      master:
+        persistence:
+          storageClass: longhorn-static
+          size: 1Gi
+    serviceMonitorScraping:
+      enabled: false

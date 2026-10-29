@@ -42,6 +42,14 @@ metadata:
 apiVersion: v1
 kind: Namespace
 metadata:
+  name: monitoring
+  labels:
+    pod-security.kubernetes.io/enforce: privileged
+    pod-security.kubernetes.io/enforce-version: latest
+---
+apiVersion: v1
+kind: Namespace
+metadata:
   name: nvidia-operator
   labels:
     pod-security.kubernetes.io/enforce: privileged
