@@ -48,6 +48,9 @@ spec:
               name: radarr-config
             - mountPath: /data
               name: radarr-data
+            - mountPath: /export/MediaFactory/torrents
+              name: radarr-data
+              subPath: torrents
       volumes:
         - name: radarr-data
           persistentVolumeClaim:

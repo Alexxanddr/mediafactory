@@ -18,7 +18,7 @@ data:
 
     providers:
       longhorn:
-        url: http://longhorn-frontend.longhorn-system.svc.cluster.local:80
+        url: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
     quicklaunch:
       searchDescriptions: true
       hideInternetSearch: true
@@ -843,8 +843,8 @@ data:
     - longhorn:
         expanded: true
         total: true
-        labels: false
-        nodes: false
+        labels: true
+        nodes: true
     - openmeteo:
         label: Rome
         latitude: 41.86094060191091

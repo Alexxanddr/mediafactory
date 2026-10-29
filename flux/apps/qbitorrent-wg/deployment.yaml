@@ -76,6 +76,9 @@ spec:
               name: qbittorrent-wg-config
             - mountPath: /data
               name: qbittorrent-wg-data
+            - mountPath: /export/MediaFactory/torrents
+              name: qbittorrent-wg-data
+              subPath: torrents
             - name: wireguard-config
               mountPath: /config/wireguard
               readOnly: true

@@ -48,6 +48,9 @@ spec:
               name: sonarr-config
             - mountPath: /data
               name: sonarr-data
+            - mountPath: /export/MediaFactory/torrents
+              name: sonarr-data
+              subPath: torrents
       volumes:
         - name: sonarr-data
           persistentVolumeClaim:
