@@ -10,6 +10,7 @@ rules:
   - pods/exec
   verbs:
   - get
+  - create
 - apiGroups:
   - ''
   resources:
