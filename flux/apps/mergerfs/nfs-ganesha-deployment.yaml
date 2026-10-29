@@ -15,7 +15,7 @@ spec:
       labels:
         app: nfs-ganesha
       annotations:
-        config-revision: "2"
+        config-revision: "3"
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "tcp"
         uptime-kuma.io/hostname: "nfs-ganesha.mergerfs.svc.cluster.local"

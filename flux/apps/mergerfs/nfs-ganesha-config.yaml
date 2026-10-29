@@ -36,7 +36,51 @@ data:
       }
 
       CLIENT {
-        Clients = 192.168.20.0/24, 192.168.30.0/24, 192.168.10.0/24;
+        Clients = 192.168.20.0/24, 192.168.10.0/24, 192.168.99.0/24;
+        Access_Type = RW;
+      }
+    }
+
+    EXPORT {
+      Export_Id = 3;
+      Path = "/export/Documents";
+      Pseudo = "/Documents";
+      Protocols = 4;
+      Transports = TCP;
+      Access_Type = RW;
+      Squash = Root_Squash;
+      Anonymous_Uid = 65534;
+      Anonymous_Gid = 65534;
+      SecType = sys;
+
+      FSAL {
+        Name = VFS;
+      }
+
+      CLIENT {
+        Clients = 192.168.10.0/24, 192.168.99.0/24;
+        Access_Type = RW;
+      }
+    }
+
+    EXPORT {
+      Export_Id = 4;
+      Path = "/export/TimeMachine";
+      Pseudo = "/TimeMachine";
+      Protocols = 4;
+      Transports = TCP;
+      Access_Type = RW;
+      Squash = Root_Squash;
+      Anonymous_Uid = 65534;
+      Anonymous_Gid = 65534;
+      SecType = sys;
+
+      FSAL {
+        Name = VFS;
+      }
+
+      CLIENT {
+        Clients = 192.168.10.0/24, 192.168.99.0/24;
         Access_Type = RW;
       }
     }

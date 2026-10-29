@@ -10,31 +10,38 @@ filesystems and do not partition or format them.
 The `mergerfs` Deployment waits until all three host paths are mounted as XFS,
 then presents them at `/run/mergerfs`. `/run` is used because Talos keeps
 `/var/mnt` read-only to Pods. NFS-Ganesha waits for the FUSE mount before
-starting and exports only:
+starting and exports these NFSv4 paths:
 
 - `/MediaFactory`
+- `/Documents`
+- `/TimeMachine`
 - `/Documents/backup-k3s`
 
-Clients are limited to `192.168.20.0/24`, `192.168.30.0/24`, and
-`192.168.10.0/24`. The existing PVs use reclaim policy `Retain`; deleting a
-claim does not ask Kubernetes to delete files from an export.
+`/MediaFactory` allows the server/pod network `192.168.20.0/24`, plus
+`192.168.10.0/24` and `192.168.99.0/24`. `/Documents` and `/TimeMachine`
+allow only `192.168.10.0/24` and `192.168.99.0/24`. The dedicated
+`/Documents/backup-k3s` export is a legacy Duplicati mount slated for removal;
+it remains until its PV/PVC and application mount are retired. The existing
+PV uses reclaim policy `Retain`; deleting a claim does not ask Kubernetes to
+delete files from an export.
 
 For a manual bootstrap on the ThinkPad, from the repository root:
 
 ```sh
+export KUBECONFIG=~/.kube/k3s
 talosctl --talosconfig terraform/talosconfig patch machineconfig \
   --nodes 192.168.20.3 --patch @terraform/media-volumes.yaml
-kubectl --kubeconfig /Users/asottile/.kube/talos label node p53-talos \
+kubectl label node p53-talos \
   mediafactory/storage-ready=true --overwrite
-kubectl --kubeconfig /Users/asottile/.kube/talos apply \
+kubectl apply \
   -f flux/apps/mergerfs/namespace.yaml \
   -f flux/apps/mergerfs/deployment.yaml
-kubectl --kubeconfig /Users/asottile/.kube/talos -n mergerfs \
+kubectl -n mergerfs \
   rollout status deployment/mergerfs
-kubectl --kubeconfig /Users/asottile/.kube/talos apply \
+kubectl apply \
   -f flux/apps/mergerfs/nfs-ganesha-config.yaml \
   -f flux/apps/mergerfs/nfs-ganesha-deployment.yaml
-kubectl --kubeconfig /Users/asottile/.kube/talos apply \
+kubectl apply \
   -f flux/infrastructure/nfs-csi/helmrepository.yaml \
   -f flux/infrastructure/nfs-csi/storageclass.yaml \
   -f flux/infrastructure/nfs-csi/persistentvolume.yaml \
