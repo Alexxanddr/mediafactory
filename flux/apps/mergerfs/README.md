@@ -66,3 +66,25 @@ recovery remains incomplete until replacement mounts pass checks. See the
 software README for exact privileges, timeouts and read-only verification
 commands. Deployment through Flux requires the published GHCR image to be
 publicly pullable. No manual apply is required.
+
+### Live validation — 2026-10-29
+
+Activated via Flux at revision `024641e` after explicit approval of the storage
+interruption. The initial recovery completed in one cycle: MergerFS recreated
+and its FUSE path read, Ganesha recreated only after that gate, real NFS export
+read, then 15 client Pods normally recreated and all replacements Ready.
+Client-namespace filesystem checks passed for NFS and direct MergerFS mounts,
+including `/export/MediaFactory/torrents` in Radarr, Sonarr and qBittorrent, and
+the FUSE mounts of Plex and Samba. Final checkpoint: `phase=complete`,
+`active=false`, `failures=0`.
+
+The API server's WebSocket upgrade authorization required `create` as well as
+`get` on `pods/exec`. This was corrected only in the dedicated namespaced Role,
+through GitOps. Recovery resumed from its checkpoint without repeating the
+MergerFS restart or duplicating client restarts. The reusable upstream manifests
+include the same fix in release v0.1.1 and an authorization regression test
+(35 tests plus the Linux FUSE/shell-less smoke test passed).
+
+No forced deletion, direct apply or PVC/PV/data mutation was used. Blocked-kernel
+I/O and simultaneous externally induced failures were not injected on the live
+cluster; those behavior limits and automated tests are documented upstream.
