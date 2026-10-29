@@ -16,8 +16,9 @@ data:
     language: en
     target: _blank
 
-    # providers:
-    #   openweathermap: openweathermapapikey
+    providers:
+      longhorn:
+        url: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
     quicklaunch:
       searchDescriptions: true
       hideInternetSearch: true
@@ -839,6 +840,11 @@ data:
     - greeting:
         text_size: xl
         text: Alexxanddr's HomeLab
+    - longhorn:
+        expanded: true
+        total: true
+        labels: true
+        nodes: true
     - openmeteo:
         label: Rome
         latitude: 41.86094060191091
