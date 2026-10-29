@@ -75,6 +75,5 @@ spec:
       mountPath: /mnt/md0/MediaFactory/media
     extraVolumes:
     - name: plex-media
-      hostPath:
-        path: /run/mergerfs/MediaFactory/media
-        type: Directory
+      persistentVolumeClaim:
+        claimName: plex-media-local

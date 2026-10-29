@@ -12,3 +12,18 @@ spec:
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: plex-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: plex-media-local
+  namespace: multimedia-factory
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 11Ti
+  storageClassName: local-media
+  volumeMode: Filesystem
+  volumeName: plex-media-local

@@ -20,3 +20,26 @@ spec:
       numberOfReplicas: "1"
       staleReplicaTimeout: "2880"
     volumeHandle: plex-config
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: plex-media-local
+spec:
+  capacity:
+    storage: 11Ti
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-media
+  volumeMode: Filesystem
+  local:
+    path: /run/mergerfs/MediaFactory/media
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - p53-talos
