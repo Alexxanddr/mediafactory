@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:
-  version: 0.45.0
+  version: 0.45.1-rc1
   podTemplateSpec:
     metadata:
       annotations:
@@ -21,6 +21,6 @@ spec:
     spec:
       containers:
         - name: falco
-          image: docker.io/falcosecurity/falco:0.45.0
+          image: docker.io/falcosecurity/falco:0.45.1-rc1
           imagePullPolicy: Always
           tty: true
