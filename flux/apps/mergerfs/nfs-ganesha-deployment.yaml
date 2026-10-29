@@ -16,6 +16,15 @@ spec:
         app: nfs-ganesha
       annotations:
         config-revision: "2"
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "tcp"
+        uptime-kuma.io/hostname: "nfs-ganesha.mergerfs.svc.cluster.local"
+        uptime-kuma.io/port: "2049"
+        uptime-kuma.io/name: "nfs-server"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Storage & Databases"
     spec:
       nodeSelector:
         kubernetes.io/hostname: p53-talos

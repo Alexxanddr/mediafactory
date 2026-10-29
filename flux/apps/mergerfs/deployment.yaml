@@ -14,6 +14,15 @@ spec:
     metadata:
       labels:
         app: mergerfs
+      annotations:
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "ping"
+        uptime-kuma.io/hostname: "mergerfs.mergerfs.svc.cluster.local"
+        uptime-kuma.io/name: "mergerfs"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Storage & Databases"
     spec:
       nodeSelector:
         kubernetes.io/hostname: p53-talos

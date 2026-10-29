@@ -15,6 +15,16 @@ spec:
         namespace: flux-system
       interval: 1h
   values:
+    podAnnotations:
+      uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/type: "tcp"
+      uptime-kuma.io/hostname: "metrics-server.system-addon.svc.cluster.local"
+      uptime-kuma.io/port: "443"
+      uptime-kuma.io/name: "metrics-server"
+      uptime-kuma.io/interval: "60"
+      uptime-kuma.io/retries: "3"
+      uptime-kuma.io/notifications: "Monitoring Bot"
+      uptime-kuma.io/group: "Monitoring & Observability"
     # Talos kubelets commonly use serving certificates that aren't trusted by
     # metrics-server; keep API aggregation TLS verification enabled separately.
     args:
