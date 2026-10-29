@@ -63,6 +63,8 @@ spec:
       limits:
         nvidia.com/gpu: "1"
     runtimeClassName: nvidia
+    nodeSelector:
+      kubernetes.io/hostname: p53-talos
     service:
       type: NodePort
       port: 32400
@@ -70,8 +72,9 @@ spec:
       externalTrafficPolicy: Local
     extraVolumeMounts:
     - name: plex-media
-      mountPath: /mnt/md0/MediaFactory
+      mountPath: /mnt/md0/MediaFactory/media
     extraVolumes:
     - name: plex-media
-      persistentVolumeClaim:
-        claimName: mediafactory-root-nfs
+      hostPath:
+        path: /run/mergerfs/MediaFactory/media
+        type: Directory

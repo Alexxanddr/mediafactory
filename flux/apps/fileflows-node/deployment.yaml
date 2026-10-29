@@ -21,6 +21,8 @@ spec:
         app: fileflows-node
     spec:
       runtimeClassName: nvidia
+      nodeSelector:
+        kubernetes.io/hostname: p53-talos
       containers:
         - name: fileflows-node
           image: revenz/fileflows
