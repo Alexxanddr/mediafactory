@@ -1,0 +1,28 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: Backup
+metadata:
+  name: migration-longhorn
+  namespace: database
+spec:
+  mariaDbRef:
+    name: mariadb
+  databases:
+    - grimmory
+    - lingarr
+    - romm
+    - youtarr
+  compression: gzip
+  maxRetention: 720h
+  args:
+    - --single-transaction
+    - --events
+    - --routines
+    - --triggers
+  storage:
+    persistentVolumeClaim:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: longhorn-retain

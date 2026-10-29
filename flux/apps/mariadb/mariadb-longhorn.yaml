@@ -30,3 +30,6 @@ spec:
     innodb_file_per_table=1
   updateStrategy:
     type: ReplicasFirstPrimaryLast
+  bootstrapFrom:
+    backupRef:
+      name: migration-longhorn
