@@ -9,13 +9,13 @@ spec:
         - allowedRoutes:
             namespaces:
                 from: Same
-          name: http
+          name: web
           port: 8000
           protocol: HTTP
         - allowedRoutes:
             namespaces:
                 from: All
-          hostname: ENC[AES256_GCM,data:om/u9Pu9O70GvcJ2twPnBq2UUc7dOjg=,iv:fLq+AXR9mwXjb9ULOTErm3wxilXmFrLw3D3ccSPN8Wo=,tag:VJ01ogtNVp/UErQNbExfXg==,type:str]
+          hostname: ENC[AES256_GCM,data:WaHwPCIm+kSKaGlrbAl6ftSfzpKAKFc=,iv:ftAzxcLRUOMURNSSGQzlp2LmQvGj7Ai4qLqN3chqdOA=,tag:PjiAAR25mnZtjoHlPJcK5w==,type:str]
           name: https
           port: 8443
           protocol: HTTPS
@@ -27,16 +27,16 @@ spec:
             mode: Terminate
 sops:
     age:
-        - recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
-          enc: |
+        - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAxcnJFL1ZXMHhEbVliQnNu
-            dThhY0o2cGUwUU1pdkRlLzQ2ZlNDbFpYYmtvCjk0a3hpODRYK3hDdnRlQ1NiWkNM
-            L3R1S1FZWVJURmdyc0lJN2xGaVpLSE0KLS0tIDJ0MEdkU2RGQ1FIblJNWlFaV1RU
-            alJZNFVNZEh5YW8vVzFsLzBYaDZUZUUKlJMpIEwPk3LUHBcNQwMEwPm+YfVumYFn
-            8R72bDT+cO5DVE2sDyqJ5Ly2/57wyWEyOBqbUr4EJ4d3Et79J2+WcA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBhYnA5VE1GUW9kMU5BR2tz
+            Q2VFRzd6Z05lY0VRSlF4RzcwUFJyNXd5d0RnCkh0aFJYRUlWNmdTam1lcUVSQ1Az
+            d040MkVlNHZOZTZzeWhNbHBPbUprT1EKLS0tIHpKRzI2ekxXc2pIQWNQZGp6TXcy
+            YzhlOVQzU05TRlRsZ21DeENTUm5yWEkK7HT/2vHVrWL4NObG+xqwI8yb2YDzU1Ca
+            r6suv80w1KqiS0+xWd+zViROFwkbop3oVqINMSHyTOEG8rwtLiMczA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-01-02T10:42:40Z"
-    mac: ENC[AES256_GCM,data:WKtGlL7+soRRsZApeZknYnsNVF1winfSd1/DgwUFmGYGHqPbKNtIUgOxNhK77rhCmpZh9msxdAl6qPp0WEdkwZyS0B+Z4wKqBfGa9WhXZDIyWY2yH3+dKfbfqEEfFkiBf4+PRB5XPJvaKwR0k/YjrI4oR9SVdqNvGypZ2PsRNGY=,iv:8mkzrZX38g3Ytx8AIJRQS5c8goHkvn5bSvyKV//DWlg=,tag:ddToSEKfX04tHQFxQh0FIA==,type:str]
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: ^(hostname)$
-    version: 3.11.0
+    lastmodified: "2026-10-29T09:56:09Z"
+    mac: ENC[AES256_GCM,data:ZoOGZ4ySwFjUywqUn6z6W9HWdvGXmI8o2S17wuWmKGKrz/xJ+kMV7SviAluQ5itQoKH5ccSqHbtgQ1frH0SvD35nGxiHlj/ZHigqXeZba+EuYvFYCVZf2yMgCQYM6krtzE4kU0f+rrPDKNBjArpcbVSxEudfipRC5V/UTMU6sHw=,iv:l4DN0rZt8I6tY6xJhX8zmrz+rapf59NlO+GIxUi9BlM=,tag:RIpYrPzdww/i/hEtfNYE8g==,type:str]
+    version: 3.13.3
