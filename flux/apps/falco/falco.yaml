@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/managed-by: falco-operator
 spec:
-  version: latest
+  version: 0.45.0
   podTemplateSpec:
     metadata:
       annotations:
