@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: samba-config
+  namespace: mergerfs
+data:
+  config.yml: |
+    auth:
+      - user: mediafactory
+        group: mediafactory
+        uid: 1000
+        gid: 1000
+        password_file: /run/secrets/samba/password
+    global:
+      - "server min protocol = SMB2_02"
+      - "server max protocol = SMB3"
+      - "map to guest = Never"
+      - "fruit:time machine = no"
+      - "wide links = no"
+    share:
+      - name: md0
+        comment: MergerFS pool
+        path: /mnt/md0
+        browsable: "yes"
+        readonly: "no"
+        guestok: "no"
+        validusers: mediafactory
+        writelist: mediafactory
+        options:
+          - "vfs objects = fruit streams_xattr"
+          - "fruit:metadata = stream"
+          - "fruit:resource = file"
+          - "fruit:time machine = no"
+          - "create mask = 0664"
+          - "directory mask = 0775"

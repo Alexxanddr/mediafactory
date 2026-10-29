@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: samba
+  namespace: mergerfs
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: samba
+  template:
+    metadata:
+      labels:
+        app: samba
+      annotations:
+        config-revision: "1"
+        uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/type: "tcp"
+        uptime-kuma.io/hostname: "samba.mergerfs.svc.cluster.local"
+        uptime-kuma.io/port: "445"
+        uptime-kuma.io/name: "samba"
+        uptime-kuma.io/interval: "60"
+        uptime-kuma.io/retries: "3"
+        uptime-kuma.io/notifications: "Monitoring Bot"
+        uptime-kuma.io/group: "Storage & Databases"
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        kubernetes.io/hostname: p53-talos
+        mediafactory/storage-ready: "true"
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: wait-for-mergerfs
+          image: busybox:1.37
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              until awk '$2 == "/mnt/md0" && $3 ~ /^fuse/ { found = 1 } END { exit !found }' /proc/mounts; do
+                echo 'waiting for mergerfs mount at /mnt/md0'
+                sleep 2
+              done
+          volumeMounts:
+            - name: merged
+              mountPath: /mnt/md0
+              mountPropagation: HostToContainer
+      containers:
+        - name: samba
+          image: ghcr.io/crazy-max/samba:latest
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: Europe/Rome
+            - name: CONFIG_FILE
+              value: /etc/samba-config/config.yml
+            - name: SAMBA_HOSTS_ALLOW
+              value: "127.0.0.0/8 10.244.0.0/16 192.168.20.0/24 192.168.10.0/24 192.168.99.0/24"
+            - name: SAMBA_WIDE_LINKS
+              value: "no"
+            - name: AVAHI_ENABLE
+              value: "0"
+            - name: WSDD2_ENABLE
+              value: "0"
+          ports:
+            - name: smb
+              containerPort: 445
+              protocol: TCP
+          readinessProbe:
+            tcpSocket:
+              port: smb
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: smb
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              memory: 1Gi
+          volumeMounts:
+            - name: config
+              mountPath: /etc/samba-config
+              readOnly: true
+            - name: credentials
+              mountPath: /run/secrets/samba
+              readOnly: true
+            - name: state
+              mountPath: /data
+            - name: merged
+              mountPath: /mnt/md0
+              mountPropagation: HostToContainer
+      volumes:
+        - name: config
+          configMap:
+            name: samba-config
+        - name: credentials
+          secret:
+            secretName: samba-auth
+            defaultMode: 0400
+        - name: state
+          persistentVolumeClaim:
+            claimName: samba-state-longhorn
+        - name: merged
+          hostPath:
+            path: /run/mergerfs
+            type: Directory

@@ -19,10 +19,14 @@ starting and exports these NFSv4 paths:
 reclaim policy `Retain`; deleting a claim does not ask Kubernetes to delete
 files from an export.
 
+[Samba](../samba/README.md) additionally exposes the entire pool as `md0`
+over authenticated SMB2/SMB3 on the node TCP port 445. The Talos pool path
+`/run/mergerfs` corresponds to the former `/mnt/md0`.
+
 For a manual bootstrap on the ThinkPad, from the repository root:
 
 ```sh
-export KUBECONFIG=~/.kube/k3s
+export KUBECONFIG=~/.kube/talos
 talosctl --talosconfig terraform/talosconfig patch machineconfig \
   --nodes 192.168.20.3 --patch @terraform/media-volumes.yaml
 kubectl label node p53-talos \
