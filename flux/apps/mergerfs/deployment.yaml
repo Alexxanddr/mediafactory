@@ -27,6 +27,15 @@ spec:
         - name: mergerfs
           image: ghcr.io/trapexit/mergerfs:2.42.0
           imagePullPolicy: IfNotPresent
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -ec
+                - awk '$2 == "/mnt/merged" && $3 ~ /^fuse/ { found = 1 } END { exit !found }' /proc/mounts
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
           command: ["/bin/sh", "-ec"]
           args:
             - |
