@@ -10,5 +10,5 @@ spec:
       diskType: filesystem
       evictionRequested: false
       path: /var/lib/longhorn/
-      storageReserved: 107374182400
+      storageReserved: 53687091200
       tags: []
