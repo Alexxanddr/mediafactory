@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nfs-ganesha-config
+  namespace: mergerfs
+data:
+  ganesha.conf: |
+    NFS_CORE_PARAM {
+      Protocols = 4;
+      NFS_Port = 2049;
+      Allow_Set_Io_Flusher_Fail = true;
+      Enable_UDP = false;
+      Enable_NLM = false;
+      Enable_RQUOTA = false;
+    }
+
+    NFSV4 {
+      Allow_Numeric_Owners = true;
+      Only_Numeric_Owners = true;
+    }
+
+    EXPORT {
+      Export_Id = 1;
+      Path = "/export/MediaFactory";
+      Pseudo = "/MediaFactory";
+      Protocols = 4;
+      Transports = TCP;
+      Access_Type = RW;
+      Squash = Root_Squash;
+      Anonymous_Uid = 65534;
+      Anonymous_Gid = 65534;
+      SecType = sys;
+
+      FSAL {
+        Name = VFS;
+      }
+
+      CLIENT {
+        Clients = 192.168.20.0/24, 192.168.30.0/24, 192.168.10.0/24;
+        Access_Type = RW;
+      }
+    }
+
+    EXPORT {
+      Export_Id = 2;
+      Path = "/export/Documents/backup-k3s";
+      Pseudo = "/Documents/backup-k3s";
+      Protocols = 4;
+      Transports = TCP;
+      Access_Type = RW;
+      Squash = Root_Squash;
+      Anonymous_Uid = 65534;
+      Anonymous_Gid = 65534;
+      SecType = sys;
+
+      FSAL {
+        Name = VFS;
+      }
+
+      CLIENT {
+        Clients = 192.168.20.0/24, 192.168.30.0/24, 192.168.10.0/24;
+        Access_Type = RW;
+      }
+    }

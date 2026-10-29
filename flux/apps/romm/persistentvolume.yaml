@@ -8,7 +8,7 @@ spec:
   capacity:
     storage: 100Gi
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   mountOptions:
     - nfsvers=4.1
   volumeMode: Filesystem

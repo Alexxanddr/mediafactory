@@ -20,6 +20,12 @@ spec:
     driver:
       enabled: false
 
+    hostPaths:
+      driverInstallDir: /usr/local
+
+    cdi:
+      enabled: true
+
     operator:
       annotations:
         uptime-kuma.io/enabled: "true"
@@ -33,23 +39,14 @@ spec:
         uptime-kuma.io/group: "Monitoring & Observability"
 
     toolkit:
-      enabled: true
-
-      env:
-        - name: CONTAINERD_CONFIG
-          value: /var/lib/rancher/k3s/agent/etc/containerd/config.toml
-
-        - name: CONTAINERD_SOCKET
-          value: /run/k3s/containerd/containerd.sock
-
-        - name: CONTAINERD_RUNTIME_CLASS
-          value: nvidia
-
-        - name: CONTAINERD_SET_AS_DEFAULT
-          value: "true"
+      enabled: false
 
     devicePlugin:
       enabled: true
+
+      env:
+        - name: NVIDIA_CDI_HOOK_PATH
+          value: /usr/local/bin/nvidia-cdi-hook
 
       config:
         name: time-slicing-config-all

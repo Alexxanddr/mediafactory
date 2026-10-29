@@ -8,7 +8,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-root-nfs
 ---
@@ -22,7 +22,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-downloads-nfs
 ---
@@ -36,7 +36,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-manga-nfs
 ---
@@ -50,7 +50,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-books-nfs
 ---
@@ -64,7 +64,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-youtarr-nfs
 ---
@@ -78,7 +78,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: mediafactory-media-nfs
 ---
@@ -92,6 +92,6 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: nfs-csi
+  storageClassName: nfs-csi-mediafactory
   volumeMode: Filesystem
   volumeName: duplicati-backup-nfs

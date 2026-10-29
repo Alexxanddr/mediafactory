@@ -10,19 +10,15 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = ">= 2.3.2"
     }
-    null = {
-      source  = "hashicorp/null"
-      version = ">=3.2.4"
+    talos = {
+      source  = "siderolabs/talos"
+      version = "~> 0.12.0"
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
       version = ">= 5"
     }
-    mongodbatlas = {
-      source  = "mongodb/mongodbatlas"
-      version = ">=2.3.0"
-    }
   }
   # https://github.com/hashicorp/terraform/releases
-  required_version = ">= 1.0"
+  required_version = ">= 1.7.0"
 }

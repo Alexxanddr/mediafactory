@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-ganesha
+  namespace: mergerfs
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-ganesha
+  template:
+    metadata:
+      labels:
+        app: nfs-ganesha
+      annotations:
+        config-revision: "2"
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: p53-talos
+        mediafactory/storage-ready: "true"
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: wait-for-mergerfs
+          image: busybox:1.37
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              until awk '$2 == "/export" && $3 ~ /^fuse/ { found = 1 } END { exit !found }' /proc/mounts; do
+                echo 'waiting for mergerfs mount at /export'
+                sleep 2
+              done
+          volumeMounts:
+            - name: merged
+              mountPath: /export
+              mountPropagation: HostToContainer
+      containers:
+        - name: nfs-ganesha
+          image: ghcr.io/kubernetes-sigs/nfs-ganesha:v6.5
+          imagePullPolicy: IfNotPresent
+          command:
+            - /usr/local/bin/ganesha.nfsd
+          args:
+            - -F
+            - -L
+            - /dev/stderr
+            - -f
+            - /etc/ganesha/ganesha.conf
+          ports:
+            - name: nfs
+              containerPort: 2049
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+              add:
+                - DAC_READ_SEARCH
+                - SETGID
+                - SETUID
+            seccompProfile:
+              type: Unconfined
+          readinessProbe:
+            tcpSocket:
+              port: nfs
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: nfs
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          volumeMounts:
+            - name: config
+              mountPath: /etc/ganesha/ganesha.conf
+              subPath: ganesha.conf
+              readOnly: true
+            - name: runtime
+              mountPath: /usr/local/var/run/ganesha
+            - name: merged
+              mountPath: /export
+              mountPropagation: HostToContainer
+      volumes:
+        - name: config
+          configMap:
+            name: nfs-ganesha-config
+        - name: runtime
+          emptyDir: {}
+        - name: merged
+          hostPath:
+            path: /run/mergerfs
+            type: Directory

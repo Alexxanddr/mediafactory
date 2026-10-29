@@ -1,0 +1,20 @@
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: externaldisk1
+discovery:
+  volumeSelector:
+    match: volume.uuid == "5245c734-d3ab-4955-a2ee-55ff9496f3a6"
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: externaldisk2
+discovery:
+  volumeSelector:
+    match: volume.uuid == "54168ec8-e4d3-4509-8b48-2f8c2ca39756"
+---
+apiVersion: v1alpha1
+kind: ExistingVolumeConfig
+name: externaldisk3
+discovery:
+  volumeSelector:
+    match: volume.uuid == "fc53a0ea-d640-4dd8-9d30-864e0fede3fc"

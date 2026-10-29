@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mergerfs
+  namespace: mergerfs
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mergerfs
+  template:
+    metadata:
+      labels:
+        app: mergerfs
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: p53-talos
+        mediafactory/storage-ready: "true"
+      tolerations:
+        - key: node-role.kubernetes.io/control-plane
+          operator: Exists
+          effect: NoSchedule
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: mergerfs
+          image: ghcr.io/trapexit/mergerfs:2.42.0
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              for branch in /mnt/externaldisk1 /mnt/externaldisk2 /mnt/externaldisk3; do
+                until awk -v path="$branch" '$2 == path && $3 == "xfs" { found = 1 } END { exit !found }' /proc/mounts; do
+                  echo "waiting for XFS filesystem at $branch"
+                  sleep 2
+                done
+              done
+              exec mergerfs -f -o allow_other,export-support=true,never-forget-nodes=true,inodecalc=path-hash,lazy-umount-mountpoint=false,cache.files=partial,dropcacheonclose=true,category.create=mfs,minfreespace=10G,fsname=mergerfs /mnt/externaldisk1:/mnt/externaldisk2:/mnt/externaldisk3 /mnt/merged
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: fuse
+              mountPath: /dev/fuse
+            - name: externaldisk1
+              mountPath: /mnt/externaldisk1
+              mountPropagation: HostToContainer
+            - name: externaldisk2
+              mountPath: /mnt/externaldisk2
+              mountPropagation: HostToContainer
+            - name: externaldisk3
+              mountPath: /mnt/externaldisk3
+              mountPropagation: HostToContainer
+            - name: merged
+              mountPath: /mnt/merged
+              mountPropagation: Bidirectional
+      volumes:
+        - name: fuse
+          hostPath:
+            path: /dev/fuse
+            type: CharDevice
+        - name: externaldisk1
+          hostPath:
+            path: /var/mnt/externaldisk1
+            type: Directory
+        - name: externaldisk2
+          hostPath:
+            path: /var/mnt/externaldisk2
+            type: Directory
+        - name: externaldisk3
+          hostPath:
+            path: /var/mnt/externaldisk3
+            type: Directory
+        - name: merged
+          hostPath:
+            path: /run/mergerfs
+            type: DirectoryOrCreate

@@ -198,20 +198,23 @@ The hostname is sensitive and must remain encrypted with SOPS. Do not create a K
 
 ## Persistent storage
 
-For local application storage, follow the existing products:
+For new persistent block storage, use Longhorn and follow the existing product manifests:
 
-- PV with `persistentVolumeReclaimPolicy: Retain`;
-- `storageClassName: local-path`;
-- application path under `/var/lib/rancher/k3s/storage/<product>/`, except existing media data under `/mnt/md0/MediaFactory`;
-- `nodeAffinity` targeting `k3s-server` for `local` volumes;
-- PVC explicitly bound with `volumeName` when using a static PV;
-- mount path taken from upstream documentation.
+- use a `longhorn-static` PV/PVC pair for statically managed application volumes, with the PVC explicitly bound by `volumeName` and the PV using `persistentVolumeReclaimPolicy: Retain`;
+- set the Longhorn `Volume` size and PV capacity consistently, and set `volumeHandle` to the Longhorn volume name;
+- use `longhorn-retain` for operator-managed databases when supported by that operator;
+- keep shared media data on the existing `nfs-csi` storage where workloads need shared access;
+- follow upstream documentation for mount paths and required access modes.
 
-Do not create storage for truly stateless workloads. Never delete or rename existing PVs or PVCs without explicit authorization: losing or detaching data is a destructive operation.
+Do not create storage for truly stateless workloads. Current Longhorn volumes use one replica and do not provide storage redundancy. A `Retain` reclaim policy protects a volume from automatic deletion but is not a backup. Never delete or rename existing PVs or PVCs without explicit authorization: losing or detaching data is a destructive operation.
+
+The shared PostgreSQL and MariaDB instances use the `longhorn-retain` StorageClass; do not provision their PVs or PVCs manually.
 
 ## Shared databases
 
 Do not create new MariaDB, PostgreSQL, or Redis instances for an individual application. Always reuse the existing services and operators.
+
+The canonical shared database resources are CloudNativePG Cluster `postgres-longhorn` and MariaDB `mariadb-longhorn`, both in namespace `database`. The former `postgres` and `mariadb` source instances have been removed; do not use their old Service names.
 
 ### Redis
 
@@ -233,11 +236,15 @@ For a new application:
 
 1. add an entry to `spec.managed.roles` in `flux/apps/postgresql/cluster.yaml`;
 2. set at least `login: true`, minimal privileges, and a dedicated `passwordSecret.name`;
-3. add a `kind: Database` resource to `flux/apps/postgresql/database.yaml`, with its owner matching the role and `cluster.name: postgres`;
+3. add a `kind: Database` resource to `flux/apps/postgresql/database.yaml`, with its owner matching the role and `cluster.name: postgres-longhorn`;
 4. add `kubernetes.io/basic-auth` credentials to `flux/apps/postgresql/secret.enc.yaml` through SOPS;
-5. point the application at the appropriate cluster Service, normally `postgres-rw.database.svc.cluster.local:5432`.
+5. point the application at the read/write Service `postgres-longhorn-rw.database.svc.cluster.local:5432`.
 
 Do not create a second PostgreSQL `Cluster` unless explicitly requested.
+
+The current Cluster has one instance with a 50Gi `longhorn-retain` volume. These manifests do not declare a recurring PostgreSQL backup; verify a backup and restore path before changing or replacing this storage.
+
+Tracearr is an existing application-specific exception: it needs TimescaleDB and uses the `tracearr-timescale` StatefulSet and Service in `flux/apps/tracearr/`. Its data PVC is named `migration-tracearr-timescale` (legacy name), requests 2Gi from `longhorn-static`, and must remain on that dedicated database. The separate Tracearr configuration PVC is `tracearr-config-longhorn`. Do not point Tracearr at the shared PostgreSQL cluster or rename either claim without a migration plan.
 
 ### MariaDB
 
@@ -245,13 +252,15 @@ MariaDB is managed by MariaDB Operator under `flux/apps/mariadb/`.
 
 For a new application, following the existing resources as a reference:
 
-1. add a `kind: Database` to `database.yaml` with `mariaDbRef.name: mariadb`;
+1. add a `kind: Database` to `database.yaml` with `mariaDbRef.name: mariadb-longhorn`;
 2. add a `kind: User` to `users.yaml` with a dedicated `passwordSecretKeyRef`;
 3. add a `kind: Grant` to `grants.yaml`, scoped to the application's database;
 4. add the new key/password to `secret.enc.yaml` through SOPS;
-5. use the `mariadb.database.svc.cluster.local:3306` Service.
+5. use the `mariadb-longhorn.database.svc.cluster.local:3306` Service.
 
 Do not create a second `MariaDB` resource, an application-specific MariaDB pod, or separate database storage unless explicitly requested.
+
+The current MariaDB resource has one replica and a 50Gi `longhorn-retain` volume. `migration-longhorn` is a one-time migration backup on a 1Gi `longhorn-retain` PVC and is still referenced by the MariaDB bootstrap configuration. It is not a recurring backup; preserve it until a separate, tested backup and restore policy replaces it.
 
 ## Helm charts and operators
 
