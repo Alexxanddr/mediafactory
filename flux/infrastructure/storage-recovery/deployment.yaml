@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-recovery
+  namespace: storage-recovery
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: 'true'
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: storage-recovery
+  template:
+    metadata:
+      labels:
+        app: storage-recovery
+      annotations:
+        config-revision: generic-v1
+        uptime-kuma.io/enabled: 'true'
+        uptime-kuma.io/type: http
+        uptime-kuma.io/url: http://storage-recovery.storage-recovery.svc:8080/healthz
+        uptime-kuma.io/name: storage-recovery
+        uptime-kuma.io/interval: '60'
+        uptime-kuma.io/retries: '3'
+        uptime-kuma.io/notifications: Monitoring Bot
+        uptime-kuma.io/group: Storage & Databases
+    spec:
+      serviceAccountName: storage-recovery
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: controller
+        image: ghcr.io/alexxanddr/stale-file-controller-k8s:latest
+        imagePullPolicy: Always
+        env:
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        envFrom:
+        - configMapRef:
+            name: storage-recovery-config
+        ports:
+        - name: health
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+        resources:
+          requests:
+            cpu: 25m
+            memory: 96Mi
+          limits:
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
