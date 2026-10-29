@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.exporter.configMap.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: uniedge
+data:
+  {{- range $key, $value := .Values.exporter.configMap.values }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

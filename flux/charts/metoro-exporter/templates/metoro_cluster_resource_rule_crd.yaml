@@ -1,0 +1,112 @@
+{{- if eq (include "metoro.shouldRenderCRD" (dict "root" . "name" "metoroclusterresourcerules.rbac.metoro.io")) "true" }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  annotations:
+    "helm.sh/resource-policy": keep
+    "meta.helm.sh/release-name": {{ .Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ .Release.Namespace | quote }}
+  name: metoroclusterresourcerules.rbac.metoro.io
+spec:
+  group: rbac.metoro.io
+  names:
+    kind: MetoroClusterResourceRule
+    listKind: MetoroClusterResourceRuleList
+    plural: metoroclusterresourcerules
+    singular: metoroclusterresourcerule
+    shortNames:
+      - mcresrule
+      - mcresrules
+    categories:
+      - metoro
+      - metoro-rbac
+  scope: Cluster
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Groups
+          type: string
+          jsonPath: .spec.groups
+        - name: Resources
+          type: string
+          jsonPath: .spec.rules[*].resources
+        - name: Verbs
+          type: string
+          jsonPath: .spec.rules[*].verbs
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: MetoroClusterResourceRule grants Metoro groups access to Metoro resources from the cluster where the rule is created.
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - groups
+                - rules
+              properties:
+                groups:
+                  type: array
+                  description: Metoro groups this rule grants resource permissions to.
+                  minItems: 1
+                  maxItems: 256
+                  x-kubernetes-list-type: set
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 256
+                rules:
+                  type: array
+                  description: Allow-grants whose effective access is the union of all entries.
+                  minItems: 1
+                  maxItems: 256
+                  items:
+                    type: object
+                    required:
+                      - resources
+                      - verbs
+                    properties:
+                      resources:
+                        type: array
+                        description: Metoro resource types this grant covers.
+                        minItems: 1
+                        maxItems: 3
+                        x-kubernetes-list-type: set
+                        items:
+                          type: string
+                          enum:
+                            - alerts
+                            - dashboards
+                            - webhooks
+                      verbs:
+                        type: array
+                        description: Actions this grant allows.
+                        minItems: 1
+                        maxItems: 4
+                        x-kubernetes-list-type: set
+                        items:
+                          type: string
+                          enum:
+                            - create
+                            - read
+                            - update
+                            - delete
+                      path:
+                        type: string
+                        description: Optional relative subpath that narrows the inherited cluster resource scope.
+                        maxLength: 1024
+{{- end }}

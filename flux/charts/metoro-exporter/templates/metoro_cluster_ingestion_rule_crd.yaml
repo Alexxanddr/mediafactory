@@ -1,0 +1,129 @@
+{{- if eq (include "metoro.shouldRenderCRD" (dict "root" . "name" "metoroclusteringestionrules.observability.metoro.io")) "true" }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  annotations:
+    helm.sh/resource-policy: keep
+    meta.helm.sh/release-name: {{ .Release.Name | quote }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace | quote }}
+  name: metoroclusteringestionrules.observability.metoro.io
+spec:
+  group: observability.metoro.io
+  names:
+    kind: MetoroClusterIngestionRule
+    listKind: MetoroClusterIngestionRuleList
+    plural: metoroclusteringestionrules
+    singular: metoroclusteringestionrule
+    shortNames:
+      - mcingrule
+      - mcingrules
+    categories:
+      - metoro
+      - metoro-observability
+  scope: Cluster
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Signals
+          type: string
+          jsonPath: .spec.rules[*].signals
+        - name: Actions
+          type: string
+          jsonPath: .spec.rules[*].action
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: MetoroClusterIngestionRule excludes matching telemetry from ingestion before it leaves the cluster where the rule is created. Rules are exclude-only and scoped to that cluster; there is no cross-cluster field.
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - rules
+              properties:
+                rules:
+                  type: array
+                  description: Exclusion rules. Rules are independent of each other — a record is excluded when any single rule matches it.
+                  minItems: 1
+                  maxItems: 256
+                  items:
+                    type: object
+                    required:
+                      - signals
+                      - action
+                    x-kubernetes-validations:
+                      - rule: "!has(self.match) || self.match.matchExpressions.all(e, e.key != 'message') || (self.signals.size() == 1 && self.signals[0] == 'logs')"
+                        message: the message key matches the log body and is only valid when the rule's signals are exactly [logs].
+                    properties:
+                      signals:
+                        type: array
+                        description: Telemetry signals this rule applies to.
+                        minItems: 1
+                        maxItems: 2
+                        x-kubernetes-list-type: set
+                        items:
+                          type: string
+                          enum:
+                            - logs
+                            - traces
+                      action:
+                        type: string
+                        description: What to do with matching telemetry. Only Exclude is supported.
+                        enum:
+                          - Exclude
+                      match:
+                        type: object
+                        description: Selects the telemetry to exclude. A record matches when all match expressions match it. Omit match to exclude everything for the rule's signals in this cluster.
+                        required:
+                          - matchExpressions
+                        properties:
+                          matchExpressions:
+                            type: array
+                            description: Attribute match expressions. Expressions are ANDed within a rule; values within an expression are ORed. Keys must be unique within a rule.
+                            minItems: 1
+                            maxItems: 64
+                            x-kubernetes-list-type: map
+                            x-kubernetes-list-map-keys:
+                              - key
+                            items:
+                              type: object
+                              required:
+                                - key
+                                - operator
+                                - values
+                              properties:
+                                key:
+                                  type: string
+                                  description: Telemetry attribute key, such as service.name, namespace, log_level, statusCode, message (the log body), or a custom attribute.
+                                  minLength: 1
+                                  maxLength: 256
+                                operator:
+                                  type: string
+                                  enum:
+                                    - In
+                                    - RegexIn
+                                values:
+                                  type: array
+                                  description: Values to match against. RegexIn values use RE2 syntax.
+                                  minItems: 1
+                                  maxItems: 256
+                                  x-kubernetes-list-type: set
+                                  items:
+                                    type: string
+                                    minLength: 1
+                                    maxLength: 1024
+{{- end }}

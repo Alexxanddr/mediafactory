@@ -1,0 +1,175 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: {{ .Values.nodeAgent.metadata.name }}
+  labels:
+    {{- toYaml .Values.nodeAgent.metadata.selectorLabels | nindent 4 }}
+spec:
+  {{- with .Values.nodeAgent.updateStrategy }}
+  updateStrategy:
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.nodeAgent.metadata.selectorLabels | nindent 6 }}
+  template:
+    metadata:
+      labels:
+      {{- toYaml .Values.nodeAgent.metadata.selectorLabels | nindent 8 }}
+        app: metoro-node-agent
+      annotations:
+        prometheus.io/scrape: '{{ .Values.nodeAgent.prometheus.scrape | default true}}'
+        prometheus.io/port: '{{ .Values.nodeAgent.prometheus.port }}'
+        {{- if .Values.nodeAgent.metadata.podAnnotations }}
+        {{- toYaml .Values.nodeAgent.metadata.podAnnotations | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.nodeAgent.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeAgent.scheduling.affinity }}
+      affinity:
+        {{- toYaml .Values.nodeAgent.scheduling.affinity | nindent 8 }}
+      {{- end }}
+      {{- if .Values.nodeAgent.scheduling.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeAgent.scheduling.nodeSelector | nindent 8 }}
+      {{- end }}
+      tolerations:
+        {{- if .Values.nodeAgent.scheduling.tolerations }}
+        {{- toYaml .Values.nodeAgent.scheduling.tolerations | nindent 8 }}
+        {{ else }}
+        - operator: Exists
+        {{- end }}
+      priorityClassName: {{ .Values.nodeAgent.priorityClassName }}
+      hostPID: true
+      containers:
+        - name: {{ .Values.nodeAgent.metadata.name }}
+          image: "{{ .Values.nodeAgent.image.repository }}:{{ .Values.nodeAgent.image.tag }}"
+          imagePullPolicy: {{ .Values.nodeAgent.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.nodeAgent.resources | nindent 12 }}
+          env:
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                 resource: limits.cpu
+                 divisor: "1"
+            - name: DISABLE_LOG_PARSING
+              value: {{ printf "\"%t\"" (not .Values.nodeAgent.logExport.enabled) }}
+            - name: TRACES_ENDPOINT
+              value: {{ printf "http://%s:%d/v1/traces" .Values.exporter.services.metoroExporter.name (.Values.exporter.services.metoroExporter.port | int) }}
+            - name: LOGS_ENDPOINT
+              value: {{ printf "http://%s:%d/v1/logs" .Values.exporter.services.metoroExporter.name (.Values.exporter.services.metoroExporter.port | int)  }}
+            - name: PROFILES_ENDPOINT
+              value: {{ printf "http://%s:%d/v1/profiles" .Values.exporter.services.metoroExporter.name (.Values.exporter.services.metoroExporter.port | int) }}
+            - name: REDIS_ADDRESS
+              {{- if .Values.redis.enabled }}
+              value: {{ printf "%s-master:%d" .Values.redis.fullnameOverride (.Values.redis.master.service.ports.redis | int) }}
+              {{- else if .Values.redisCluster.enabled }}
+              value: {{ printf "%s-master:%d" .Values.redisCluster.fullnameOverride (.Values.redisCluster.master.service.ports.redis | int) }}
+              {{- end }}
+            {{- if .Values.redis.auth.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.redis.auth.existingSecret }}
+                    key: password
+            {{ else if .Values.redisCluster.auth.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.redisCluster.auth.existingSecret }}
+                    key: password
+            {{- end }}
+          {{ with .Values.nodeAgent.envVars.userDefined }}
+          {{- . | toYaml | nindent 12 }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.nodeAgent.prometheus.port }}
+              name: http
+          securityContext:
+            # Required to access node level cgroup stats + inject ebpf programs into the kernel
+            privileged: true
+          volumeMounts:
+            - mountPath: /host/sys/fs/cgroup
+              name: cgroupfs
+              readOnly: true
+            - mountPath: /sys/kernel/tracing
+              name: tracefs
+              readOnly: false
+            - mountPath: /sys/kernel/debug
+              name: debugfs
+              readOnly: false
+            - mountPath: /tmp
+              name: tmp
+              readOnly: false
+            # Required to access containerd, docker, crio, podman sockets
+            - mountPath: /var/run/containerd/containerd.sock
+              name: containerd-sock
+            - mountPath: /var/run/docker.sock
+              name: docker-sock
+            - mountPath: /var/run/crio/crio.sock
+              name: crio-sock
+            - mountPath: /var/run/podman/podman.sock
+              name: podman-sock
+            # System paths
+            - mountPath: /sys
+              name: sys
+              readOnly: true
+            # Runtime specific paths
+            - mountPath: /var/lib/containerd
+              name: containerd
+              readOnly: true
+            - mountPath: /var/lib/docker
+              name: docker
+              readOnly: true
+            - mountPath: /var/lib/kubelet
+              name: kubelet
+              readOnly: true
+            - mountPath: /var/lib/containers
+              name: containers
+              readOnly: true
+      volumes:
+        - hostPath:
+            path: /sys/fs/cgroup
+          name: cgroupfs
+        - hostPath:
+            path: /sys/kernel/tracing
+          name: tracefs
+        - hostPath:
+            path: /sys/kernel/debug
+          name: debugfs
+        - emptyDir: { }
+          name: tmp
+        # Container runtime socket volumes
+        - hostPath:
+            path: /var/run/containerd/containerd.sock
+          name: containerd-sock
+        - hostPath:
+            path: /var/run/docker.sock
+          name: docker-sock
+        - hostPath:
+            path: /var/run/crio/crio.sock
+          name: crio-sock
+        - hostPath:
+            path: /var/run/podman/podman.sock
+          name: podman-sock
+        # System volumes
+        - hostPath:
+            path: /sys
+          name: sys
+        # Runtime specific volumes
+        - hostPath:
+            path: /var/lib/containerd
+          name: containerd
+        - hostPath:
+            path: /var/lib/docker
+          name: docker
+        - hostPath:
+            path: /var/lib/kubelet
+          name: kubelet
+        - hostPath:
+            path: /var/lib/containers
+          name: containers

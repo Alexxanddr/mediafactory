@@ -1,0 +1,135 @@
+{{- if eq (include "metoro.shouldRenderCRD" (dict "root" . "name" "metorowebhooks.observability.metoro.io")) "true" }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  annotations:
+    helm.sh/resource-policy: keep
+    meta.helm.sh/release-name: {{ .Release.Name | quote }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace | quote }}
+  name: metorowebhooks.observability.metoro.io
+spec:
+  group: observability.metoro.io
+  names:
+    kind: MetoroWebhook
+    listKind: MetoroWebhookList
+    plural: metorowebhooks
+    singular: metorowebhook
+    shortNames:
+      - mw
+      - mwebhook
+      - mwebhooks
+    categories:
+      - metoro
+      - metoro-observability
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Display Name
+          type: string
+          jsonPath: .spec.displayName
+        - name: Method
+          type: string
+          jsonPath: .spec.method
+        - name: URL
+          type: string
+          jsonPath: .spec.url
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: MetoroWebhook defines a Metoro webhook integration managed from Kubernetes.
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - url
+              properties:
+                displayName:
+                  type: string
+                  description: Display name for the synced Metoro webhook integration. Defaults to metadata.name when omitted.
+                  minLength: 1
+                  maxLength: 512
+                url:
+                  type: string
+                  description: Webhook URL. Template variables are supported by Metoro when notifications are sent.
+                  minLength: 1
+                method:
+                  type: string
+                  description: HTTP method used when sending the webhook. Defaults to POST.
+                  default: POST
+                  enum:
+                    - GET
+                    - POST
+                    - PUT
+                    - PATCH
+                    - DELETE
+                headers:
+                  type: object
+                  description: Additional HTTP headers to send with the webhook.
+                  additionalProperties:
+                    type: string
+                body:
+                  type: string
+                  description: Optional body template. Leave empty to use Metoro's default webhook payload.
+                headersFrom:
+                  type: object
+                  description: HTTP headers whose values come from a Secret in the same namespace as this webhook. A header must not appear in both headers and headersFrom, and Content-Type must be set inline.
+                  additionalProperties:
+                    type: object
+                    required:
+                      - secretKeyRef
+                    properties:
+                      secretKeyRef:
+                        type: object
+                        required:
+                          - name
+                          - key
+                        properties:
+                          name:
+                            type: string
+                            description: Name of the Secret in this webhook's namespace.
+                            minLength: 1
+                            maxLength: 253
+                          key:
+                            type: string
+                            description: Key within the Secret holding the header value.
+                            minLength: 1
+                            maxLength: 253
+                bodyFrom:
+                  type: object
+                  description: Body template sourced from a Secret in the same namespace. Mutually exclusive with body.
+                  required:
+                    - secretKeyRef
+                  properties:
+                    secretKeyRef:
+                      type: object
+                      required:
+                        - name
+                        - key
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the Secret in this webhook's namespace.
+                          minLength: 1
+                          maxLength: 253
+                        key:
+                          type: string
+                          description: Key within the Secret holding the body template.
+                          minLength: 1
+                          maxLength: 253
+{{- end }}

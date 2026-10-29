@@ -1,0 +1,403 @@
+{{- if .Values.serviceMonitorScraping.enabled -}}
+{{- if ne .Values.serviceMonitorScraping.collector.mode "statefulset" -}}
+{{- fail "serviceMonitorScraping.collector.mode currently supports only statefulset" -}}
+{{- end -}}
+{{- if not .Values.serviceMonitorScraping.targetAllocator.enabled -}}
+{{- fail "serviceMonitorScraping.targetAllocator.enabled must be true when serviceMonitorScraping.enabled is true" -}}
+{{- end -}}
+{{- $collectorName := include "metoro.serviceMonitorScraping.collectorName" . -}}
+{{- $collectorConfigMapName := include "metoro.serviceMonitorScraping.collectorConfigMapName" . -}}
+{{- $collectorHeadlessServiceName := include "metoro.serviceMonitorScraping.collectorHeadlessServiceName" . -}}
+{{- $collectorServiceAccountName := include "metoro.serviceMonitorScraping.collectorServiceAccountName" . -}}
+{{- $targetAllocatorName := include "metoro.serviceMonitorScraping.targetAllocatorName" . -}}
+{{- $targetAllocatorServiceAccountName := include "metoro.serviceMonitorScraping.serviceAccountName" . -}}
+{{- $exporterMetricsEndpoint := printf "http://%s.%s.svc.cluster.local:%d/api/v1/custom/otel/metrics" .Values.exporter.services.metoroExporter.name .Release.Namespace (.Values.exporter.services.metoroExporter.port | int) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $collectorConfigMapName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+data:
+  collector.yaml: |-
+    receivers:
+      prometheus:
+        config:
+          scrape_configs: []
+        target_allocator:
+          endpoint: http://{{ $targetAllocatorName }}:80
+          interval: 30s
+          collector_id: ${POD_NAME}
+    processors:
+      batch:
+        send_batch_size: 10000
+        timeout: 10s
+      transform/prometheus_label_compat:
+        error_mode: ignore
+        metric_statements:
+          - context: datapoint
+            statements:
+              - set(attributes["job"], resource.attributes["service.name"]) where resource.attributes["service.name"] != nil
+              - set(attributes["instance"], resource.attributes["service.instance.id"]) where resource.attributes["service.instance.id"] != nil
+
+    exporters:
+      otlphttp/metoro:
+        metrics_endpoint: {{ $exporterMetricsEndpoint | quote }}
+
+    service:
+      pipelines:
+        metrics:
+          receivers: [prometheus]
+          processors: [transform/prometheus_label_compat, batch]
+          exporters: [otlphttp/metoro]
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $collectorServiceAccountName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $collectorHeadlessServiceName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  selector:
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+  ports:
+    - name: metrics
+      port: 8888
+      targetPort: metrics
+---
+{{- if .Values.serviceMonitorScraping.collector.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $collectorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ .Values.serviceMonitorScraping.collector.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 6 }}
+---
+{{- end }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ $collectorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 4 }}
+spec:
+  serviceName: {{ $collectorHeadlessServiceName }}
+  replicas: {{ .Values.serviceMonitorScraping.collector.replicas }}
+  selector:
+    matchLabels:
+      {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ toJson (dict "collector" .Values.serviceMonitorScraping.collector "targetAllocatorName" $targetAllocatorName "exporterMetricsEndpoint" $exporterMetricsEndpoint) | sha256sum }}
+      labels:
+        {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 8 }}
+        {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ $collectorServiceAccountName }}
+      {{- with .Values.serviceMonitorScraping.collector.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.serviceMonitorScraping.collector.scheduling.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceMonitorScraping.collector.scheduling.affinity }}
+      affinity:
+        {{- toYaml .Values.serviceMonitorScraping.collector.scheduling.affinity | nindent 8 }}
+      {{- else if dig "podAntiAffinity" "enabled" false .Values.serviceMonitorScraping.collector.scheduling }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 20 }}
+                topologyKey: kubernetes.io/hostname
+      {{- end }}
+      {{- with .Values.serviceMonitorScraping.collector.scheduling.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: otc-container
+          image: "{{ .Values.serviceMonitorScraping.collector.image.repository }}:{{ .Values.serviceMonitorScraping.collector.image.tag }}"
+          imagePullPolicy: {{ .Values.serviceMonitorScraping.collector.image.pullPolicy }}
+          args:
+            - --config=/conf/collector.yaml
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          ports:
+            - name: metrics
+              containerPort: 8888
+              protocol: TCP
+          volumeMounts:
+            - name: otc-internal
+              mountPath: /conf
+          {{- with .Values.serviceMonitorScraping.collector.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: otc-internal
+          configMap:
+            name: {{ $collectorConfigMapName }}
+            items:
+              - key: collector.yaml
+                path: collector.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $targetAllocatorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+data:
+  targetallocator.yaml: |-
+    allocation_strategy: {{ .Values.serviceMonitorScraping.targetAllocator.allocationStrategy }}
+    filter_strategy: {{ .Values.serviceMonitorScraping.targetAllocator.filterStrategy }}
+    collector_selector:
+      matchlabels:
+        {{- include "metoro.serviceMonitorScraping.collectorSelectorLabels" . | nindent 8 }}
+    prometheus_cr:
+      enabled: true
+      scrape_interval: {{ .Values.serviceMonitorScraping.targetAllocator.prometheusCR.scrapeInterval }}
+      service_monitor_selector:
+        {{- include "metoro.serviceMonitorScraping.targetAllocatorLabelSelector" .Values.serviceMonitorScraping.targetAllocator.prometheusCR.serviceMonitorSelector | nindent 8 }}
+      pod_monitor_selector:
+        {{- include "metoro.serviceMonitorScraping.targetAllocatorLabelSelector" .Values.serviceMonitorScraping.targetAllocator.prometheusCR.podMonitorSelector | nindent 8 }}
+      service_monitor_namespace_selector:
+        {{- include "metoro.serviceMonitorScraping.targetAllocatorLabelSelector" .Values.serviceMonitorScraping.targetAllocator.prometheusCR.namespaceSelector | nindent 8 }}
+      pod_monitor_namespace_selector:
+        {{- include "metoro.serviceMonitorScraping.targetAllocatorLabelSelector" .Values.serviceMonitorScraping.targetAllocator.prometheusCR.namespaceSelector | nindent 8 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ $targetAllocatorServiceAccountName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+---
+{{- if .Values.serviceMonitorScraping.targetAllocator.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ $targetAllocatorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ .Values.serviceMonitorScraping.targetAllocator.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 6 }}
+---
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $targetAllocatorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.serviceMonitorScraping.targetAllocator.replicas }}
+  selector:
+    matchLabels:
+      {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ toJson .Values.serviceMonitorScraping.targetAllocator | sha256sum }}
+      labels:
+        {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 8 }}
+        {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ $targetAllocatorServiceAccountName }}
+      {{- with .Values.serviceMonitorScraping.targetAllocator.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.serviceMonitorScraping.targetAllocator.scheduling.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.serviceMonitorScraping.targetAllocator.scheduling.affinity }}
+      affinity:
+        {{- toYaml .Values.serviceMonitorScraping.targetAllocator.scheduling.affinity | nindent 8 }}
+      {{- else if dig "podAntiAffinity" "enabled" false .Values.serviceMonitorScraping.targetAllocator.scheduling }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 20 }}
+                topologyKey: kubernetes.io/hostname
+      {{- end }}
+      {{- with .Values.serviceMonitorScraping.targetAllocator.scheduling.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: ta-container
+          image: "{{ .Values.serviceMonitorScraping.targetAllocator.image.repository }}:{{ .Values.serviceMonitorScraping.targetAllocator.image.tag }}"
+          imagePullPolicy: {{ .Values.serviceMonitorScraping.targetAllocator.image.pullPolicy }}
+          args:
+            - --config-file=/conf/targetallocator.yaml
+            - --enable-prometheus-cr-watcher=true
+            - --listen-addr=:8080
+          env:
+            - name: OTELCOL_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+          volumeMounts:
+            - name: ta-internal
+              mountPath: /conf
+          {{- with .Values.serviceMonitorScraping.targetAllocator.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      volumes:
+        - name: ta-internal
+          configMap:
+            name: {{ $targetAllocatorName }}
+            items:
+              - key: targetallocator.yaml
+                path: targetallocator.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $targetAllocatorName }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.serviceMonitorScraping.commonLabels" . | nindent 4 }}
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+spec:
+  selector:
+    {{- include "metoro.serviceMonitorScraping.targetAllocatorSelectorLabels" . | nindent 4 }}
+  ports:
+    - name: targetallocation
+      port: 80
+      targetPort: http
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ $targetAllocatorServiceAccountName }}
+  labels:
+    {{- include "metoro.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - monitoring.coreos.com
+    resources:
+      - servicemonitors
+      - podmonitors
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+      - nodes
+      - nodes/metrics
+      - services
+      - endpoints
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - get
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+    verbs:
+      - get
+      - list
+      - watch
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $targetAllocatorServiceAccountName }}
+  labels:
+    {{- include "metoro.labels" . | nindent 4 }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ $targetAllocatorServiceAccountName }}
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ $targetAllocatorServiceAccountName }}
+  apiGroup: rbac.authorization.k8s.io
+{{- end -}}

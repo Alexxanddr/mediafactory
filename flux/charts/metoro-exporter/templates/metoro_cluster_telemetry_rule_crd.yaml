@@ -1,0 +1,134 @@
+{{- if eq (include "metoro.shouldRenderCRD" (dict "root" . "name" "metoroclustertelemetryrules.rbac.metoro.io")) "true" }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  annotations:
+    "helm.sh/resource-policy": keep
+    "meta.helm.sh/release-name": {{ .Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ .Release.Namespace | quote }}
+  name: metoroclustertelemetryrules.rbac.metoro.io
+spec:
+  group: rbac.metoro.io
+  names:
+    kind: MetoroClusterTelemetryRule
+    listKind: MetoroClusterTelemetryRuleList
+    plural: metoroclustertelemetryrules
+    singular: metoroclustertelemetryrule
+    shortNames:
+      - mctelrule
+      - mctelrules
+    categories:
+      - metoro
+      - metoro-rbac
+  scope: Cluster
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Groups
+          type: string
+          jsonPath: .spec.groups
+        - name: Rules
+          type: string
+          jsonPath: .spec.rules[*].signals
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: MetoroClusterTelemetryRule grants Metoro groups access to telemetry from the cluster where the rule is created.
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - groups
+                - rules
+              properties:
+                groups:
+                  type: array
+                  description: Metoro groups this rule grants telemetry visibility to.
+                  minItems: 1
+                  maxItems: 256
+                  x-kubernetes-list-type: set
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 256
+                rules:
+                  type: array
+                  description: Allow-expressions whose effective access is the union of all entries.
+                  minItems: 1
+                  maxItems: 256
+                  items:
+                    type: object
+                    required:
+                      - signals
+                    properties:
+                      signals:
+                        type: array
+                        description: Telemetry signals this grant covers.
+                        minItems: 1
+                        maxItems: 5
+                        x-kubernetes-list-type: set
+                        items:
+                          type: string
+                          enum:
+                            - logs
+                            - metrics
+                            - traces
+                            - profiles
+                            - kubernetesResources
+                      match:
+                        type: object
+                        description: Optional telemetry attribute selector that narrows the inherited cluster scope.
+                        required:
+                          - matchExpressions
+                        properties:
+                          matchExpressions:
+                            type: array
+                            description: Attribute match expressions. Expressions are ANDed within a rule.
+                            minItems: 1
+                            maxItems: 64
+                            items:
+                              type: object
+                              required:
+                                - key
+                                - operator
+                              x-kubernetes-validations:
+                                - rule: "self.operator in ['Exists', 'DoesNotExist'] ? !has(self.values) : (has(self.values) && size(self.values) > 0)"
+                                  message: values must be set for In, NotIn, and RegexIn, and omitted for Exists and DoesNotExist.
+                              properties:
+                                key:
+                                  type: string
+                                  description: Telemetry attribute key, such as service.name, namespace, severity, metric.name, status.code, or a custom attribute.
+                                  minLength: 1
+                                  maxLength: 256
+                                operator:
+                                  type: string
+                                  enum:
+                                    - In
+                                    - NotIn
+                                    - Exists
+                                    - DoesNotExist
+                                    - RegexIn
+                                values:
+                                  type: array
+                                  description: Values for In, NotIn, and RegexIn operators.
+                                  maxItems: 256
+                                  x-kubernetes-list-type: set
+                                  items:
+                                    type: string
+                                    maxLength: 1024
+{{- end }}

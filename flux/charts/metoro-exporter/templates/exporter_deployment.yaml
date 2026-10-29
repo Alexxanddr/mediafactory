@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Values.exporter.metadata.name}}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- toYaml .Values.exporter.metadata.selectorLabels | nindent 4 }}
+spec:
+  {{- if not .Values.exporter.autoscaling.horizontalPodAutoscaler.enabled }}
+  replicas: {{ .Values.exporter.replicas }}
+  {{- end }}
+  strategy:
+    {{- toYaml .Values.exporter.updateStrategy | nindent 4 }}
+  selector:
+    matchLabels:
+      {{- toYaml .Values.exporter.metadata.selectorLabels | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/metoro-crd-watchers: {{ include "metoro.exporter.crdWatcherChecksum" . | sha256sum | quote }}
+      {{- with .Values.exporter.metadata.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "metoro.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.exporter.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ .Values.exporter.serviceAccount.name }}
+      {{- if .Values.exporter.gracefulShutdown.enabled }}
+      terminationGracePeriodSeconds: {{ .Values.exporter.gracefulShutdown.terminationGracePeriodSeconds }}
+      {{- end }}
+      # We want to attempt to put the exporter on different nodes so that if a node goes down, we don't become unavailable
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app.kubernetes.io/name
+                      operator: In
+                      values:
+                        - metoro-exporter
+                topologyKey: kubernetes.io/hostname
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.exporter.image.repository }}:{{ .Values.exporter.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.exporter.image.pullPolicy }}
+          env:
+            - name: GOMAXPROCS
+              valueFrom:
+                resourceFieldRef:
+                  resource: limits.cpu
+                  divisor: "1"
+            - name: VERSION
+              value: {{ .Chart.AppVersion }}
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_UID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.uid
+            - name: METORO_OTLP_URL
+              value: {{ .Values.exporter.envVars.mandatory.otlpUrl }}
+            - name: METORO_API_SERVER_URL
+              value: {{ .Values.exporter.envVars.mandatory.apiServerUrl }}
+            - name: METORO_AUTH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  {{- if not .Values.exporter.secret.externalSecret.enabled }}
+                  name: {{ .Values.exporter.secret.name }}
+                  key: AUTH_TOKEN
+                  {{- else }}
+                  name: {{ .Values.exporter.secret.externalSecret.name }}
+                  key: {{ .Values.exporter.secret.externalSecret.secretKey }}
+                  {{- end }}
+            - name: REDIS_URL
+              {{- if .Values.redis.enabled }}
+              value: {{printf "%s-master:%d" .Values.redis.fullnameOverride (.Values.redis.master.service.ports.redis | int)}}
+              {{- else if .Values.redisCluster.enabled }}
+              value: {{printf "%s-master:%d" .Values.redisCluster.fullnameOverride (.Values.redisCluster.master.service.ports.redis | int)}}
+              {{- end }}
+            {{- if .Values.redis.auth.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.redis.auth.existingSecret }}
+                  key: password
+            {{ else if .Values.redisCluster.auth.enabled }}
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.redisCluster.auth.existingSecret }}
+                  key: password
+            {{- end }}
+            - name: GIN_MODE
+              value: release
+            - name: SHOULD_DROP_METORO_DATA
+              value: {{ .Values.exporter.envVars.mandatory.shouldDropMetoroData | quote }}
+            {{- if .Values.exporter.envVars.optional.k8sResources }}
+            - name: METORO_K8S_RESOURCES
+              value: {{ .Values.exporter.envVars.optional.k8sResources | quote }}
+            {{- end }}
+            {{- if .Values.exporter.secretRefs.enabled }}
+            - name: METORO_SECRET_REFS_ENABLED
+              value: "true"
+            {{- end }}
+            - name: METORO_HONOR_WORKLOAD_TELEMETRY_ANNOTATIONS
+              value: {{ .Values.exporter.envVars.optional.honorMetoroPodAnnotations | quote }}
+            - name: METORO_HONOR_FLUENTBIT_ANNOTATIONS
+              value: {{ .Values.exporter.envVars.optional.honorFluentBitAnnotations | quote }}
+            {{- with .Values.exporter.envVars.userDefined }}
+            {{- . | toYaml | nindent 12 }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.exporter.resources | nindent 12 }}
+          # failureThreshold is 24 (120s) because the exporter takes time to populate caches on startup
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 24
+          readinessProbe:
+            httpGet:
+              path: /api/v1/readiness
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 24
+          volumeMounts:
+            - name: {{ .Values.exporter.configMap.name }}
+              mountPath: /etc/exporter
+              readOnly: true
+      {{- with .Values.exporter.scheduling.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.exporter.scheduling.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.exporter.scheduling.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: {{ .Values.exporter.configMap.name }}
+          configMap:
+            name: {{ .Values.exporter.configMap.name }}
+            defaultMode: 420

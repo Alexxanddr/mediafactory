@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.exporter.services.metoroExporter.name }}
+  labels:
+    {{- toYaml .Values.exporter.metadata.selectorLabels | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.exporter.services.metoroExporter.port }}
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    {{- toYaml .Values.exporter.metadata.selectorLabels | nindent 4 }}
+---

@@ -1,0 +1,254 @@
+# Exporter
+exporter:
+  metadata:
+    name: "metoro-exporter"
+    podAnnotations: {}
+    selectorLabels:
+      app.kubernetes.io/name: "metoro-exporter"
+  # Used only when the horizontal pod autoscaler is disabled.
+  replicas: 2
+  updateStrategy:
+    type: "RollingUpdate"
+  # Pod Disruption Budget configuration
+  podDisruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  envVars:
+    mandatory:
+      otlpUrl: "https://us-east.metoro.io/ingest/api/v1/otel"
+      apiServerUrl: "https://us-east.metoro.io/api/v1/exporter"
+      shouldDropMetoroData: "true"
+    optional:
+      # Comma-separated selectors for Kubernetes resources to watch (for example: "pod,service,deployment,ingress").
+      # Leave empty to watch all exporter-supported resources.
+      k8sResources: ""
+      # Honor metoro.io/exclude-logs and metoro.io/exclude-traces Pod annotations.
+      honorMetoroPodAnnotations: true
+      # Honor fluentbit.io/exclude: "true" Pod annotations to exclude whole-Pod logs.
+      honorFluentBitAnnotations: false
+    userDefined: {}
+  # Opt-in: mirror the Kubernetes Secret keys that Metoro CRDs reference by
+  # name (e.g. MetoroWebhook secretKeyRefs) to Metoro's encrypted secret
+  # store, so credentials stay out of CRD manifests and resource history.
+  # The exporter reads just the referenced keys with `get` (only) and never
+  # lists or watches Secrets.
+  #
+  # By default access is scoped to the release namespace via a namespaced
+  # Role. Add entries to `namespaces` to let CRDs in those namespaces
+  # reference their Secrets too, or set `global: true` for a cluster-wide
+  # ClusterRole rule instead.
+  # Note: anyone who can create a Metoro CRD with a secretKeyRef in an
+  # in-scope namespace can have the exporter read the named Secret there.
+  secretRefs:
+    enabled: false
+    # Namespaces (in addition to the release namespace) whose Secrets may be
+    # referenced by Metoro CRDs.
+    namespaces: []
+    # Grant cluster-wide `get` on Secrets instead of per-namespace Roles.
+    global: false
+  image:
+    tag: "v2-stable"
+    repository: quay.io/metoro/metoro-exporter
+    pullPolicy: "Always"
+    imagePullSecrets: [ ]
+  # Placeholder configmap
+  configMap:
+    name: "exporter-config"
+    values:
+      config.yml: |-
+        # Placeholder config
+  serviceAccount:
+    name: "metoro-exporter"
+  clusterRole:
+    name: "metoro-exporter-cluster-role"
+  clusterRoleBinding:
+    name: "metoro-exporter-cluster-role-binding"
+  services:
+    metoroExporter:
+      name: "metoro-exporter"
+      port: 80
+  resources:
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+    requests:
+      cpu: "1"
+      memory: "2Gi"
+  secret:
+    name: "exporter-secret"
+    bearerToken: "CHANGE_ME"
+    externalSecret:
+      enabled: false
+      name: "CHANGE_ME"
+      secretKey: "AUTH_TOKEN"
+  scheduling:
+    nodeSelector: {}
+    affinity: {}
+    tolerations: []
+  autoscaling:
+    horizontalPodAutoscaler:
+      enabled: true
+      name: "metoro-exporter-hpa"
+      minReplicas: 2
+      maxReplicas: 10
+      targetCPUUtilizationPercentage: 70
+  gracefulShutdown:
+    enabled: true
+    # Time to wait for inflight requests to complete after SIGTERM
+    terminationGracePeriodSeconds: 15
+# Node Agent
+nodeAgent:
+  metadata:
+    name: "metoro-node-agent"
+    podAnnotations: {}
+    selectorLabels:
+      app.kubernetes.io/name: "metoro-node-agent"
+  envVars:
+    mandatory: {}
+    userDefined: {}
+  updateStrategy:
+    type: "RollingUpdate"
+  prometheus:
+    scrape: true
+    # Port numbers below 1024 are often blocked. If you change this port, make sure it is open.
+    port: "8080"
+  image:
+    repository: quay.io/metoro/metoro-node-agent
+    tag: "v2-stable"
+    # This should be kept as Always in the vast majority of cases. The node agent restarts itself each day in order to pick up the latest agent image.
+    # If this is set to anything else, the node agent will fall behind and miss out on new features, bug fixes and security patches.
+    pullPolicy: "Always"
+    imagePullSecrets: []
+  # The below resources are tuned for a typical deployment. Around 200k requests per node per hour. Reach out for help tuning these values.
+  resources:
+    limits:
+      cpu: "1"
+      memory: "2Gi"
+    requests:
+      cpu: "300m"
+      memory: "300Mi"
+  priorityClassName: ""
+  logExport:
+    enabled: true
+  scheduling:
+    affinity:
+       nodeAffinity:
+         requiredDuringSchedulingIgnoredDuringExecution:
+           nodeSelectorTerms:
+             # We can't run on Fargate (or any other serverless platform) as we don't have access to the host to run ebpf programs
+             - matchExpressions:
+                 - key: eks.amazonaws.com/compute-type
+                   operator: NotIn
+                   values:
+                     - fargate
+    tolerations: []
+    nodeSelector: {}
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+    existingSecret: "redis-secret"
+    existingSecretPasswordKey: "password"
+  architecture: standalone
+  fullnameOverride: "metoro-redis"
+  image:
+    registry: "quay.io"
+    repository: "metoro/redis"
+    tag: "7.4.0-debian-12-r4"
+    pullPolicy: "IfNotPresent"
+  master:
+    resourcesPreset: "medium"
+    startupProbe:
+      initialDelaySeconds: 5
+    livenessProbe:
+      initialDelaySeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 5
+    persistence:
+      enabled: true
+
+redisCluster:
+  enabled: false
+  auth:
+    enabled: false
+    existingSecret: "redis-secret"
+    existingSecretPasswordKey: "password"
+  architecture: "replication"
+  rbac:
+    create: true
+  sentinel:
+    enabled: true
+    quorum: 2
+    service:
+      createMaster: true
+    startupProbe:
+      initialDelaySeconds: 5
+    livenessProbe:
+      initialDelaySeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 5
+  fullnameOverride: "metoro-redis"
+  pdb:
+    create: true
+    maxUnavailable: 1
+  replica:
+    replicaCount: 3
+    resourcesPreset: "micro"
+    automountServiceAccountToken: true
+    livenessProbe:
+      initialDelaySeconds: 5
+    readinessProbe:
+      initialDelaySeconds: 5
+    startupProbe:
+      initialDelaySeconds: 5
+    persistence:
+      enabled: true
+
+serviceMonitorScraping:
+  enabled: true
+
+  collector:
+    mode: statefulset
+    replicas: 2
+    podDisruptionBudget:
+      enabled: true
+      maxUnavailable: 1
+    image:
+      repository: quay.io/metoro/opentelemetry-collector
+      tag: "stable"
+      pullPolicy: Always
+      imagePullSecrets: []
+    resources: {}
+    scheduling:
+      nodeSelector: {}
+      affinity: {}
+      podAntiAffinity:
+        enabled: true
+      tolerations: []
+
+  targetAllocator:
+    enabled: true
+    replicas: 2
+    podDisruptionBudget:
+      enabled: true
+      maxUnavailable: 1
+    image:
+      repository: quay.io/metoro/opentelemetry-target-allocator
+      tag: "stable"
+      pullPolicy: Always
+      imagePullSecrets: []
+    allocationStrategy: consistent-hashing
+    filterStrategy: relabel-config
+    resources: {}
+    scheduling:
+      nodeSelector: {}
+      affinity: {}
+      podAntiAffinity:
+        enabled: true
+      tolerations: []
+    prometheusCR:
+      scrapeInterval: 30s
+      serviceMonitorSelector: {}
+      podMonitorSelector: {}
+      namespaceSelector: {}

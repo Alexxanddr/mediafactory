@@ -1,0 +1,14 @@
+{{- if .Values.exporter.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ .Values.exporter.metadata.name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "metoro.labels" . | nindent 4 }}
+spec:
+  maxUnavailable: {{ .Values.exporter.podDisruptionBudget.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "metoro.selectorLabels" . | nindent 6 }}
+{{- end }}

@@ -1,0 +1,16 @@
+apiVersion: v2
+appVersion: 0.2303.0
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.1.6
+- alias: redisCluster
+  condition: redisCluster.enabled
+  name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.1.6
+description: A helm chart for the Metoro Exporter
+name: metoro-exporter
+type: application
+version: 0.478.0

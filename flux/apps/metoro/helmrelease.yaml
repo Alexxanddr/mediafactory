@@ -8,11 +8,10 @@ spec:
   interval: 1h
   chart:
     spec:
-      chart: metoro-exporter
-      version: 0.478.0
+      chart: ./flux/charts/metoro-exporter
       sourceRef:
-        kind: HelmRepository
-        name: metoro
+        kind: GitRepository
+        name: flux-system
         namespace: flux-system
       interval: 12h
   values:

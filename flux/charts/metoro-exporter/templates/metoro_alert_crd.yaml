@@ -1,0 +1,280 @@
+{{- if eq (include "metoro.shouldRenderCRD" (dict "root" . "name" "metoroalerts.observability.metoro.io")) "true" }}
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+  annotations:
+    "helm.sh/resource-policy": keep
+    "meta.helm.sh/release-name": {{ .Release.Name | quote }}
+    "meta.helm.sh/release-namespace": {{ .Release.Namespace | quote }}
+  name: metoroalerts.observability.metoro.io
+spec:
+  group: observability.metoro.io
+  names:
+    kind: MetoroAlert
+    listKind: MetoroAlertList
+    plural: metoroalerts
+    singular: metoroalert
+    shortNames:
+      - ma
+      - malert
+      - malerts
+    categories:
+      - metoro
+      - metoro-observability
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      additionalPrinterColumns:
+        - name: Display Name
+          type: string
+          jsonPath: .spec.displayName
+        - name: Query
+          type: string
+          jsonPath: .spec.timeseries.expression.metoroQLTimeseries.query
+        - name: Age
+          type: date
+          jsonPath: .metadata.creationTimestamp
+      schema:
+        openAPIV3Schema:
+          type: object
+          description: MetoroAlert defines a Metoro timeseries alert managed from Kubernetes.
+          required:
+            - spec
+          properties:
+            apiVersion:
+              type: string
+            kind:
+              type: string
+            metadata:
+              type: object
+            spec:
+              type: object
+              required:
+                - timeseries
+              properties:
+                displayName:
+                  type: string
+                  description: Display name for the synced Metoro alert. Defaults to metadata.name when omitted.
+                  minLength: 1
+                  maxLength: 512
+                description:
+                  type: string
+                  description: Optional alert description.
+                  maxLength: 4096
+                tags:
+                  type: array
+                  description: Tags applied to the synced Metoro alert. Tags are lowercased and whitespace-collapsed on sync; letters, numbers, spaces, hyphens and underscores are allowed.
+                  maxItems: 20
+                  items:
+                    type: string
+                    minLength: 1
+                    maxLength: 64
+                    pattern: '^[\p{L}\p{N} _-]*[\p{L}\p{N}_-][\p{L}\p{N} _-]*$'
+                aiInvestigateOnFire:
+                  type: boolean
+                  description: Whether Metoro should automatically start an AI investigation when this alert fires.
+                timeseries:
+                  type: object
+                  description: OpenAPI-compatible timeseries alert body.
+                  required:
+                    - expression
+                    - evaluationRules
+                  properties:
+                    expression:
+                      type: object
+                      required:
+                        - metoroQLTimeseries
+                      properties:
+                        metoroQLTimeseries:
+                          type: object
+                          required:
+                            - query
+                            - bucketSize
+                          properties:
+                            query:
+                              type: string
+                              minLength: 1
+                            bucketSize:
+                              type: integer
+                              format: int64
+                              minimum: 1
+                    evaluationRules:
+                      type: array
+                      description: Rules for evaluating the timeseries and triggering alerts. v1 supports exactly one rule.
+                      minItems: 1
+                      maxItems: 1
+                      items:
+                        type: object
+                        required:
+                          - name
+                          - type
+                          - static
+                        properties:
+                          name:
+                            type: string
+                            minLength: 1
+                            maxLength: 512
+                          type:
+                            type: string
+                            enum:
+                              - static
+                          static:
+                            type: object
+                            required:
+                              - operators
+                              - persistenceSettings
+                            properties:
+                              operators:
+                                type: array
+                                description: Operator conditions that must be met. v1 supports exactly one operator.
+                                minItems: 1
+                                maxItems: 1
+                                items:
+                                  type: object
+                                  required:
+                                    - operator
+                                    - threshold
+                                  properties:
+                                    operator:
+                                      type: string
+                                      enum:
+                                        - greaterThan
+                                        - lessThan
+                                        - greaterThanOrEqual
+                                        - lessThanOrEqual
+                                        - equals
+                                        - notEquals
+                                    threshold:
+                                      type: number
+                                      format: double
+                                    unit:
+                                      type: string
+                                      description: >-
+                                        Optional UCUM unit the threshold is expressed in. When set,
+                                        the threshold is converted into the queried metric's own unit
+                                        before evaluation. If the unit is not compatible with the
+                                        metric's unit, the threshold is evaluated in the metric's base
+                                        unit and a warning is logged to the organization's log stream.
+                                      enum:
+                                        - ns
+                                        - us
+                                        - ms
+                                        - s
+                                        - min
+                                        - h
+                                        - d
+                                        - By
+                                        - kBy
+                                        - MBy
+                                        - GBy
+                                        - TBy
+                                        - KiBy
+                                        - MiBy
+                                        - GiBy
+                                        - TiBy
+                              persistenceSettings:
+                                type: object
+                                required:
+                                  - datapointsToAlarm
+                                  - datapointsInEvaluationWindow
+                                x-kubernetes-validations:
+                                  - rule: "self.datapointsToAlarm <= self.datapointsInEvaluationWindow"
+                                    message: datapointsToAlarm must be less than or equal to datapointsInEvaluationWindow.
+                                properties:
+                                  datapointsToAlarm:
+                                    type: integer
+                                    format: int64
+                                    minimum: 1
+                                  datapointsInEvaluationWindow:
+                                    type: integer
+                                    format: int64
+                                    minimum: 1
+                                  missingDatapointBehavior:
+                                    type: string
+                                    default: notBreaching
+                                    enum:
+                                      - breaching
+                                      - notBreaching
+                          actions:
+                            type: array
+                            items:
+                              type: object
+                              required:
+                                - type
+                              x-kubernetes-validations:
+                                - rule: "self.type == 'slack' ? has(self.slackDestination) && !has(self.pagerDutyDestination) && !has(self.emailDestination) && !has(self.webhookDestination) : !has(self.slackDestination)"
+                                  message: slack actions must set only slackDestination.
+                                - rule: "self.type == 'pagerDuty' ? has(self.pagerDutyDestination) && !has(self.slackDestination) && !has(self.emailDestination) && !has(self.webhookDestination) : !has(self.pagerDutyDestination)"
+                                  message: pagerDuty actions must set only pagerDutyDestination.
+                                - rule: "self.type == 'email' ? has(self.emailDestination) && !has(self.slackDestination) && !has(self.pagerDutyDestination) && !has(self.webhookDestination) : !has(self.emailDestination)"
+                                  message: email actions must set only emailDestination.
+                                - rule: "self.type == 'webhook' ? has(self.webhookDestination) && !has(self.slackDestination) && !has(self.pagerDutyDestination) && !has(self.emailDestination) : !has(self.webhookDestination)"
+                                  message: webhook actions must set only webhookDestination.
+                              properties:
+                                type:
+                                  type: string
+                                  enum:
+                                    - slack
+                                    - pagerDuty
+                                    - email
+                                    - webhook
+                                slackDestination:
+                                  type: object
+                                  properties:
+                                    channel:
+                                      type: string
+                                      description: Slack channel to send alert to.
+                                      minLength: 1
+                                    notifyOnResolve:
+                                      type: boolean
+                                      default: false
+                                      description: Whether to notify the channel when the alert is resolved.
+                                pagerDutyDestination:
+                                  type: object
+                                  properties:
+                                    serviceId:
+                                      type: string
+                                      description: PagerDuty service ID.
+                                      minLength: 1
+                                    serviceName:
+                                      type: string
+                                      description: PagerDuty service name.
+                                      minLength: 1
+                                emailDestination:
+                                  type: object
+                                  properties:
+                                    emails:
+                                      type: array
+                                      description: Email addresses to send alert to.
+                                      minItems: 1
+                                      items:
+                                        type: string
+                                        minLength: 1
+                                    notifyOnResolve:
+                                      type: boolean
+                                      default: false
+                                      description: Whether to notify the email recipients when the alert is resolved.
+                                webhookDestination:
+                                  type: object
+                                  properties:
+                                    uuid:
+                                      type: string
+                                      description: UUID of the webhook configuration to use for notifying that the alert is triggered.
+                                      minLength: 1
+                                    name:
+                                      type: string
+                                      description: Name of the webhook configuration to use for notifying that the alert is triggered.
+                                      minLength: 1
+                                    resolved_uuid:
+                                      type: string
+                                      description: UUID of the webhook configuration to use for notifying that the alert is resolved.
+                                      minLength: 1
+                                    resolved_name:
+                                      type: string
+                                      description: Name of the webhook configuration to use for notifying that the alert is resolved.
+                                      minLength: 1
+{{- end }}
