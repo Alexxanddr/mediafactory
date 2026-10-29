@@ -4,7 +4,6 @@ metadata:
   name: mariadb
   namespace: database
 spec:
-  suspend: true
   podMetadata:
     annotations:
       uptime-kuma.io/enabled: "true"

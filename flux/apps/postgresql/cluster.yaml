@@ -3,8 +3,6 @@ kind: Cluster
 metadata:
   name: postgres
   namespace: database
-  annotations:
-    cnpg.io/hibernation: "on"
 spec:
   instances: 1
   inheritedMetadata:
