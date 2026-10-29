@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: migration-longhorn
+  namespace: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-retain
+  volumeName: pvc-6c918047-bb5e-4f8b-ac96-aabc8be905c7
+  resources:
+    requests:
+      storage: 1Gi
