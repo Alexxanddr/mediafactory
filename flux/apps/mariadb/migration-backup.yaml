@@ -1,3 +1,5 @@
+# Completed migration record retained for the immutable mariadb-longhorn bootstrap reference.
+# The original source instance is retired; do not rerun its migration Job.
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: Backup
 metadata:
