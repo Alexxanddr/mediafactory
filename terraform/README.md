@@ -1,10 +1,10 @@
 # Talos on the ThinkPad P53
 
 This Terraform root bootstraps the single-node Talos cluster. Flux and
-monitoring resources are enabled only after bootstrap. Cloudflare remains
-managed by the unchanged `k3s-server` workspace. Terraform Cloud uses the
-separate `mediafactory-talos` workspace so the current `k3s-server` state stays
-available during the migration.
+monitoring resources are enabled only after bootstrap. Cloudflare resources
+have been transferred from `k3s-server` to the `mediafactory-talos` workspace.
+Terraform Cloud uses the separate `mediafactory-talos` workspace so the
+cluster migration does not share state with the former K3s setup.
 
 Generate and download the ThinkPad image without applying the machine config:
 
@@ -46,13 +46,14 @@ tfale apply
 The local kubeconfig and talosconfig are ignored by Git. Keep other secrets in
 Terraform Cloud or an ignored local `.tfvars` file.
 
-Cloudflare resources are suspended in this workspace; the `removed` blocks
-detach partial state entries without deleting live objects. Cloudflare stays
-managed by the unchanged `k3s-server` workspace.
+Cloudflare resources are managed in this workspace and their state was moved
+from `k3s-server` without deleting the live Cloudflare objects. Do not apply
+the old `k3s-server` Terraform configuration: it still declares these
+resources and would try to create them again after the state transfer.
 
-Before applying Terraform with Flux enabled, push the bootstrap manifests and Terraform values to the
-`codex/talos-thinkpad-p53` branch, which is the branch configured as Flux's Git
-source. After the Longhorn backup restore is complete, switch `instance.sync.path`
+The Flux `FluxInstance` is configured to sync `master`. After publishing the
+merge and applying this Terraform workspace, Flux will use the `master` branch.
+After the Longhorn backup restore is complete, switch `instance.sync.path`
 back to `flux/clusters/home/` to start reconciling the full infrastructure and
 apps tree.
 
