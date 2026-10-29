@@ -34,8 +34,8 @@ Configure MCPHub's `italian-travel-search` server with:
 Verify the service and MCP transport after Flux reconciliation:
 
 ```sh
-KUBECONFIG=~/.kube/k3s kubectl get pod,service,pvc -n extra-tools -l app.kubernetes.io/name=italian-travel-search
-KUBECONFIG=~/.kube/k3s kubectl port-forward -n extra-tools service/italian-travel-search 3099:3000
+KUBECONFIG=/Users/asottile/.kube/talos kubectl get pod,service,pvc -n extra-tools -l app.kubernetes.io/name=italian-travel-search
+KUBECONFIG=/Users/asottile/.kube/talos kubectl port-forward -n extra-tools service/italian-travel-search 3099:3000
 # In another local terminal:
 curl --fail http://127.0.0.1:3099/health
 HTTP_BASE_URL=http://127.0.0.1:3099 SMOKE_DATE=YYYY-MM-DD node scripts/live-smoke.mjs

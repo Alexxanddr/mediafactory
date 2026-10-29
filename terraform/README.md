@@ -43,6 +43,10 @@ tfale output -raw talosconfig > talosconfig
 tfale apply
 ```
 
+For operational Kubernetes and Flux commands, explicitly use
+`KUBECONFIG=/Users/asottile/.kube/talos`. Terraform providers continue to
+read their generated local `terraform/kubeconfig` file.
+
 The local kubeconfig and talosconfig are ignored by Git. Keep other secrets in
 Terraform Cloud or an ignored local `.tfvars` file.
 

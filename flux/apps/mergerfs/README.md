@@ -24,17 +24,17 @@ For a manual bootstrap on the ThinkPad, from the repository root:
 ```sh
 talosctl --talosconfig terraform/talosconfig patch machineconfig \
   --nodes 192.168.20.3 --patch @terraform/media-volumes.yaml
-kubectl --kubeconfig terraform/kubeconfig label node p53-talos \
+kubectl --kubeconfig /Users/asottile/.kube/talos label node p53-talos \
   mediafactory/storage-ready=true --overwrite
-kubectl --kubeconfig terraform/kubeconfig apply \
+kubectl --kubeconfig /Users/asottile/.kube/talos apply \
   -f flux/apps/mergerfs/namespace.yaml \
   -f flux/apps/mergerfs/deployment.yaml
-kubectl --kubeconfig terraform/kubeconfig -n mergerfs \
+kubectl --kubeconfig /Users/asottile/.kube/talos -n mergerfs \
   rollout status deployment/mergerfs
-kubectl --kubeconfig terraform/kubeconfig apply \
+kubectl --kubeconfig /Users/asottile/.kube/talos apply \
   -f flux/apps/mergerfs/nfs-ganesha-config.yaml \
   -f flux/apps/mergerfs/nfs-ganesha-deployment.yaml
-kubectl --kubeconfig terraform/kubeconfig apply \
+kubectl --kubeconfig /Users/asottile/.kube/talos apply \
   -f flux/infrastructure/nfs-csi/helmrepository.yaml \
   -f flux/infrastructure/nfs-csi/storageclass.yaml \
   -f flux/infrastructure/nfs-csi/persistentvolume.yaml \

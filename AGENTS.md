@@ -2,7 +2,7 @@
 
 ## Scope
 
-These instructions apply to the entire repository. This project manages a K3s homelab with Terraform and FluxCD; Git is the source of truth. Cluster changes must be declarative and committed to the repository. Do not install resources directly with `kubectl apply`, `helm install`, or equivalent commands unless the user explicitly requests diagnostic or emergency work.
+These instructions apply to the entire repository. This project manages a single-node Talos Linux homelab on a ThinkPad P53 with Terraform and FluxCD; Git is the source of truth. Cluster changes must be declarative and committed to the repository. Do not install resources directly with `kubectl apply`, `helm install`, or equivalent commands unless the user explicitly requests diagnostic or emergency work.
 
 Before modifying a resource:
 
@@ -16,14 +16,34 @@ Before modifying a resource:
 
 ### `terraform/`
 
-This directory contains the cluster bootstrap:
+This root uses the Terraform Cloud organization `alexxanddr-cloud`, workspace
+`mediafactory-talos`, with local execution. It manages:
 
-- K3s installation through the `xunleii/k3s/module` module;
-- node and NFS/storage configuration;
-- Flux Operator and Flux Instance installation;
-- Git repository and SOPS Age key configuration;
-- Metoro installation for monitoring;
-- Cloudflare configuration and externally exposed services.
+- Talos Image Factory extensions, machine secrets/configuration, installation and bootstrap;
+- Flux Operator, Flux Instance, GitHub App authentication and SOPS Age key;
+- Cloudflare DNS, Tunnel configuration, Access application, policies and Google IdP.
+
+Cloudflare managed objects were transferred out of the old `k3s-server` state.
+Use the new workspace; applying the old root could attempt to recreate them.
+For Access automatic identity redirect, keep exactly one Google IdP in
+`allowed_idps`. Metoro remains commented out in `terraform/metoro.tf`.
+
+Before Talos changes, read `terraform/README.md` and `terraform/talos.tf`.
+The install selector targets the internal NVMe and its serial, with wipe enabled.
+Installation settings are destructive: preserve the selected system disk and
+the three existing XFS media disks. Media mounts use `ExistingVolumeConfig`
+by UUID; they must never be converted to newly provisioned/formatted volumes.
+Talos has no SSH package installation workflow.
+
+Terraform Kubernetes/Helm providers read the ignored `terraform/kubeconfig`;
+Talos operations use `terraform/talosconfig`. For agent Kubernetes and Flux
+commands, follow `AGENTS.override.md`: explicitly set
+`KUBECONFIG="/Users/asottile/.kube/talos"`. Verify the target context before cluster operations. Keep both generated configs, state, plan
+files and local tfvars outside tracked Git files.
+
+For every commit use Alessandro Sottile
+`<sottile.alessandro10@gmail.com>`. Follow the user's current authorization
+for commits, pushes and applies; a local merge does not publish a remote branch.
 
 Format Terraform changes with `terraform fmt`. Do not add sensitive values to `.tf` files, other tracked files, or outputs that are not marked `sensitive`.
 
@@ -31,11 +51,22 @@ Format Terraform changes with `terraform fmt`. Do not add sensitive values to `.
 
 This is the entrypoint reconciled by the Flux Instance. It contains the Flux `Kustomization` resources that define ordering and dependencies, together with bootstrap resources that must exist before the rest of the cluster, such as the Gateway API CRDs.
 
+The desired Flux source is `master`, path `flux/clusters/home/`, configured
+through `instance.sync` in `terraform/values/flux-values.yaml`. Publishing
+Git changes and applying the Flux Instance values are separate operations.
+Inspect the live Flux Instance/source before claiming the cluster has switched.
+
 Current order:
 
-1. bootstrap resources and CRDs in `clusters/home`;
-2. `infrastructure`;
-3. `apps`, which depends on `infrastructure`.
+1. bootstrap resources and Gateway API CRDs in `clusters/home`;
+2. `infrastructure`, with HelmRelease health checks;
+3. `apps` and the separate `traefik-middleware` Kustomization depend on infrastructure.
+
+`flux/clusters/talos-bootstrap/` and `flux/bootstrap/longhorn/` are recovery
+entrypoints, not the normal full-stack sync. `flux/disabled/` holds inactive
+migration resources; preserve that exclusion when changing reconciliation paths.
+Inspect existing bootstrap resources before activating them: restoring migration
+jobs or database source instances can collide with restored production data.
 
 When a new product requires CRDs or an operator, ensure they are Ready before applying their Custom Resources. If the existing Kustomizations cannot guarantee this dependency, add a dedicated Kustomization under `flux/clusters/home/` with an explicit `dependsOn`.
 
@@ -50,11 +81,24 @@ This directory contains shared infrastructure components, including:
 - MetalLB;
 - Traefik and Gateway API;
 - NVIDIA Operator;
-- shared security components.
+- shared security components;
+- Longhorn, NFS CSI, and metrics-server (CPU/memory Metrics API).
 
 Install operators, controllers, infrastructure Helm charts, and CRDs here. Application instances or Custom Resources managed by those operators normally belong under `flux/apps/`.
 
-Shared namespaces are defined in `flux/infrastructure/namespace.yaml`. Reuse an existing namespace; do not create a new one without a concrete reason.
+Shared namespaces are defined in `flux/infrastructure/namespace.yaml`. Reuse an appropriate namespace. Workloads needing host mounts, host networking
+or privileges use dedicated namespaces with explicit Pod Security labels.
+Keep shared namespaces at their existing policy; inspect
+`flux/infrastructure/namespace.yaml` before adding privileged workloads.
+
+Talos permits workloads on its control plane. Its kubelet configuration allows
+the specific WireGuard sysctls used by qBittorrent and sets the pod limit.
+Preserve these settings and the resolver configuration when changing machine
+patches; inspect rejection events before widening security permissions.
+
+Talos supplies NVIDIA kernel drivers and the container toolkit. The NVIDIA
+Operator manages device discovery, device plugin, time slicing and metrics;
+keep its driver/toolkit installation disabled.
 
 ### `flux/apps/`
 
@@ -210,6 +254,25 @@ Do not create storage for truly stateless workloads. Current Longhorn volumes us
 
 The shared PostgreSQL and MariaDB instances use the `longhorn-retain` StorageClass; do not provision their PVs or PVCs manually.
 
+### Media filesystem and NFS
+
+Before modifying host media mounts, mergerfs, NFS exports or CSI bindings,
+read `flux/apps/mergerfs/README.md` and inspect the current PVs.
+Talos mounts three existing XFS filesystems at `/var/mnt/externaldisk1-3`.
+The mergerfs Deployment waits for those mounts, then exposes the union at
+`/run/mergerfs`; NFS-Ganesha exports the media and backup directories.
+NFS CSI uses the node address and NFSv4.1 with Retain storage. Preserve export
+paths, mount propagation, startup checks, access restrictions and existing
+claim bindings. The storage-ready node label gates host storage workloads.
+
+### Runtime-owned UniFi state
+
+The two `unifi-youtube-pbr-state-x/y` ConfigMaps are initialized by Flux and
+updated by the UniFi CronJobs. Preserve their `ssa: IfNotPresent` and
+`prune: Disabled` annotations in `flux/apps/update-unifi-pbr/state-configmaps.yaml`.
+Keep runtime data out of Git; reconciling empty desired data must not erase
+job state.
+
 ## Shared databases
 
 Do not create new MariaDB, PostgreSQL, or Redis instances for an individual application. Always reuse the existing services and operators.
@@ -280,7 +343,7 @@ When introducing an operator:
 
 ## Required validation
 
-Run the relevant checks before considering a change complete:
+Select checks that cover the changed layer. For documentation-only changes, check links, consistency with manifests and whitespace; cluster renders, Terraform validation and Helm rendering are for changes to those layers. Available checks:
 
 ```bash
 git diff --check
