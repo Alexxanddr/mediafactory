@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: storage-probe
+  namespace: storage-recovery
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: 'true'
+spec:
+  selector:
+    matchLabels:
+      app: storage-probe
+  template:
+    metadata:
+      labels:
+        app: storage-probe
+    spec:
+      automountServiceAccountToken: false
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+        - operator: Exists
+      containers:
+        - name: probe
+          image: ghcr.io/alexxanddr/stale-file-controller-k8s:latest
+          imagePullPolicy: Always
+          command: [python, -c, 'import time; time.sleep(2147483647)']
+          securityContext:
+            privileged: true
+            runAsUser: 0
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              memory: 256Mi
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}

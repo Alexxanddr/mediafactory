@@ -49,3 +49,20 @@ kubectl apply \
 The Talos patch and manifests are idempotent. Do not replace these existing
 filesystems with `UserVolumeConfig`, and do not run formatting or wipe commands
 against the three data disks.
+
+## Automatic recovery controller
+
+The infrastructure manifests in `flux/infrastructure/storage-recovery/` deploy
+[stale-file-controller-k8s](https://github.com/Alexxanddr/stale-file-controller-k8s).
+It serializes MergerFS restart/read -> Ganesha restart/real NFS export read ->
+all discovered client restarts/namespace mount reads. NFS CSI 4.13.4's
+NodePublish ESTALE remount complements this ordering. Plex's local MergerFS PV
+is discovered as well as NFS CSI claims. The privileged diagnostic DaemonSet
+checks actual client mount namespaces even for images without shell tools.
+
+The checkpoint and Lease survive controller restarts. Normal pod termination
+is never forced: blocked NFS I/O requires storage/node investigation, and
+recovery remains incomplete until replacement mounts pass checks. See the
+software README for exact privileges, timeouts and read-only verification
+commands. Deployment through Flux requires the published GHCR image to be
+publicly pullable. No manual apply is required.
