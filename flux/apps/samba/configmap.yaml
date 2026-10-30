@@ -11,6 +11,11 @@ data:
         uid: 1000
         gid: 1000
         password_file: /run/secrets/samba/password
+      - user: timemachine
+        group: timemachine
+        uid: 1001
+        gid: 1002
+        password_file: /run/secrets/samba/timemachine-password
     global:
       - "server min protocol = SMB2_02"
       - "server max protocol = SMB3"
@@ -33,3 +38,18 @@ data:
           - "fruit:time machine = no"
           - "create mask = 0664"
           - "directory mask = 0775"
+      - name: TimeMachine
+        comment: Time Machine backups
+        path: /mnt/md0/TimeMachine
+        browsable: "yes"
+        readonly: "no"
+        guestok: "no"
+        validusers: timemachine
+        writelist: timemachine
+        options:
+          - "vfs objects = fruit streams_xattr"
+          - "fruit:metadata = stream"
+          - "fruit:resource = file"
+          - "fruit:time machine = yes"
+          - "create mask = 0600"
+          - "directory mask = 0700"

@@ -26,11 +26,18 @@ client VLANs and the node as needed. No HTTPRoute or Internet exposure is used.
 Bonjour and Windows discovery are disabled; use the explicit address above.
 
 The upstream image enables `fruit` and `streams_xattr` for macOS compatibility.
-Time Machine advertising is disabled. Access is authenticated, read/write,
+Bonjour advertising is disabled; the dedicated `TimeMachine` share enables the
+Samba Time Machine extensions. Access is authenticated, read/write,
 and uses UID/GID 1000:1000 to match the media directories. Existing Unix
 permissions remain authoritative: the pool root is root-owned and `TimeMachine`
 currently belongs to 1001:1002 with mode 0700, so this account cannot write to
 the pool root or access that directory. No recursive chmod/chown is performed.
+Connect to `smb://192.168.20.3/TimeMachine` as `timemachine` using the
+configured password (SOPS key `timemachine-password`). This account uses the
+existing directory owner UID/GID 1001:1002 and can access only this share.
+No existing backups or ownership are changed. Mount the share manually before
+selecting it in macOS Time Machine settings.
+
 Samba SID/database state persists on the 1Gi `samba-state` Longhorn volume,
 with one replica and a Retain PV. It does not store the shared media.
 

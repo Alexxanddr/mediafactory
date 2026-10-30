@@ -19,7 +19,7 @@ spec:
       labels:
         app: samba
       annotations:
-        config-revision: "1"
+        config-revision: "2"
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/type: "tcp"
         uptime-kuma.io/hostname: "samba.mergerfs.svc.cluster.local"
