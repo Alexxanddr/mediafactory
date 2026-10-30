@@ -38,7 +38,7 @@ data:
           - "fruit:time machine = no"
           - "create mask = 0664"
           - "directory mask = 0775"
-      - name: TimeMachine
+      - name: "Time Machine"
         comment: Time Machine backups
         path: /mnt/md0/TimeMachine
         browsable: "yes"
