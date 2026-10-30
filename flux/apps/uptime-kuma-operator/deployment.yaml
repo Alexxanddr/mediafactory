@@ -24,13 +24,13 @@ spec:
     metadata:
       labels:
         app: uptime-kuma-operator
-        app.kubernetes.io/version: 1.1.2
+        app.kubernetes.io/version: 1.2.0
     spec:
       serviceAccountName: uptime-kuma-operator
       automountServiceAccountToken: true
       containers:
       - name: operator
-        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.1.2
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.2.0
         imagePullPolicy: Always
         command:
         - kopf
@@ -56,6 +56,14 @@ spec:
             secretKeyRef:
               name: uptime-kuma-creds
               key: pass
+        - name: KUMA_STATUS_PAGE_SLUG
+          value: "k8s-services"
+        - name: KUMA_STATUS_PAGE_ID
+          value: "2"
+        - name: KUMA_STATUS_PAGE_GROUPS
+          value: "{\"102\":9,\"103\":10,\"106\":11,\"105\":12,\"107\":13,\"104\":14,\"108\":15}"
+        - name: KUMA_STATUS_PAGE_MONITORS
+          value: "[109,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,139,140,141,142,143,145,146,147,148,150,151,158,160,161,162,163,165,170,172,173,189,190,194,195,198,199,200,201,202,204,205,206,207,208,209,210,213,220,221,224,225,228,231,232,233,235,236,237,238,239,240,241,242,243,244,245]"
         - name: LOG_LEVEL
           value: INFO
         securityContext:

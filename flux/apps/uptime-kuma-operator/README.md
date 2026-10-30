@@ -1,7 +1,7 @@
 # Uptime Kuma operator
 
-The operator runs in `extra-tools` using the public `1.1.2` image from
-[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.1.2).
+The operator runs in `extra-tools` using the public `1.2.0` image from
+[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.2.0).
 This existing operator deliberately uses a versioned image for controlled,
 validated upgrades; the old moving `latest` tag is not part of this rollout.
 Keel annotations are retained for compatibility.
@@ -45,3 +45,44 @@ Version 1.1.2 keeps health probes asynchronous during reconciliation bursts and
 excludes controller-generated state annotations from desired-state comparison.
 This prevents executor starvation and status feedback loops. The normal probe
 budgets are restored. Automated E2E coverage includes 64 simultaneous workloads.
+
+## Dedicated status page
+
+The status-page configuration targets `k8s-services` (page ID 2), titled
+`Kubernetes Services`. Initial provisioning on 2026-10-30 explicitly published
+82 UID-owned active monitors, preserving all 93 monitor/group configurations and
+the original `k8s` page with its `Homelab` aggregate group. Publication does not
+expose monitor target URLs. Page tag and certificate-expiry display are disabled;
+refresh remains 300 seconds. Initial monitor order follows source weight/name/ID.
+
+The deployment's `KUMA_STATUS_PAGE_MONITORS` allowlist approves those exact monitor
+IDs without changing workload pod templates or restarting the monitored services.
+An explicit workload `uptime-kuma.io/status-page: "false"` overrides the allowlist;
+`"true"` opts in a new UID-owned monitor. A recreated monitor with a new ID is not
+automatically approved by the historical ID list.
+
+Destination groups are explicitly reserved by ID:
+
+| Kuma source ID | Public group ID | Name |
+| --- | --- | --- |
+| 102 | 9 | Media & Streaming |
+| 103 | 10 | Media Acquisition |
+| 106 | 11 | Monitoring & Observability |
+| 105 | 12 | Network & Connectivity |
+| 107 | 13 | Security & Cluster |
+| 104 | 14 | Storage & Databases |
+| 108 | 15 | Utilities |
+
+Require one writer for this page. Existing group/member order is preserved;
+new entries append and source group renames update full-path titles. Reserve
+membership/link settings of UID-owned monitors in these groups for the operator;
+do not add hidden custom URLs. Manual hidden links outside that contract block
+lossy saves. New or recreated public groups require explicit reviewed ID mapping.
+Opt out and verify cleanup before changing page identity or removing old mappings.
+
+Version 1.2.0 status-page writes support Kuma 2.5.8 only, preserving authenticated
+page configuration including `autoRefreshInterval` and verifying save readback.
+See the upstream [status-page guide](https://github.com/Alexxanddr/uptime-kuma-operator/blob/main/docs/status-pages.md)
+for ownership, public data exposure and the unavoidable concurrent-save limit.
+The committed configuration is desired state; verify the running image and
+successful reconciliation before treating automatic synchronization as active.
