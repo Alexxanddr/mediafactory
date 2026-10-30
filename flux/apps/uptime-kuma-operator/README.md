@@ -48,12 +48,16 @@ budgets are restored. Automated E2E coverage includes 64 simultaneous workloads.
 
 ## Dedicated status page
 
-The status-page configuration targets `k8s-services` (page ID 2), titled
-`Kubernetes Services`. Initial provisioning on 2026-10-30 explicitly published
+The status-page configuration targets `k8s` (page ID 2), titled
+`k8s`. Initial provisioning on 2026-10-30 explicitly published
 82 UID-owned active monitors, preserving all 93 monitor/group configurations and
 the original `k8s` page with its `Homelab` aggregate group. Publication does not
 expose monitor target URLs. Page tag and certificate-expiry display are disabled;
 refresh remains 300 seconds. Initial monitor order follows source weight/name/ID.
+
+The owner subsequently deleted the former aggregate-only `k8s` page (ID 1).
+The managed page was renamed from `k8s-services` to `k8s`, retaining ID 2, all
+seven public groups and the same monitored services.
 
 Publication is declared next to each workload's monitoring configuration with
 `uptime-kuma.io/status-page: "true"`. Direct workloads use their existing metadata

@@ -58,7 +58,7 @@ spec:
               name: uptime-kuma-creds
               key: pass
         - name: KUMA_STATUS_PAGE_SLUG
-          value: "k8s-services"
+          value: "k8s"
         - name: KUMA_STATUS_PAGE_ID
           value: "2"
         - name: KUMA_STATUS_PAGE_GROUPS
