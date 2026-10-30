@@ -8,5 +8,8 @@ spec:
   selector:
     app: uptime-kuma-operator
   ports:
-    - name: dummy
-      port: 80
+  - name: dummy
+    port: 80
+  - name: health
+    port: 8080
+    targetPort: health

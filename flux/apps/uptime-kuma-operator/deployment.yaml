@@ -16,7 +16,7 @@ metadata:
     uptime-kuma.io/notifications: Monitoring Bot
     uptime-kuma.io/group: Monitoring & Observability
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: uptime-kuma-operator
@@ -24,12 +24,13 @@ spec:
     metadata:
       labels:
         app: uptime-kuma-operator
+        app.kubernetes.io/version: 1.1.0
     spec:
       serviceAccountName: uptime-kuma-operator
       automountServiceAccountToken: true
       containers:
       - name: operator
-        image: ghcr.io/alexxanddr/uptime-kuma-operator:latest
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.1.0
         imagePullPolicy: Always
         command:
         - kopf
@@ -37,6 +38,7 @@ spec:
         - run
         - --all-namespaces
         - --standalone
+        - --liveness=http://0.0.0.0:8080/healthz
         - operator.py
         env:
         - name: KUMA_URL
@@ -55,9 +57,56 @@ spec:
               name: uptime-kuma-creds
               key: pass
         - name: LOG_LEVEL
-          value: DEBUG
+          value: INFO
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        ports:
+        - name: health
+          containerPort: 8080
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: health
+          periodSeconds: 5
+          failureThreshold: 24
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - name: tmp
+        emptyDir: {}
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
+    type: Recreate
+    rollingUpdate: null
