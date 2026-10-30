@@ -16,6 +16,10 @@ spec:
       interval: 12h
   values:
     exporter:
+      envVars:
+        userDefined:
+          - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+            value: http://metoro-exporter.monitoring.svc.cluster.local/api/v1/custom/otel/metrics
       metadata:
         podAnnotations:
           uptime-kuma.io/enabled: "true"
