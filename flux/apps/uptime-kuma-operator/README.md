@@ -55,11 +55,19 @@ the original `k8s` page with its `Homelab` aggregate group. Publication does not
 expose monitor target URLs. Page tag and certificate-expiry display are disabled;
 refresh remains 300 seconds. Initial monitor order follows source weight/name/ID.
 
-The deployment's `KUMA_STATUS_PAGE_MONITORS` allowlist approves those exact monitor
-IDs without changing workload pod templates or restarting the monitored services.
-An explicit workload `uptime-kuma.io/status-page: "false"` overrides the allowlist;
-`"true"` opts in a new UID-owned monitor. A recreated monitor with a new ID is not
-automatically approved by the historical ID list.
+Publication is declared next to each workload's monitoring configuration with
+`uptime-kuma.io/status-page: "true"`. Direct workloads use their existing metadata
+or pod-template annotation location; Helm releases and Falco resources use the
+same supported annotation maps as the monitoring settings. There is no monitor-ID
+environment allowlist in this deployment. A recreated workload keeps its explicit
+publication intent while UID ownership protects unrelated monitors.
+
+Only the target page identity and source/public group ID mapping remain in the
+operator environment. Set `status-page: "false"` or remove the annotation to opt
+out. New services require an explicit publication decision; names and operational
+status are public information even when target URLs are hidden. Updating Helm
+pod-template annotations may restart pods; preserve the declarative annotation
+contract rather than avoiding those rollouts with an ID list.
 
 Destination groups are explicitly reserved by ID:
 
