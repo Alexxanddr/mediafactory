@@ -11,6 +11,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://sonarr.multimedia-factory.svc:8989"
     uptime-kuma.io/name: "sonarr"

@@ -30,6 +30,7 @@ spec:
   values:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/status-page: "true"
       uptime-kuma.io/type: "http"
       uptime-kuma.io/url: "http://mariadb-operator-metrics.database.svc:8080/metrics"
       uptime-kuma.io/status-codes: "200"

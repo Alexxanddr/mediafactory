@@ -9,6 +9,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://your-spotify-server.extra-tools.svc:8080"
     uptime-kuma.io/name: "your-spotify-server"
@@ -46,6 +47,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://your-spotify-web.extra-tools.svc:3000"
     uptime-kuma.io/name: "your-spotify-web"
@@ -86,6 +88,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://your-spotify-server.extra-tools.svc:8080"
     uptime-kuma.io/name: "mongo"

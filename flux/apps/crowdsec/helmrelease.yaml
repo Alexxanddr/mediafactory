@@ -44,6 +44,7 @@ spec:
     lapi:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://crowdsec-service.crowdsec-system.svc:8080"
         uptime-kuma.io/name: "crowdsec-lapi"
@@ -109,6 +110,7 @@ spec:
     agent:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://crowdsec-agent-service.crowdsec-system.svc:6060"
         uptime-kuma.io/name: "crowdsec-agent"

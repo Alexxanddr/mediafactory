@@ -14,6 +14,7 @@ spec:
     metadata:
       annotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://falcosidekick.system-addon.svc:2801/healthz"
         uptime-kuma.io/name: "falcosidekick"
@@ -72,6 +73,7 @@ spec:
     metadata:
       annotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "port"
         uptime-kuma.io/url: "metacollector.system-addon.svc"
         uptime-kuma.io/port: "45000"
@@ -97,6 +99,7 @@ spec:
     metadata:
       annotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://falcosidekick-ui.system-addon.svc:2802/api/v1/healthz"
         uptime-kuma.io/name: "falcosidekick-ui"

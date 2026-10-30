@@ -8,6 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: http
     uptime-kuma.io/url: http://open-wearables-backend.extra-tools.svc:8000/
     uptime-kuma.io/name: open-wearables backend
@@ -70,6 +71,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: http
     uptime-kuma.io/url: http://open-wearables-frontend.extra-tools.svc:3000
     uptime-kuma.io/name: open-wearables frontend

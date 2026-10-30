@@ -21,6 +21,7 @@ spec:
       annotations:
         config-revision: "3"
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "tcp"
         uptime-kuma.io/hostname: "samba.mergerfs.svc.cluster.local"
         uptime-kuma.io/port: "445"

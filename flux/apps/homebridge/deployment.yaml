@@ -9,6 +9,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://homebridge.home-automation.svc:8581"
     uptime-kuma.io/name: "homebridge"

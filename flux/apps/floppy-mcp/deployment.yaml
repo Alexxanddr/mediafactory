@@ -8,6 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "tcp"
     uptime-kuma.io/url: "floppy-mcp.extra-tools.svc"
     uptime-kuma.io/port: "3000"

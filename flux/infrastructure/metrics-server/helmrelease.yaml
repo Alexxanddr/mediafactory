@@ -17,6 +17,7 @@ spec:
   values:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/status-page: "true"
       uptime-kuma.io/type: "tcp"
       uptime-kuma.io/hostname: "metrics-server.system-addon.svc.cluster.local"
       uptime-kuma.io/port: "443"

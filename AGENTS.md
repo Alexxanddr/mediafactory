@@ -200,6 +200,13 @@ The following values are the canonical Uptime Kuma macro-groups. Select the most
 - `Security & Cluster`;
 - `Utilities`.
 
+Status-page membership belongs in workload annotations, next to the existing
+monitor settings. For services explicitly approved for publication, set
+`uptime-kuma.io/status-page: "true"`; omit it or use `"false"` for private services.
+Keep the page identity and group mapping in the operator configuration. Do not
+replace workload annotations with monitor-ID environment allowlists to avoid pod
+restarts: Helm pod-template annotation changes may legitimately trigger rollouts.
+
 ## Internal HTTP exposure
 
 Every new service that exposes a user-facing web interface must be exposed internally through Gateway API and an `HTTPRoute` stored in `httproute.enc.yaml`. Do not create an `HTTPRoute` merely because a Service uses HTTP: backend APIs used only by other workloads, ingestion endpoints, metrics endpoints, health endpoints, webhooks, and other machine-to-machine interfaces must remain cluster-internal unless the user explicitly requests direct access or the product requires it. When a product has separate API and UI Services, create a route only for the UI.

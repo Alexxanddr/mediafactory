@@ -29,6 +29,7 @@ spec:
     operator:
       annotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://gpu-operator.nvidia-operator.svc:8080"
         uptime-kuma.io/name: "nvidia-operator"
@@ -59,6 +60,7 @@ spec:
 
       annotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://nvidia-dcgm-exporter.nvidia-operator.svc:9400/metrics"
         uptime-kuma.io/name: "nvidia-dcgm-exporter"

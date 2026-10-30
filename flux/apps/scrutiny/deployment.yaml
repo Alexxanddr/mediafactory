@@ -11,6 +11,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://scrutiny-web.extra-tools.svc:8080"
     uptime-kuma.io/name: "scrutiny-web"
@@ -73,6 +74,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://scrutiny-web.extra-tools.svc:8080"
     uptime-kuma.io/name: "scrutiny-collector"
@@ -159,6 +161,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://scrutiny-influxdb.extra-tools.svc:8086"
     uptime-kuma.io/name: "scrutiny-influxdb"

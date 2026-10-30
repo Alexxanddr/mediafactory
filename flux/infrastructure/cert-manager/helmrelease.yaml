@@ -27,6 +27,7 @@ spec:
   values:
     podAnnotations:
       uptime-kuma.io/enabled: "true"
+      uptime-kuma.io/status-page: "true"
       uptime-kuma.io/type: "http"
       uptime-kuma.io/url: "http://cert-manager.cert-manager.svc:9402/metrics"
       uptime-kuma.io/name: "cert-manager"
@@ -38,6 +39,7 @@ spec:
     webhook:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://cert-manager-webhook.cert-manager.svc:9402/metrics"
         uptime-kuma.io/name: "cert-manager-webhook"
@@ -49,6 +51,7 @@ spec:
     cainjector:
       podAnnotations:
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "http"
         uptime-kuma.io/url: "http://cert-manager-cainjector.cert-manager.svc:9402/metrics"
         uptime-kuma.io/name: "cert-manager-cainjector"

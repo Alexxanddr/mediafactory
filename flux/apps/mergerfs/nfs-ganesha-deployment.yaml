@@ -17,6 +17,7 @@ spec:
       annotations:
         config-revision: "4"
         uptime-kuma.io/enabled: "true"
+        uptime-kuma.io/status-page: "true"
         uptime-kuma.io/type: "tcp"
         uptime-kuma.io/hostname: "nfs-ganesha.mergerfs.svc.cluster.local"
         uptime-kuma.io/port: "2049"

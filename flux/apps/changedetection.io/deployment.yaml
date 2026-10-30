@@ -8,6 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://changedetection.extra-tools.svc:5000"
     uptime-kuma.io/name: "changedetection"
@@ -57,6 +58,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "port"
     uptime-kuma.io/url: "browser-sockpuppet-chrome.extra-tools.svc"
     uptime-kuma.io/port: "3000"

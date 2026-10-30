@@ -8,6 +8,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://tranga-api.multimedia-factory.svc:6531"
     uptime-kuma.io/name: "tranga-api"
@@ -65,6 +66,7 @@ metadata:
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
     uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
     uptime-kuma.io/type: "http"
     uptime-kuma.io/url: "http://tranga-website.multimedia-factory.svc:80"
     uptime-kuma.io/name: "tranga-website"
