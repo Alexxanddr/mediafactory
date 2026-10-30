@@ -1,7 +1,7 @@
 # Uptime Kuma operator
 
-The operator runs in `extra-tools` using the public `1.1.0` image from
-[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.1.0).
+The operator runs in `extra-tools` using the public `1.1.2` image from
+[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.1.2).
 This existing operator deliberately uses a versioned image for controlled,
 validated upgrades; the old moving `latest` tag is not part of this rollout.
 Keel annotations are retained for compatibility.
@@ -40,3 +40,8 @@ intervals, active state, and unrelated monitor settings. Verify enabled workload
 report successful reconciliation and confirm the controller is Ready without
 restarts. Restore ownership markers before attempting to run an old unsafe
 controller; see the upstream migration guide. Never bulk-clear finalizers.
+
+Version 1.1.2 keeps health probes asynchronous during reconciliation bursts and
+excludes controller-generated state annotations from desired-state comparison.
+This prevents executor starvation and status feedback loops. The normal probe
+budgets are restored. Automated E2E coverage includes 64 simultaneous workloads.

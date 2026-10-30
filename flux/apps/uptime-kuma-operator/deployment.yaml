@@ -24,13 +24,13 @@ spec:
     metadata:
       labels:
         app: uptime-kuma-operator
-        app.kubernetes.io/version: 1.1.0
+        app.kubernetes.io/version: 1.1.2
     spec:
       serviceAccountName: uptime-kuma-operator
       automountServiceAccountToken: true
       containers:
       - name: operator
-        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.1.0
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.1.2
         imagePullPolicy: Always
         command:
         - kopf
@@ -79,7 +79,7 @@ spec:
             path: /healthz
             port: health
           periodSeconds: 10
-          timeoutSeconds: 10
+          timeoutSeconds: 3
           failureThreshold: 3
         livenessProbe:
           httpGet:
@@ -87,13 +87,13 @@ spec:
             port: health
           periodSeconds: 10
           timeoutSeconds: 3
-          failureThreshold: 30
+          failureThreshold: 3
         startupProbe:
           httpGet:
             path: /healthz
             port: health
           periodSeconds: 5
-          failureThreshold: 120
+          failureThreshold: 24
         volumeMounts:
         - name: tmp
           mountPath: /tmp
