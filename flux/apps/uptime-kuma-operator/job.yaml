@@ -1,0 +1,70 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: uptime-kuma-ownership-v110
+  namespace: extra-tools
+spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: uptime-kuma-ownership-v110
+    spec:
+      serviceAccountName: uptime-kuma-operator
+      restartPolicy: Never
+      securityContext:
+        runAsUser: 10001
+        runAsGroup: 10001
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: migration
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.1.0
+        imagePullPolicy: Always
+        command:
+        - python
+        - -I
+        - /migration/migrate.py
+        env:
+        - name: KUMA_URL
+          valueFrom:
+            secretKeyRef:
+              name: uptime-kuma-creds
+              key: url
+        - name: KUMA_USER
+          valueFrom:
+            secretKeyRef:
+              name: uptime-kuma-creds
+              key: user
+        - name: KUMA_PASS
+          valueFrom:
+            secretKeyRef:
+              name: uptime-kuma-creds
+              key: pass
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        volumeMounts:
+        - name: migration
+          mountPath: /migration
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: migration
+        configMap:
+          name: uptime-kuma-ownership-v110
+      - name: tmp
+        emptyDir: {}
