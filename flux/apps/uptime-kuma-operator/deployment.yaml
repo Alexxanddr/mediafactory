@@ -79,7 +79,7 @@ spec:
             path: /healthz
             port: health
           periodSeconds: 10
-          timeoutSeconds: 3
+          timeoutSeconds: 10
           failureThreshold: 3
         livenessProbe:
           httpGet:
@@ -87,13 +87,13 @@ spec:
             port: health
           periodSeconds: 10
           timeoutSeconds: 3
-          failureThreshold: 3
+          failureThreshold: 30
         startupProbe:
           httpGet:
             path: /healthz
             port: health
           periodSeconds: 5
-          failureThreshold: 24
+          failureThreshold: 120
         volumeMounts:
         - name: tmp
           mountPath: /tmp
