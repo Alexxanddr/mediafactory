@@ -1,7 +1,7 @@
 # Vinted Monitoring
 
-This module deploys Vinted Monitoring through Talos/Flux. MCPHub registration
-and Telegram credentials are separate configuration steps. The service uses the public
+This module deploys Vinted Monitoring through Talos/Flux. MCPHub is registered privately and the Hermes skills are installed.
+Telegram credentials remain a separate configuration step. The service uses the public
 `ghcr.io/alexxanddr/vinted-monitoring:latest` image, one replica and Recreate.
 It runs as UID/GID 10001 in `extra-tools` and exposes only an internal MCP API:
 
@@ -43,10 +43,13 @@ Never paste these values into documentation, shell history or tool calls.
 After subsequent secret changes, restart the workload through the authorized
 GitOps workflow because environment variables are loaded at process startup.
 
-## MCPHub and Hermes (pending)
+## MCPHub and Hermes
 
-Add a private Streamable HTTP server in MCPHub using the endpoint above and
-`Authorization: Bearer <VM_HTTP_TOKEN>`, supplied through private settings.
+MCPHub has a private Streamable HTTP server named `vinted-monitoring`, using
+the endpoint above and `Authorization: Bearer <VM_HTTP_TOKEN>` from its private
+settings. The token was transferred in memory without printing it. On a new
+installation, add this entry through the installed version's supported server
+management API or UI; do not replace the other server entries.
 The NetworkPolicy permits only MCPHub and Uptime Kuma ingress on port 8000,
 following the other internal MCP services. There is no HTTPRoute or public
 status-page enrollment. Egress is not isolated by this policy, so the service
@@ -61,13 +64,20 @@ changes reset the baseline, and existing queued messages survive edits,
 pause and deletion. No price-drop alerts or reliable listing-time filter
 exists.
 
-Do not report Hermes integration complete until MCPHub's real catalog has
-been checked. Its distributable skill and configuration examples are in the
-[service repository](https://github.com/Alexxanddr/vinted-monitoring).
-Updating the local Hermes skill sources and installed copies remains a
-separate authorized task, including the required commit/push, installed-skill
-backup outside indexed directories, `--force` update and persistent-file
-verification.
+Hermes discovery and live tool calls were verified through its existing gateway
+connection: it loaded `vinted-monitoring` and the homelab reference, called
+`list_watches` and `monitoring_status`, then searched once for five newest
+ThinkCentre i5 listings under EUR 150. Five results were returned; no watch was
+created and no Telegram message was sent. Empty watch/backlog state and a false
+local request-suspension flag were observed. The flag does not describe a
+Vinted account status.
+
+The local sources in `skills/hermes-skills` and persistent installed copies
+were updated through commit/push, external `/tmp` backups and `hermes skills
+update <skill> --force`. The dedicated Vinted skill was installed from that
+source repository; installed file hashes were verified against the sources.
+For future changes, preserve that complete workflow. Keep Telegram bot and
+destination configuration in SOPS; they remain intentionally empty.
 
 ## Verification after an authorized rollout
 
