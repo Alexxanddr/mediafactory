@@ -1,7 +1,7 @@
 # Uptime Kuma operator
 
-The operator runs in `extra-tools` using the public `1.2.0` image from
-[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.2.0).
+The operator runs in `extra-tools` using the public `1.2.1` image from
+[uptime-kuma-operator](https://github.com/Alexxanddr/uptime-kuma-operator/releases/tag/v1.2.1).
 This existing operator deliberately uses a versioned image for controlled,
 validated upgrades; the old moving `latest` tag is not part of this rollout.
 Keel annotations are retained for compatibility.
@@ -10,8 +10,9 @@ Keel annotations are retained for compatibility.
 
 - One replica and `Recreate`; overlapping independent Socket.IO controllers are unsupported.
 - Non-root UID/GID 10001, read-only root, dropped capabilities, writable `/tmp`.
-- Requests 50m CPU/128Mi memory; limits 500m CPU/512Mi memory. The previous process
-  used approximately 216Mi, so the generic 256Mi limit was raised for this workload count.
+- Requests 100m CPU/256Mi memory; limits 1 CPU/1Gi memory. The controller watches
+  over 120 workloads and shares one serialized Kuma session; the single handler
+  worker bounds memory during cluster-wide resumes.
 - Startup/liveness/readiness use port 8080 `/healthz`; process health does not
   replace monitoring of Kuma authentication/reconciliation errors.
 - `service.yaml` preserves the legacy dummy port and exposes the internal health port.
@@ -62,14 +63,15 @@ seven public groups and the same monitored services.
 Publication is declared next to each workload's monitoring configuration with
 `uptime-kuma.io/status-page: "true"`. Direct workloads use their existing metadata
 or pod-template annotation location; Helm releases and Falco resources use the
-same supported annotation maps as the monitoring settings. There is no monitor-ID
-environment allowlist in this deployment. A recreated workload keeps its explicit
-publication intent while UID ownership protects unrelated monitors.
+same supported annotation maps as the monitoring settings. An explicit monitor-ID
+allowlist retains publication for existing monitors. Recreated workloads keep
+their explicit publication intent while UID ownership protects unrelated monitors.
 
 Only the target page identity and source/public group ID mapping remain in the
-operator environment. Set `status-page: "false"` or remove the annotation to opt
-out. New services require an explicit publication decision; names and operational
-status are public information even when target URLs are hidden. Updating Helm
+operator environment, including an explicit ID allowlist for existing monitors.
+Set `status-page: "false"` or remove the annotation to opt out. New services
+require an explicit publication decision; names and operational status are public
+information even when target URLs are hidden. Updating Helm
 pod-template annotations may restart pods; preserve the declarative annotation
 contract rather than avoiding those rollouts with an ID list.
 
@@ -92,7 +94,7 @@ do not add hidden custom URLs. Manual hidden links outside that contract block
 lossy saves. New or recreated public groups require explicit reviewed ID mapping.
 Opt out and verify cleanup before changing page identity or removing old mappings.
 
-Version 1.2.0 status-page writes support Kuma 2.5.8 only, preserving authenticated
+Version 1.2.1 status-page writes support Kuma 2.5.8 and 2.5.9, preserving authenticated
 page configuration including `autoRefreshInterval` and verifying save readback.
 See the upstream [status-page guide](https://github.com/Alexxanddr/uptime-kuma-operator/blob/main/docs/status-pages.md)
 for ownership, public data exposure and the unavoidable concurrent-save limit.

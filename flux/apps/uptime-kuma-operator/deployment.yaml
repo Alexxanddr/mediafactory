@@ -24,13 +24,13 @@ spec:
     metadata:
       labels:
         app: uptime-kuma-operator
-        app.kubernetes.io/version: 1.2.0
+        app.kubernetes.io/version: 1.2.1
     spec:
       serviceAccountName: uptime-kuma-operator
       automountServiceAccountToken: true
       containers:
       - name: operator
-        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.2.0
+        image: ghcr.io/alexxanddr/uptime-kuma-operator:1.2.1
         imagePullPolicy: Always
         command:
         - kopf
@@ -74,11 +74,11 @@ spec:
             - ALL
         resources:
           requests:
-            cpu: 50m
-            memory: 128Mi
+            cpu: 100m
+            memory: 256Mi
           limits:
-            cpu: 500m
-            memory: 512Mi
+            cpu: "1"
+            memory: 1Gi
         ports:
         - name: health
           containerPort: 8080
