@@ -91,6 +91,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td>🪽</td><td><b><a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a></b></td><td>Isolated personal AI agent; auto-loads the MCP-only travel policy</td></tr>
 <tr><td>文</td><td><b><a href="https://github.com/Alexxanddr/jlpt-bun-dojo">JLPT Bun Dojo</a></b></td><td>Japanese writing trainer for JLPT N5</td></tr>
 <tr><td>🔌</td><td><b><a href="https://github.com/samanhappy/mcphub">MCPHub</a></b></td><td>Self-hosted MCP gateway and control plane</td></tr>
+<tr><td>🛍️</td><td><b><a href="https://github.com/Alexxanddr/vinted-monitoring">Vinted Monitoring</a></b></td><td>Persistent Vinted watches, Telegram delivery and internal MCP</td></tr>
 <tr><td>🚆</td><td><b><a href="https://github.com/Alexxanddr/italian-travel-search">Italian Travel Search</a></b></td><td>Containerized bus and train search MCP service</td></tr>
 <tr><td>🚌</td><td><b><a href="https://github.com/adambenhassen/flixbus-mcp">FlixBus MCP</a></b></td><td>FlixBus trip search MCP server</td></tr>
 <tr><td>🛣️</td><td><b><a href="https://github.com/diegosouzapw/OmniRoute">OmniRoute</a></b></td><td>Unified AI provider routing and management</td></tr>

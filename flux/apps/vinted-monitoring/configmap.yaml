@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: vinted-monitoring
+  namespace: extra-tools
+data:
+  VM_TRANSPORT: http
+  VM_HOST: 0.0.0.0
+  VM_PORT: "8000"
+  VM_DATABASE: /data/monitor.sqlite3
+  VM_ALLOWED_HOSTS: '["127.0.0.1:*","localhost:*","vinted-monitoring:8000","vinted-monitoring.extra-tools:8000","vinted-monitoring.extra-tools.svc:8000","vinted-monitoring.extra-tools.svc.cluster.local:8000"]'
+  VM_PAGE_SIZE: "50"
+  VM_MAX_PAGES: "5"
+  VM_REQUEST_TIMEOUT: "15"
+  VM_REQUEST_ATTEMPTS: "3"
+  VM_SCAN_TIMEOUT: "300"
+  VM_TICK_SECONDS: "5"
+  VM_FAILURE_ALERT_SECONDS: "3600"
