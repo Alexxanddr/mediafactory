@@ -47,14 +47,18 @@ spec:
             - name: NVIDIA_VISIBLE_DEVICES
               value: "all"
           volumeMounts:
+            - name: fileflows-node-data
+              mountPath: /app/Logs
+              subPath: logs
             - name: fileflows-node-common
               mountPath: /app/common
             - name: fileflows-node-data
               mountPath: /app/Data
             - name: fileflows-node-media
               mountPath: /media
-            - name: fileflows-node-temp
+            - name: fileflows-node-media
               mountPath: /temp
+              subPath: fileflows-temp/node
             - name: dri
               mountPath: /dev/dri
           resources:
@@ -75,9 +79,6 @@ spec:
         - name: fileflows-node-media
           persistentVolumeClaim:
             claimName: mediafactory-root-nfs
-        - name: fileflows-node-temp
-          persistentVolumeClaim:
-            claimName: fileflows-node-temp-longhorn
         - name: dri
           hostPath:
             path: /dev/dri

@@ -47,6 +47,12 @@ spec:
             - name: FFNODE
               value: "0"
           volumeMounts:
+            - mountPath: /temp
+              name: fileflows-media
+              subPath: fileflows-temp/server
+            - mountPath: /app/Logs
+              name: fileflows-data
+              subPath: logs
             - mountPath: /app/common
               name: fileflows-common
             - mountPath: /app/Data

@@ -151,3 +151,18 @@ MIT License - feel free to use and adapt for your own projects.
 ---
 
 **Note**: This repository demonstrates production-ready practices in a homelab context. Sensitive values are managed via environment variables and encrypted secrets, never committed in plain text.
+
+### FileFlows storage paths
+
+FileFlows server and worker mount the shared media root at `/media`; libraries
+remain at `/media/media/movies` and `/media/media/tv`. Both mount `/temp` from
+the same NFS claim, using separate `fileflows-temp/server` and
+`fileflows-temp/node` subdirectories outside watched libraries. These directories
+must exist with UID/GID 1000 write access before starting the workloads.
+Temporary encoding output shares media storage capacity and NFS bandwidth.
+The former 1 GiB worker temporary Longhorn volume is retained but no longer mounted.
+
+Both workloads persist `/app/Logs` in the `logs` subdirectory of their existing
+data PVC, alongside `/app/Data`. Create it with UID/GID 1000 write access and
+copy existing logs before changing the mounts. FFmpeg and FFprobe remain at
+`/usr/local/bin/ffmpeg` and `/usr/local/bin/ffprobe`, installed by the DockerMod.
