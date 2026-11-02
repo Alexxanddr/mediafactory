@@ -29,6 +29,7 @@ spec:
         app.kubernetes.io/name: arr-mcp
     spec:
       automountServiceAccountToken: false
+      enableServiceLinks: false
       securityContext:
         fsGroup: 1000
         fsGroupChangePolicy: OnRootMismatch
@@ -52,6 +53,9 @@ spec:
         - name: arr-mcp
           image: ghcr.io/bardesss/arr-mcp:latest
           imagePullPolicy: Always
+          env:
+            - name: ARR_MCP_PORT
+              value: "6060"
           volumeMounts:
             - name: config
               mountPath: /config
