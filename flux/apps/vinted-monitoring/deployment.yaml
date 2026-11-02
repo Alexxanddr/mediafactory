@@ -25,6 +25,7 @@ spec:
   template:
     metadata:
       annotations:
+        kubectl.kubernetes.io/restartedAt: "2026-11-02T10:51:55.460208+00:00"
         checksum/config: 31b85b80cd5783c82806e44e6a071820061a668fd077f346d479acaaacda4f72
       labels:
         app.kubernetes.io/name: vinted-monitoring
