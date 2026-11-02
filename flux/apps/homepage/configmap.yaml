@@ -609,10 +609,6 @@ data:
               type: traefik
               url: http://traefik-dashboard.system-addon:8080
               fields: ["routers", "services", "middleware"]
-        - Longhorn:
-            icon: longhorn.png
-            href: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            showStats: false
         - Uptime Kuma:
             icon: https://uptimekuma.org/wp-content/uploads/2025/01/Uptime-Kuma-Logo.png
             href: https://uptime-kuma.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
@@ -718,6 +714,14 @@ data:
           app: falcosidekick-ui
           namespace: system-addon
           podSelector: app.kubernetes.io/name in ( falcosidekick-ui )
+        - Longhorn:
+            icon: longhorn.png
+            href: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            siteMonitor: http://longhorn-frontend.longhorn-system.svc:80
+            showStats: false
+            app: longhorn-ui
+            namespace: longhorn-system
+            podSelector: app in ( longhorn-ui )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
