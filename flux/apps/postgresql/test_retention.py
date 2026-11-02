@@ -1,6 +1,5 @@
 """Run with python3 test_retention.py; requires the repository's yq CLI."""
 import copy
-import json
 from pathlib import Path
 import subprocess
 import unittest

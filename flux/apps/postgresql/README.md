@@ -44,7 +44,8 @@ KUBECONFIG=~/.kube/talos kubectl -n database get scheduledbackup,backup
 KUBECONFIG=~/.kube/talos kubectl -n database get volumesnapshot
 KUBECONFIG=~/.kube/talos kubectl get volumesnapshotcontent
 KUBECONFIG=~/.kube/talos kubectl -n longhorn-system get backups.longhorn.io
-KUBECONFIG=~/.kube/talos kubectl -n database get jobs -l batch.kubernetes.io/cronjob-name=postgres-backup-retention
+KUBECONFIG=~/.kube/talos kubectl -n database get cronjob postgres-backup-retention
+KUBECONFIG=~/.kube/talos kubectl -n database get jobs
 python3 flux/apps/postgresql/test_retention.py
 ```
 
@@ -67,3 +68,13 @@ References:
 - [CloudNativePG snapshot backup and recovery](https://cloudnative-pg.io/docs/1.30/appendixes/backup_volumesnapshot/)
 - [Longhorn CSI backups](https://longhorn.io/docs/1.13.0/snapshots-and-backups/csi-snapshot-support/csi-volume-snapshot-associated-with-longhorn-backup/)
 - [External snapshotter v8.6.0](https://github.com/kubernetes-csi/external-snapshotter/tree/v8.6.0)
+
+## Live validation — 2026-11-02
+
+The first backup, `postgres-longhorn-daily-20261102114905`, completed at
+11:49:49 UTC. The CSI snapshot is ready, with handle
+`bak://pvc-1efc8a08-9f4a-4d39-b49f-2f6fc88d7c0a/backup-3d0a1fe8e4aa4b67`.
+Longhorn reports that backup `Completed` at 100%. PostgreSQL remained healthy,
+and all Flux Kustomizations returned Ready. Retention selection tests passed;
+RBAC allows listing/deleting CNPG backups and denies PVC deletion. The first
+scheduled retention run and a restore drill have not yet been performed.
