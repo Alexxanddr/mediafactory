@@ -19,8 +19,8 @@ being overwritten by Flux. After provisioning, edit configuration through the
 UI; changing the bootstrap Secret alone does not update the persisted file.
 Storage uses a 1Gi retained volume with one replica.
 
-Migrated services: Sonarr, Radarr, Prowlarr, Bazarr, Plex, Seerr (the previous
-Overseerr configuration), and qBittorrent. Tracearr is unsupported; use its
+Configured services: Sonarr, Radarr, Prowlarr, Bazarr, Plex, Seerr (the previous
+Overseerr configuration), qBittorrent, and Profilarr. Tracearr is unsupported; use its
 separate integration. Read and write permissions preserve the previous Yarr
 scope. Every write requires arr-mcp's preview/confirmation handshake and user
 authorization for the requested operation.
@@ -70,3 +70,12 @@ JS
 For the migration, `PUT /api/servers/yarr` with `{newName: "arr-mcp", config}`
 renames the existing entry instead, preserving its identity and private owner.
 MCPHub prefixes published tools, for example `arr-mcp-stack_health`.
+
+## Profilarr
+
+Profilarr uses `http://profilarr.multimedia-factory.svc:6868` with its existing
+API key stored only in arr-mcp's encrypted bootstrap and persisted configuration.
+No Profilarr authentication changes or additional runtime keys are required.
+arr-mcp enables safe writes (`sync_database`) through its standard
+preview/confirmation flow; destructive permissions are disabled.
+Verify it with `arr-mcp-stack_health` through the existing Hermes MCPHub connection.
