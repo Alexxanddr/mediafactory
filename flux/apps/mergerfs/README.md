@@ -114,3 +114,23 @@ The recovery controller checks mount accessibility and stale-handle errors,
 not equality of every directory listing between FUSE and NFS. A successful
 health check does not prove that every newly created name is already visible
 through a cached client mount.
+
+### Directory coherency validation — 2026-11-02
+
+The `func.getattr=newest` change was reconciled through Flux after approval of
+storage/client restarts. The recovery sequence completed with 15 clients Ready
+and their live mounts verified; the checkpoint returned to `complete`,
+`active=false`, `failures=0`.
+
+A live filesystem check created one uniquely named empty diagnostic directory
+through a client NFS mount as the application's UID 1000. The directory was
+visible from the creating client, another client Pod, and the FUSE union. The
+union parent's mtime matched the newest backing branch, and the NFS parent's
+mtime matched the union. The diagnostic directory was removed with `rmdir`;
+no existing media files were modified. The previously reported missing series
+directory was visible through the original client mount after recovery.
+
+The configured-image Docker regression test, full Flux apps/infrastructure
+renders, whitespace checks and SOPS/Gitleaks pre-commit hooks passed. This
+validates the observed metadata-policy defect; it is not a guarantee of
+instantaneous cache invalidation across every independent NFS client.
