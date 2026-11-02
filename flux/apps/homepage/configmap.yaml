@@ -714,14 +714,14 @@ data:
           app: falcosidekick-ui
           namespace: system-addon
           podSelector: app.kubernetes.io/name in ( falcosidekick-ui )
-        - Longhorn:
-            icon: longhorn.png
-            href: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
-            siteMonitor: http://longhorn-frontend.longhorn-system.svc:80
-            showStats: false
-            app: longhorn-ui
-            namespace: longhorn-system
-            podSelector: app in ( longhorn-ui )
+      - Longhorn:
+          icon: longhorn.png
+          href: https://longhorn.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+          siteMonitor: http://longhorn-frontend.longhorn-system.svc:80
+          showStats: false
+          app: longhorn-ui
+          namespace: longhorn-system
+          podSelector: app in ( longhorn-ui )
     - Tools:
         - HomeBridge:
             icon: homebridge.svg
