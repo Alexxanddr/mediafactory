@@ -8,7 +8,9 @@ The internal Gateway HTTPRoute exposes the authenticated configuration UI.
 The SOPS Secret `arr-mcp` contains the bootstrap `config.yaml`, MCPHub token
 (`mcp-token`), and generated UI password (`ui-password`, username `admin`).
 Retrieve credentials privately through Kubernetes, never through documentation.
-No extra environment variables are required: the image defaults to port 6060
+Set `ARR_MCP_PORT=6060` and disable Kubernetes Service links to prevent the
+Service-generated `ARR_MCP_PORT` URL from overriding the numeric port.
+No other environment variables are required: the image defaults to port 6060
 and `ARR_MCP_CONFIG_DIR=/config`.
 
 The init container seeds configuration only on an empty Longhorn volume.
@@ -42,3 +44,29 @@ KUBECONFIG=~/.kube/talos kubectl -n extra-tools rollout status deployment/arr-mc
 From MCPHub, GET `/healthz`, initialize an authenticated MCP session, list tools
 and call `stack_health`. Check every configured service, then verify the same
 catalog through MCPHub before removing Yarr. Do not test writes on media files.
+
+To create the registration through MCPHub's API, run inside its pod after
+privately supplying `MCPHUB_ADMIN_TOKEN` (dashboard login JWT) and `ARR_MCP_TOKEN`
+(the `arr-mcp` Secret's `mcp-token`). Values must never be pasted into commands
+or documentation:
+
+```sh
+node --input-type=module <<'JS'
+const response = await fetch('http://localhost:3000/api/servers', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json', 'x-auth-token': process.env.MCPHUB_ADMIN_TOKEN },
+  body: JSON.stringify({ name: 'arr-mcp', config: {
+    enabled: true, owner: 'admin', visibility: 'private',
+    type: 'streamable-http', url: 'http://arr-mcp.extra-tools.svc:6060/mcp',
+    enableKeepAlive: false,
+    headers: { Authorization: 'Bearer ' + process.env.ARR_MCP_TOKEN }
+  } })
+});
+if (!response.ok) throw new Error('MCPHub registration failed: ' + response.status);
+console.log('arr-mcp registered');
+JS
+```
+
+For the migration, `PUT /api/servers/yarr` with `{newName: "arr-mcp", config}`
+renames the existing entry instead, preserving its identity and private owner.
+MCPHub prefixes published tools, for example `arr-mcp-stack_health`.
