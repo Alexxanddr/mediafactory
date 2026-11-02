@@ -88,3 +88,29 @@ include the same fix in release v0.1.1 and an authorization regression test
 No forced deletion, direct apply or PVC/PV/data mutation was used. Blocked-kernel
 I/O and simultaneous externally induced failures were not injected on the live
 cluster; those behavior limits and automated tests are documented upstream.
+
+## Directory attribute freshness
+
+Use `func.getattr=newest` when exporting the union through NFS. MergerFS's
+default `getattr` policy is `ff`: a directory duplicated across branches can
+retain the first branch's old mtime even after a child is created on another
+branch. NFS directory/name caches can then retain an outdated view without
+returning ESTALE. Selecting the branch with the newest mtime exposes that
+change to metadata consumers. This costs additional attribute lookups across
+branches and also affects attributes of regular files duplicated across them.
+It does not replace the normal cache/coherency rules of NFS.
+
+[Upstream explanation](https://trapexit.github.io/mergerfs/2.42.0/known_issues_bugs/#directory-mtime-is-not-being-updated).
+
+Run `sh tests/mergerfs-directory-mtime.sh` from the repository root to check
+the configured image and options against synthetic branches. The local Docker
+test requires privileged FUSE support (and amd64 emulation on other platforms),
+uses no host data volumes or networking, and fails if a visible new child does
+not update the union parent's advertised mtime. It does not restart Kubernetes
+workloads. Applying a changed MergerFS command through Flux does restart the
+union server and triggers the configured storage recovery sequence.
+
+The recovery controller checks mount accessibility and stale-handle errors,
+not equality of every directory listing between FUSE and NFS. A successful
+health check does not prove that every newly created name is already visible
+through a cached client mount.

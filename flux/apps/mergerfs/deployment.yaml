@@ -55,7 +55,7 @@ spec:
                   sleep 2
                 done
               done
-              exec mergerfs -f -o allow_other,export-support=true,never-forget-nodes=true,inodecalc=path-hash,lazy-umount-mountpoint=false,cache.files=partial,dropcacheonclose=true,category.create=mfs,minfreespace=10G,fsname=mergerfs /mnt/externaldisk1:/mnt/externaldisk2:/mnt/externaldisk3 /mnt/merged
+              exec mergerfs -f -o allow_other,export-support=true,never-forget-nodes=true,inodecalc=path-hash,lazy-umount-mountpoint=false,cache.files=partial,dropcacheonclose=true,category.create=mfs,func.getattr=newest,minfreespace=10G,fsname=mergerfs /mnt/externaldisk1:/mnt/externaldisk2:/mnt/externaldisk3 /mnt/merged
           securityContext:
             privileged: true
           volumeMounts:
