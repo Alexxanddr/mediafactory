@@ -41,3 +41,12 @@ of the stuck October 31 Job. It initially skipped volumes still attaching;
 the subsequent system backup covered these after attachment completed. A
 temporary duplicate manual volume Job was stopped. Historical failed backup
 records were preserved. This validation did not include a restore test.
+
+## CloudNativePG CSI backups
+
+The `longhorn-backup` VolumeSnapshotClass uses `type: bak` and the existing
+default NFS target. PostgreSQL coordinates its own online backup using CNPG
+`ScheduledBackup` and `Backup` resources. See
+[PostgreSQL backup operations](../../apps/postgresql/README.md) for its separate
+schedule, seven-successful-backup retention, verification and recovery limits.
+Existing Longhorn recurring and system backups remain unchanged.

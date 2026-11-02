@@ -1,0 +1,13 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: ScheduledBackup
+metadata:
+  name: postgres-longhorn-daily
+  namespace: database
+spec:
+  schedule: "0 0 1 * * *"
+  immediate: true
+  backupOwnerReference: self
+  cluster:
+    name: postgres-longhorn
+  method: volumeSnapshot
+  target: primary

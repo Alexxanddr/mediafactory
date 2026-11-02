@@ -20,6 +20,15 @@ spec:
   storage:
     storageClass: longhorn-retain
     size: 50Gi
+  backup:
+    volumeSnapshot:
+      className: longhorn-backup
+      snapshotOwnerReference: backup
+      online: true
+      onlineConfiguration:
+        # No external WAL archive is configured; recovery uses WAL in the snapshot.
+        waitForArchive: false
+        immediateCheckpoint: true
   managed:
     roles:
       - name: sparkyfitness
