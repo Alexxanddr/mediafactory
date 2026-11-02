@@ -1,7 +1,7 @@
 # Vinted Monitoring
 
 This module deploys Vinted Monitoring through Talos/Flux. MCPHub is registered privately and the Hermes skills are installed.
-Telegram credentials remain a separate configuration step. The service uses the public
+Telegram uses the same bot and confirmed private chat as Hermes, as explicitly authorized. The service uses the public
 `ghcr.io/alexxanddr/vinted-monitoring:latest` image, one replica and Recreate.
 It runs as UID/GID 10001 in `extra-tools` and exposes only an internal MCP API:
 
@@ -26,12 +26,13 @@ backup completion after deployment.
 
 ## Secret configuration
 
-`secret.enc.yaml` contains a newly generated MCP bearer token encrypted by
-SOPS. Telegram fields are intentionally empty: immediate search can run, but
-creating watches is rejected until both are configured. No existing bot or
-chat destination was assumed or copied.
+`secret.enc.yaml` stores the MCP bearer token and the explicitly authorized
+Hermes Telegram bot/private destination, encrypted with SOPS. The destination
+was matched against the actual Hermes conversation and its configured home
+chat. Read-only Telegram `getMe` and `getChat` checks verified the bot and chat;
+no test message was sent and no Vinted watch was created by this configuration.
 
-Before enabling monitoring, edit privately:
+For future changes, edit privately:
 
 ```sh
 sops flux/apps/vinted-monitoring/secret.enc.yaml
@@ -40,8 +41,12 @@ sops flux/apps/vinted-monitoring/secret.enc.yaml
 Set `VM_TELEGRAM_TOKEN` and `VM_TELEGRAM_CHAT_ID` together. Keep
 `VM_HTTP_TOKEN` consistent with the private MCPHub Authorization header.
 Never paste these values into documentation, shell history or tool calls.
-After subsequent secret changes, restart the workload through the authorized
-GitOps workflow because environment variables are loaded at process startup.
+The Deployment's `checksum/config` annotation is the SHA-256 of the encrypted
+Secret file; update it after secret edits so Flux restarts the single owner
+and the new environment takes effect. Preserve the data PVC across restarts.
+When rotating the shared bot token, update both Hermes and this encrypted
+Secret. Vinted Monitoring only sends messages; it never consumes Telegram
+updates, so Hermes keeps control of incoming chat messages.
 
 ## MCPHub and Hermes
 
@@ -76,8 +81,8 @@ The local sources in `skills/hermes-skills` and persistent installed copies
 were updated through commit/push, external `/tmp` backups and `hermes skills
 update <skill> --force`. The dedicated Vinted skill was installed from that
 source repository; installed file hashes were verified against the sources.
-For future changes, preserve that complete workflow. Keep Telegram bot and
-destination configuration in SOPS; they remain intentionally empty.
+For future changes, preserve that complete workflow. Keep the shared Telegram bot and private destination in SOPS. Monitoring is
+available after configuration; creating a watch still requires a user request.
 
 ## Verification after an authorized rollout
 
