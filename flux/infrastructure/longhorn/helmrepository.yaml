@@ -29,7 +29,7 @@ spec:
     crds: Create
   values:
     defaultBackupStore:
-      backupTarget: "nfs://192.168.20.3:/MediaFactory/longhorn-backup"
+      backupTarget: "nfs://192.168.20.3:/MediaFactory/longhorn-backup?nfsOptions=nfsvers=4.1,actimeo=1,soft,timeo=100,retrans=2"
       pollInterval: 300
     persistence:
       defaultClass: false
