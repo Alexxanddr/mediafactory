@@ -25,6 +25,8 @@ spec:
       app.kubernetes.io/name: arr-mcp
   template:
     metadata:
+      annotations:
+        mediafactory/config-revision: "2"
       labels:
         app.kubernetes.io/name: arr-mcp
     spec:
