@@ -835,11 +835,6 @@ data:
     - greeting:
         text_size: xl
         text: Alexxanddr's HomeLab
-    - longhorn:
-        expanded: true
-        total: true
-        labels: true
-        nodes: true
     - openmeteo:
         label: Rome
         latitude: 41.86094060191091
