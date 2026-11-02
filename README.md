@@ -97,7 +97,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 <tr><td>🛣️</td><td><b><a href="https://github.com/diegosouzapw/OmniRoute">OmniRoute</a></b></td><td>Unified AI provider routing and management</td></tr>
 <tr><td>🩺</td><td><b><a href="https://github.com/the-momentum/open-wearables">Open Wearables</a></b></td><td>Open wearable data platform</td></tr>
 <tr><td>🧩</td><td><b><a href="https://github.com/alexxanddr/hinge-mcp">Hinge MCP</a></b></td><td>MCP service for Hinge</td></tr>
-<tr><td>🔎</td><td><b><a href="https://github.com/dinglebear-ai/yarr">Yarr</a></b></td><td>MCP service for homelab services</td></tr>
+<tr><td>🔎</td><td><b><a href="https://github.com/bardesss/arr-mcp">arr-mcp</a></b></td><td>MCP service for the media stack</td></tr>
 <tr><td>💾</td><td><b><a href="https://github.com/Alexxanddr/floppy-mcp">Floppy MCP</a></b></td><td>MCP service for Floppy</td></tr>
 <tr><td>🎵</td><td><b><a href="https://github.com/Alexxanddr/spotify-mcp-server">Spotify MCP Server</a></b></td><td>MCP service for Spotify</td></tr>
 </table>

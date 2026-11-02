@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arr-mcp
+  namespace: extra-tools
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
+    uptime-kuma.io/enabled: "true"
+    uptime-kuma.io/status-page: "true"
+    uptime-kuma.io/type: "http"
+    uptime-kuma.io/url: "http://arr-mcp.extra-tools.svc:6060/healthz"
+    uptime-kuma.io/name: "arr-mcp"
+    uptime-kuma.io/interval: "60"
+    uptime-kuma.io/retries: "3"
+    uptime-kuma.io/notifications: "Monitoring Bot"
+    uptime-kuma.io/group: "Utilities"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: arr-mcp
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: arr-mcp
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: seed-config
+          image: ghcr.io/bardesss/arr-mcp:latest
+          imagePullPolicy: Always
+          command: ["sh", "-ec", "if [ ! -e /config/config.yaml ]; then cp /seed/config.yaml /config/config.yaml; chmod 600 /config/config.yaml; fi"]
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: seed
+              mountPath: /seed
+              readOnly: true
+      containers:
+        - name: arr-mcp
+          image: ghcr.io/bardesss/arr-mcp:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          ports:
+            - name: http
+              containerPort: 6060
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 5
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: 20
+            failureThreshold: 6
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 2Gi
+      volumes:
+        - name: config
+          persistentVolumeClaim:
+            claimName: arr-mcp-longhorn
+        - name: seed
+          secret:
+            secretName: arr-mcp
+            defaultMode: 0440
+            items:
+              - key: config.yaml
+                path: config.yaml
