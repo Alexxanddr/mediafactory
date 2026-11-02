@@ -25,3 +25,45 @@ spec:
   concurrency: 1
   parameters:
     volume-backup-policy: if-not-present
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: postgres-local-prune
+  namespace: longhorn-system
+spec:
+  cron: "0 4 * * *"
+  task: snapshot-delete
+  groups:
+    - postgres-maintenance
+  retentionPolicy: count-based
+  retain: 1
+  concurrency: 1
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: postgres-local-purge
+  namespace: longhorn-system
+spec:
+  cron: "30 4 * * *"
+  task: snapshot-cleanup
+  groups:
+    - postgres-maintenance
+  retentionPolicy: count-based
+  retain: 0
+  concurrency: 1
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: postgres-filesystem-trim
+  namespace: longhorn-system
+spec:
+  cron: "30 0,6 * * *"
+  task: filesystem-trim
+  groups:
+    - postgres-maintenance
+  retentionPolicy: count-based
+  retain: 0
+  concurrency: 1

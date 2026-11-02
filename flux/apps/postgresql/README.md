@@ -34,8 +34,27 @@ content and corresponding NFS backup. Deleting the schedule also cascades to its
 backups because `backupOwnerReference: self` is set. Do not remove the schedule
 as a way to pause it; use `spec.suspend: true` instead.
 
-This retention does not delete existing Longhorn recurring/system backups or
-local snapshot chains. Those require separate inspection and cleanup.
+Remote backup retention and local snapshot retention are separate. Three native
+Longhorn RecurringJobs apply only to the `postgres-maintenance` group inherited
+by this cluster's PVCs:
+
+| UTC schedule | Job | Behavior |
+| --- | --- | --- |
+| 00:30 and 06:30 | `postgres-filesystem-trim` | Reclaims filesystem-free blocks, then purges removed snapshots |
+| 04:00 | `postgres-local-prune` | Keeps the newest one local snapshot; skips snapshots used by active backups |
+| 04:30 | `postgres-local-purge` | Purges removed/system snapshots |
+
+Existing default-group backups and system backups remain enabled. The seven
+CNPG backup points remain on NFS even when their local Longhorn snapshot is
+removed: CSI `bak://` restore uses the NFS backup, not the local snapshot file.
+The PVC explicitly remains in the default recurring-job group as well as the
+PostgreSQL maintenance group. Other application volumes are not selected.
+
+Automatic snapshot removal during TRIM remains disabled. Thus TRIM cannot
+reclaim blocks retained by the one remaining valid local snapshot; retaining
+one local point favors a small history without modifying snapshots under an
+active backup. Initial cleanup of the old chain is performed separately after
+a successful restore drill, followed by purge and TRIM.
 
 ## Verification
 

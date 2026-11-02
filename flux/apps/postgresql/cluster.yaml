@@ -7,6 +7,10 @@ spec:
   instances: 1
   imageName: ghcr.io/cloudnative-pg/postgresql:18.4-system-trixie
   inheritedMetadata:
+    labels:
+      recurring-job.longhorn.io/source: enabled
+      recurring-job-group.longhorn.io/default: enabled
+      recurring-job-group.longhorn.io/postgres-maintenance: enabled
     annotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/type: "tcp"
