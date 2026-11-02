@@ -1,0 +1,12 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Backup
+metadata:
+  name: postgres-longhorn-after-trim-20261102
+  namespace: database
+  labels:
+    cnpg.io/scheduled-backup: postgres-longhorn-daily
+spec:
+  cluster:
+    name: postgres-longhorn
+  method: volumeSnapshot
+  target: primary

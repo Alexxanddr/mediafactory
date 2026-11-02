@@ -50,3 +50,13 @@ default NFS target. PostgreSQL coordinates its own online backup using CNPG
 [PostgreSQL backup operations](../../apps/postgresql/README.md) for its separate
 schedule, seven-successful-backup retention, verification and recovery limits.
 Existing Longhorn recurring and system backups remain unchanged.
+
+## PostgreSQL local space management
+
+The `postgres-maintenance` group is selected only by the shared PostgreSQL
+Cluster's inherited PVC labels. Native jobs prune to one local snapshot at
+04:00 UTC, purge at 04:30 UTC, and trim/purge at 00:30 and 06:30 UTC. Other
+application volumes are not selected. Existing default-group and system
+backups remain enabled. PostgreSQL's seven NFS-backed CSI backup points are
+independent of the local snapshot chain. Automatic snapshot removal during
+TRIM is disabled; valid snapshots can still retain blocks until pruning.

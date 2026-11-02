@@ -95,5 +95,41 @@ The first backup, `postgres-longhorn-daily-20261102114905`, completed at
 `bak://pvc-1efc8a08-9f4a-4d39-b49f-2f6fc88d7c0a/backup-3d0a1fe8e4aa4b67`.
 Longhorn reports that backup `Completed` at 100%. PostgreSQL remained healthy,
 and all Flux Kustomizations returned Ready. Retention selection tests passed;
-RBAC allows listing/deleting CNPG backups and denies PVC deletion. The first
-scheduled retention run and a restore drill have not yet been performed.
+RBAC allows listing/deleting CNPG backups and denies PVC deletion. The retention job and restore drill were subsequently validated as described below.
+
+## Local cleanup and restore drill — 2026-11-02
+
+The NFS backup was restored into `postgres-restore-check`, a separate Cluster
+and 50 GiB PVC. All 11 non-template databases passed a complete `pg_dump`, and
+an insert/read/rollback check passed in the restored instance. The diagnostic
+Cluster, PVC, retained PV and detached Longhorn volume were removed afterwards.
+The diagnostic retention job also completed successfully without deleting any
+of the existing recovery points.
+
+Native prune and purge jobs removed the old local chain. Purge completed in
+about eight minutes. The first filesystem trim left previously discarded
+blocks allocated: ext4 can remember blocks trimmed while snapshots still
+retained them. A controlled CNPG hibernation/rehydration detached and remounted
+the volume; clean PostgreSQL fast shutdown was used to avoid waiting on open
+application sessions. A second trim/purge completed successfully. Do not
+schedule this restart daily: the regular maintenance jobs run online.
+
+Measured physical PostgreSQL usage fell from **179.61 GiB to 2.82 GiB**,
+reclaiming **176.79 GiB** from that volume. Available NVMe space increased from
+**143.26 GiB to 318.16 GiB**; other cluster activity accounts for the difference.
+All nine pre-existing PostgreSQL Longhorn backup records retained their states
+and none were deleted, including the pre-existing failed records. PostgreSQL
+passed a production insert/read/rollback check, all 11 databases remained
+present, the read/write service had a ready endpoint, all application Pods
+were ready, and Flux was Ready.
+
+The recovery checkpoint manifests under
+[`flux/disabled/postgres-restore-check`](../../disabled/postgres-restore-check/README.md)
+are excluded from routine reconciliation. Checkpoint backups share the daily
+schedule label and are included in its seven-successful-backup retention.
+
+The final checkpoint `postgres-longhorn-after-trim-20261102` completed on NFS
+as `backup-6050565640064b09` at 100%; its CSI snapshot is ready with a `bak://`
+handle. Exactly one valid local snapshot remained, approximately 2.8 GiB.
+Diagnostic jobs were removed and no restore-test Cluster, PVC, PV or Longhorn
+volume remained. The hibernation annotation was removed.

@@ -16,3 +16,9 @@ StorageClass uses `Retain`, also remove only the identified test PV and detached
 Longhorn volume after confirming the production volume ID differs. Never use
 wildcards or production selectors for cleanup. Do not leave the test copy on
 the NVMe after the drill.
+
+`backup.yaml` is a one-time post-cleanup checkpoint, also excluded from Flux.
+It deliberately uses the daily schedule's label so the normal seven-successful-
+backup retention includes it. Apply it only after purge/TRIM has completed;
+update its dated name before repeating the procedure. Do not delete the Backup
+or its CSI snapshot after testing: it is a retained recovery point on NFS.
