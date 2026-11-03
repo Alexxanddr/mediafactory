@@ -134,3 +134,18 @@ The configured-image Docker regression test, full Flux apps/infrastructure
 renders, whitespace checks and SOPS/Gitleaks pre-commit hooks passed. This
 validates the observed metadata-policy defect; it is not a guarantee of
 instantaneous cache invalidation across every independent NFS client.
+
+## Diagnosing overlapping mounts
+
+The backing host bind and FUSE overmount can both appear at the union path in
+`/proc/PID/mountinfo`. Mount IDs are reusable identifiers, not a numeric or
+lexicographic visibility order. The visible filesystem must be resolved through
+parent relationships, including overmounts that hide older child mounts.
+
+A probe reporting `expected fuse, found tmpfs` while an in-container read and
+mountinfo show the FUSE above tmpfs can be a diagnostic-parser failure. Probe
+release v0.1.2 fixes this case, with regression coverage for both layer orders,
+hidden child mounts and a Linux FUSE-over-tmpfs integration fixture. The
+DaemonSet template revision ensures that the diagnostic agent pulls the fix.
+Do not reset a recovery checkpoint or bypass the filesystem gate to hide this
+error; updating the agent lets the existing recovery resume its normal sequence.
