@@ -149,3 +149,21 @@ hidden child mounts and a Linux FUSE-over-tmpfs integration fixture. The
 DaemonSet template revision ensures that the diagnostic agent pulls the fix.
 Do not reset a recovery checkpoint or bypass the filesystem gate to hide this
 error; updating the agent lets the existing recovery resume its normal sequence.
+
+### Visible-mount validation — 2026-11-03
+
+A controller Pod was Running with no restarts but failed readiness with HTTP
+503 because a checkpoint had remained in `mergerfs-up` beyond its deadline.
+An in-container read succeeded, while the old probe selected the underlying
+tmpfs instead of the visible FUSE overmount from the same mountinfo records.
+The parser defect was reproduced before the fix and covered by regression tests.
+
+Source release v0.1.2 (`05400d6`) passed 39 tests and the Linux stacked-mount
+smoke test. Flux revision `8c2a1a2` rolled the diagnostic agent to that image.
+The original checkpoint and Lease were preserved: MergerFS passed its gate
+without another restart, then Ganesha and 15 clients completed normal recovery.
+The original controller Pod became Ready with zero restarts, all replacement
+clients were Ready and their mounts verified, and the checkpoint returned to
+`complete`, `active=false`, `failures=0`. No health gate was disabled, no deadline
+or permissions were relaxed, and no forced deletion or volume/data mutation
+was used.
