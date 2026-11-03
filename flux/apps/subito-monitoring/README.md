@@ -76,3 +76,20 @@ Hermes source changes belong in `skills/hermes-skills`, followed by author-corre
 commit/push, backups outside indexed skills, `hermes skills update <skill> --force`
 and verification of persistent installed files. See the source project for the
 complete public configuration, backup/restore and integration limits.
+
+### Verified deployment — 2026-11-03
+
+Flux reconciled the deployment; one replica is Ready, the PVC is Bound and its
+Longhorn volume is attached/healthy. MCPHub reports the private server connected
+with all eight tools. Shared Telegram settings match Vinted and the MCP token is
+independent, verified without exposing values. No real Telegram message was sent.
+
+Hermes chat successfully invoked list_watches and monitoring_status. A live search
+through Hermes' installed MCP registry and MCPHub returned five listings below
+EUR 150. Conversational search remains unaccepted: model-generated deferred calls
+omitted the required query object and were rejected before reaching Subito; a
+final chat attempt timed out. Do not mistake the registry test for a successful
+conversational test. Hermes skill sources were published, backed up and updated
+in persistent storage; the operational limitation is documented in their catalog.
+No acceptance watch was created. Sustained polling, real Telegram delivery and
+completion of the first storage backup have not been verified on this deployment.
