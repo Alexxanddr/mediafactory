@@ -357,7 +357,6 @@ spec:
           and user.uid = 1001
           and proc.name = "bash"
           and proc.exepath = "/usr/bin/bash"
-          and proc.pname = "runc"
           and proc.tty = 0
           and proc.cmdline in (
             "bash -ec /health/ping_readiness_local.sh 1",
