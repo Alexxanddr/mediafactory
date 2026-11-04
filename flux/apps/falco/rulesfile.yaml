@@ -71,10 +71,20 @@ spec:
           and proc.tty = 0
         )
         or (
-          container.image.repository = "ghcr.io/flaresolverr/flaresolverr"
-          and container.image.tag = "latest"
-          and container.name = "flaresolverr"
-          and k8s.ns.name = "multimedia-factory"
+          (
+            (
+              container.image.repository = "ghcr.io/flaresolverr/flaresolverr"
+              and container.image.tag = "latest"
+              and container.name = "flaresolverr"
+              and k8s.ns.name = "multimedia-factory"
+            )
+            or (
+              not container.image.repository exists
+              and k8smeta.ns.name = "multimedia-factory"
+              and k8smeta.pod.name startswith "flaresolverr-"
+              and k8smeta.pod.label[app] = "flaresolverr"
+            )
+          )
           and user.uid = 1000
           and proc.name = "chromedriver"
           and proc.exepath = "/app/chromedriver"
