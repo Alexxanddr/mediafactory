@@ -201,8 +201,13 @@ The following values are the canonical Uptime Kuma macro-groups. Select the most
 - `Utilities`.
 
 Status-page membership belongs in workload annotations, next to the existing
-monitor settings. For services explicitly approved for publication, set
-`uptime-kuma.io/status-page: "true"`; omit it or use `"false"` for private services.
+monitor settings. Every new monitored service must also set
+`uptime-kuma.io/status-page: "true"` unless the user explicitly requests a private
+monitor. `uptime-kuma.io/enabled: "true"` enables monitoring only; it does not
+publish the monitor. Never rely on the existing monitor-ID allowlist for new
+services. Verify the monitor appears in both the dashboard and the `k8s` status
+page after reconciliation. Dashboard group monitors appear as status-page
+sections, so compare actual monitor IDs rather than raw dashboard totals.
 Keep the page identity and group mapping in the operator configuration. Do not
 replace workload annotations with monitor-ID environment allowlists to avoid pod
 restarts: Helm pod-template annotation changes may legitimately trigger rollouts.
