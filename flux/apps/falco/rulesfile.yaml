@@ -38,6 +38,7 @@ spec:
               and proc.exepath = "/usr/bin/upsc"
               and proc.cmdline in (
                 "upsc ups@127.0.0.1",
+                "upsc ups@localhost",
                 "upsc ups@localhost ups.status"
               )
             )
@@ -63,7 +64,7 @@ spec:
           and user.uid in (0, 1000)
           and proc.name = "pihole-FTL"
           and proc.exepath = "/usr/bin/pihole-FTL"
-          and proc.sname = "start.sh"
+          and proc.sname in ("start.sh", "crond")
           and proc.pname in ("bash", "start.sh")
           and proc.cwd in ("/", "/root/")
           and proc.cmdline startswith "pihole-FTL "
@@ -161,6 +162,34 @@ spec:
           and proc.cmdline startswith "ping -c 1 "
           and proc.tty = 0
         )
+        or (
+          k8s.ns.name = "longhorn-system"
+          and container.image.tag = "v1.13.0"
+          and user.uid = 0
+          and proc.tty = 0
+          and evt.type = "dup3"
+          and (
+            (
+              container.image.repository = "docker.io/longhornio/longhorn-manager"
+              and container.name = "longhorn-manager"
+              and proc.name = "longhorn-manage"
+              and proc.cmdline startswith "longhorn-manage -d daemon --engine-image "
+              and fd.rnet = "10.244.0.0/16"
+              and fd.rport = 8501
+            )
+            or (
+              container.image.repository = "docker.io/longhornio/longhorn-instance-manager"
+              and container.name = "instance-manager"
+              and proc.name = "longhorn-instan"
+              and proc.cmdline = "longhorn-instan --debug daemon --listen :8500"
+              and (
+                (fd.lport in (8501, 8502) and fd.cnet = "10.244.0.0/16")
+                or (fd.lport = 8502 and fd.cip = "::1")
+                or (fd.rport >= 10000 and fd.rport <= 30000 and fd.rnet = "10.244.0.0/16")
+              )
+            )
+          )
+        )
       override:
         condition: append
     - macro: user_known_contact_k8s_api_server_activities
@@ -192,13 +221,36 @@ spec:
           )
           or (
             container.image.repository = "ghcr.io/alexxanddr/uptime-kuma-operator"
-            and container.image.tag = "latest"
+            and container.image.tag in ("1.2.0", "1.2.1")
             and container.name = "operator"
             and k8s.ns.name = "extra-tools"
-            and user.uid = 0
+            and user.uid = 10001
             and proc.name = "kopf"
             and proc.exepath startswith "/usr/local/bin/python3"
-            and proc.cmdline = "kopf /usr/local/bin/kopf run --all-namespaces --standalone operator.py"
+            and proc.cmdline = "kopf /usr/local/bin/kopf run --all-namespaces --standalone --liveness=http://0.0.0.0:8080/healthz operator.py"
+            and proc.tty = 0
+          )
+          or (
+            container.image.repository = "ghcr.io/alexxanddr/stale-file-controller-k8s"
+            and container.image.tag = "latest"
+            and container.name = "controller"
+            and k8s.ns.name = "storage-recovery"
+            and user.uid = 65532
+            and proc.name = "stale-file-cont"
+            and proc.exepath = "/usr/local/bin/python3.13"
+            and proc.cmdline = "stale-file-cont /usr/local/bin/stale-file-controller"
+            and proc.tty = 0
+          )
+          or (
+            container.image.repository = "docker.io/library/python"
+            and container.image.tag = "latest"
+            and container.name = "retention"
+            and k8s.ns.name = "database"
+            and user.uid = 65532
+            and proc.name = "python"
+            and proc.exepath startswith "/usr/local/bin/python3"
+            and proc.cmdline = "python /scripts/retention.py"
+            and proc.tty = 0
           )
         )
       override:
@@ -207,7 +259,7 @@ spec:
       condition: >
         or (
           container.image.repository = "ghcr.io/cloudnative-pg/postgresql"
-          and container.name = "postgres"
+          and container.name in ("postgres", "pgbasebackup")
           and k8s.ns.name = "database"
           and user.uid = 26
           and proc.name = "sh"
@@ -215,6 +267,102 @@ spec:
           and proc.pname = "postgres"
           and proc.cmdline startswith
           "sh -c -- /controller/manager wal-archive --log-destination /controller/log/postgres.json pg_wal/"
+        )
+      override:
+        condition: append
+    - macro: allowed_clear_log_files
+      condition: >
+        or (
+          container.image.repository = "docker.io/revenz/fileflows"
+          and container.image.tag = "latest"
+          and container.name in ("fileflows", "fileflows-node")
+          and k8s.ns.name = "multimedia-factory"
+          and user.uid = 0
+          and proc.name = "fontconfig.post"
+          and proc.exepath = "/usr/bin/dash"
+          and proc.pname = "dpkg"
+          and proc.cmdline = "fontconfig.post /var/lib/dpkg/info/fontconfig.postinst triggered /usr/share/fonts /usr/share/ghostscript/fonts"
+          and fd.name = "/var/log/fontconfig.log"
+        )
+      override:
+        condition: append
+    - rule: Create Hardlink Over Sensitive Files
+      condition: >
+        and not (
+          user.uid = 0
+          and proc.tty = 0
+          and proc.name = "adduser"
+          and proc.exepath = "/bin/busybox"
+          and evt.arg.oldpath = "/etc/shadow"
+          and evt.arg.newpath = "/etc/shadow-"
+          and container.image.tag = "latest"
+          and (
+            (
+              container.image.repository = "docker.io/trigus42/qbittorrentvpn"
+              and container.name = "qbittorrent-wg"
+              and k8s.ns.name = "qbittorrent-wg"
+              and proc.pname = "environment.sh"
+              and proc.cmdline = "adduser -D -u 1000 qbittorrent"
+            )
+            or (
+              container.image.repository = "docker.io/grimmory/grimmory"
+              and container.name = "grimmory"
+              and k8s.ns.name = "multimedia-factory"
+              and proc.pname = "entrypoint.sh"
+              and proc.cmdline = "adduser -u 1000 -G booklore -S -D booklore"
+            )
+            or (
+              container.image.repository = "ghcr.io/crazy-max/samba"
+              and container.name = "samba"
+              and k8s.ns.name = "mergerfs"
+              and proc.pname = "bash"
+              and proc.cmdline in (
+                "adduser -u 1000 -G mediafactory mediafactory -SHD",
+                "adduser -u 1001 -G timemachine timemachine -SHD"
+              )
+            )
+            or (
+              container.image.repository = "ghcr.io/anibridge/anibridge"
+              and container.name = "anibridge"
+              and k8s.ns.name = "multimedia-factory"
+              and proc.pname = "sh"
+              and proc.cmdline = "adduser -u 1000 -G abc -s /bin/sh -D abc"
+            )
+          )
+        )
+      override:
+        condition: append
+    - rule: Packet socket created in container
+      condition: >
+        and not (
+          container.image.repository = "quay.io/metallb/speaker"
+          and container.image.tag = "v0.16.2"
+          and container.name = "speaker"
+          and k8s.ns.name = "metallb-system"
+          and user.uid = 0
+          and proc.name = "speaker"
+          and proc.exepath = "/speaker"
+          and proc.cmdline = "speaker --port=9120 --health-probe-port=17472 --log-level=info"
+          and proc.tty = 0
+        )
+      override:
+        condition: append
+    - rule: Run shell untrusted
+      condition: >
+        and not (
+          container.image.repository = "registry-1.docker.io/bitnami/redis"
+          and container.image.tag = "latest"
+          and container.name = "redis"
+          and k8s.ns.name = "database"
+          and user.uid = 1001
+          and proc.name = "bash"
+          and proc.exepath = "/usr/bin/bash"
+          and proc.pname = "runc"
+          and proc.tty = 0
+          and proc.cmdline in (
+            "bash -ec /health/ping_readiness_local.sh 1",
+            "bash -ec /health/ping_liveness_local.sh 5"
+          )
         )
       override:
         condition: append
