@@ -101,7 +101,7 @@ spec:
           and proc.exe = "/usr/local/bin/ffmpeg"
           and proc.exepath = "/usr/lib/jellyfin-ffmpeg/ffmpeg"
           and proc.pname = "dotnet"
-          and proc.aname[2] = "dotnet"
+          and proc.aname[2] in ("dotnet", ".NET TP Worker")
           and proc.cwd = "/app/FlowRunner/"
           and proc.cmdline startswith "ffmpeg "
           and proc.tty = 0
