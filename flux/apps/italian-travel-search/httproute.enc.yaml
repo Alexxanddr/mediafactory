@@ -1,0 +1,58 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: italian-travel-search
+    namespace: extra-tools
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:oJScM91Ll5DWpXzFg7RxhSs3lN6btCE3/x95ULw=,iv:HjQyeuh6+xP9GoprSxPzrcEJdVKzXfh2JmIGU4sG+xA=,tag:4Sx6GGelATQCc0XWWZSc8A==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: Exact
+                value: /
+            - path:
+                type: Exact
+                value: /index.html
+            - path:
+                type: PathPrefix
+                value: /assets
+            - path:
+                type: Exact
+                value: /api/providers
+            - path:
+                type: Exact
+                value: /api/train-providers
+            - path:
+                type: Exact
+                value: /api/locations
+            - path:
+                type: Exact
+                value: /api/train-locations
+            - path:
+                type: Exact
+                value: /api/journeys
+            - path:
+                type: Exact
+                value: /api/train-journeys
+          backendRefs:
+            - name: italian-travel-search
+              port: 3000
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3Um13V0NzczU5L3BOaWtu
+            ZWRjRWR2blZqV0RtZy9sRmhLVWRybUxMd1dzCm1aODcrblQzMW9SUVJaQzM1S01Z
+            N0ZvM3RlOXRKMWp4UWxoV1I3OFg1QXcKLS0tIFhHTEtpQmxVOTBWanJ0NmZubXQr
+            b2FlZi9lZ3ZiS2U1YjJvdTh3L1I1YUkKGQqU7iZi/3VHkXxKO5+K9qUWP7ZpJ9ki
+            HplAeFwCgqqxV9mghvTtXdnjpiX1XXpvL47jlWhPckYScV2pP3D8OA==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: hostnames
+    lastmodified: "2026-11-05T14:30:45Z"
+    mac: ENC[AES256_GCM,data:MeI19JXgBeYIMl8mWZNs7R7L2Q9eZXPhG6tfYh+U3uwyHP3/fRQh8NTp/GZlJHSlXdx+mJJn1pMavfvUSvH6ZkDqnX4myNeFe9DBHniyXk76C7+RrIJOkE1mivFDi1rturB+ovvu+i0SRHvwUNQQ6g8n2Bc7lnLUcl0lK0THg50=,iv:Tk4JxJQOT0dyYFr/MNk/V5QkcABQDARHjuqNVbWfXz8=,tag:u3ush3MWvtdzRmbXv+u/1g==,type:str]
+    version: 3.13.3
