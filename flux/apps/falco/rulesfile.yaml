@@ -64,7 +64,24 @@ spec:
           and user.uid in (0, 1000)
           and proc.name = "pihole-FTL"
           and proc.exepath = "/usr/bin/pihole-FTL"
-          and proc.sname in ("start.sh", "crond")
+          and (
+            proc.sname in ("start.sh", "crond")
+            or (
+              proc.sname = ""
+              and proc.pname = "bash"
+              and proc.aname[2] = "bash"
+              and proc.cmdline in (
+                "pihole-FTL --config -q files.log.dnsmasq",
+                "pihole-FTL --config -q files.log.ftl",
+                "pihole-FTL --config -q files.log.webserver",
+                "pihole-FTL --config -q webserver.paths.webroot",
+                "pihole-FTL --config -q webserver.paths.webhome",
+                "pihole-FTL version",
+                "pihole-FTL branch",
+                "pihole-FTL --hash"
+              )
+            )
+          )
           and proc.pname in ("bash", "start.sh")
           and proc.cwd in ("/", "/root/")
           and proc.cmdline startswith "pihole-FTL "
@@ -153,6 +170,7 @@ spec:
           and proc.exepath endswith "ldconfig"
           and proc.cmdline in (
             "11 -f /etc/ld.so.conf -C /etc/ld.so.cache",
+            "12 -f /etc/ld.so.conf -C /etc/ld.so.cache",
             "memfd:runc_clon -f /etc/ld.so.conf -C /etc/ld.so.cache"
           )
           and proc.tty = 0
