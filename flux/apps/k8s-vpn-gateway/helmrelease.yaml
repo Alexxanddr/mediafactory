@@ -26,9 +26,10 @@ spec:
       name: RetryOnFailure
       retryInterval: 3m
   values:
-    image: ghcr.io/alexxanddr/k8s-vpn-gateway@sha256:c573e049eb26b9e55703c93262da5603cd50db6b19096b58cb14a8d6d107fc4f
+    image: ghcr.io/alexxanddr/k8s-vpn-gateway@sha256:79c10b013e6b435d23ec55488d842ad10c5922bbe1bbb7709d37fae7a66a0ffd
     clusterDNS: 10.96.0.10
     vpnSecret: vpn-provider
+    autoEnroll: true
     clientNamespaces:
       - vpn-apps
   postRenderers:

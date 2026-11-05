@@ -7,4 +7,4 @@ spec:
   interval: 1h
   url: https://github.com/Alexxanddr/k8s-vpn-gateway.git
   ref:
-    commit: ff2866d29711a5bdc262e94041dbba7798044d5c
+    commit: 3ddcf75688962683d77363694f74885f077c326f

@@ -1,10 +1,13 @@
 # Shared Kubernetes VPN gateway
 
 Flux installs the upstream chart in `vpn-gateway` after cert-manager is ready.
-Only workloads in `vpn-apps` are eligible for opt-in admission. Add
-`pass-to-vpn: "true"` and follow the upstream application security requirements.
-Both namespaces allow the chart's network components to use `NET_ADMIN` and
-`/dev/net/tun`. Limit workload creation there to trusted operators.
+Add `pass-to-vpn: "true"` to a compatible Pod or Deployment in its existing
+application namespace. Admission injects the guard and the controller provisions
+that namespace's transport Secret on demand. The original `vpn-apps` namespace
+also remains available. Automatic enrollment excludes the gateway and system
+namespaces. Namespace Pod Security enforcement and existing NetworkPolicies
+still apply. Workloads that require inbound connections or elevated application
+capabilities are outside the upstream guard contract.
 
 The gateway and its admission endpoint use internal ClusterIP Services. Uptime
 Kuma checks TCP reachability of the admission Service. Kubernetes readiness and
