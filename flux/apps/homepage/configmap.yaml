@@ -723,6 +723,15 @@ data:
           namespace: longhorn-system
           podSelector: app in ( longhorn-ui )
     - Tools:
+        - Binario:
+            icon: mdi-train-bus
+            href: https://binario.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
+            description: Bus and train search in Italy
+            siteMonitor: http://italian-travel-search.extra-tools.svc:3000/health
+            showStats: false
+            app: italian-travel-search
+            namespace: extra-tools
+            podSelector: app.kubernetes.io/name in ( italian-travel-search )
         - HomeBridge:
             icon: homebridge.svg
             href: https://homebridge.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}
