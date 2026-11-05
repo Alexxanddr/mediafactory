@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: k8s-vpn-gateway
+  namespace: flux-system
+spec:
+  interval: 1h
+  url: https://github.com/Alexxanddr/k8s-vpn-gateway.git
+  ref:
+    commit: ff2866d29711a5bdc262e94041dbba7798044d5c

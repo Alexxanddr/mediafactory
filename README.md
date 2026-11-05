@@ -30,6 +30,8 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 
 [Samba](flux/apps/samba/README.md) exposes the MergerFS pool to LAN SMB2/SMB3 clients, including macOS.
 
+The [shared VPN gateway](flux/apps/k8s-vpn-gateway/README.md) provides opt-in WireGuard egress for workloads in `vpn-apps`.
+
 <table>
 <tr><td><img src="https://artifacthub.io/image/77a66245-d325-4c09-815f-75344b3eb82c@3x" width="16"></td><td><b><a href="https://cert-manager.io/">cert-manager</a></b></td><td>X.509 certificate management for Kubernetes</td></tr>
 <tr><td><img src="https://uptime.kuma.pet/img/icon.svg" width="16"></td><td><b><a href="https://github.com/louislam/uptime-kuma">uptime-kuma</a></b></td><td>Self-hosted uptime monitoring tool</td></tr>
