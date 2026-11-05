@@ -27,7 +27,7 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: italian-travel-search
-        app.kubernetes.io/version: 0.3.7
+        app.kubernetes.io/version: 0.3.8
     spec:
       automountServiceAccountToken: false
       securityContext:
