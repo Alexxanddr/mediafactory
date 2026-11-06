@@ -14,8 +14,9 @@ network probes. The guard allows underlay replies only on those connections.
 Applications initiate Internet connections through the VPN.
 
 The gateway and its admission endpoint use internal ClusterIP Services. Uptime
-Kuma checks TCP reachability of the admission Service. Kubernetes readiness and
-Flux HelmRelease status track the gateway, whose overlay Service uses UDP.
+Kuma checks TCP reachability of the admission Service and polls Gluetun's HTTP
+health endpoint on the gateway Service. The HTTP monitor reflects provider VPN
+health. The client overlay uses UDP port 1194.
 
 The chart revision and runtime image digest are pinned. Update them together
 through Git, following the upstream verification procedure. The provider profile

@@ -66,6 +66,16 @@ spec:
               metadata:
                 name: vpn-gateway
                 namespace: vpn-gateway
+                annotations:
+                  uptime-kuma.io/enabled: "true"
+                  uptime-kuma.io/status-page: "true"
+                  uptime-kuma.io/type: "http"
+                  uptime-kuma.io/url: "http://vpn-gateway.vpn-gateway.svc:9999/"
+                  uptime-kuma.io/name: "vpn-gateway"
+                  uptime-kuma.io/interval: "60"
+                  uptime-kuma.io/retries: "3"
+                  uptime-kuma.io/notifications: "Monitoring Bot"
+                  uptime-kuma.io/group: "Network & Connectivity"
               spec:
                 template:
                   spec:
@@ -77,3 +87,20 @@ spec:
                     containers:
                       - name: gluetun
                         imagePullPolicy: Always
+                        env:
+                          - name: HEALTH_SERVER_ADDRESS
+                            value: "0.0.0.0:9999"
+                          - name: FIREWALL_INPUT_PORTS
+                            value: "1194,9999"
+          - patch: |
+              apiVersion: v1
+              kind: Service
+              metadata:
+                name: vpn-gateway
+                namespace: vpn-gateway
+              spec:
+                ports:
+                  - name: health
+                    port: 9999
+                    targetPort: 9999
+                    protocol: TCP
