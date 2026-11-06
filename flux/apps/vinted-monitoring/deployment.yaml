@@ -4,6 +4,7 @@ metadata:
   name: vinted-monitoring
   namespace: extra-tools
   annotations:
+    pass-to-vpn: "true"
     keel.sh/policy: force
     keel.sh/trigger: poll
     keel.sh/matchTag: "true"
