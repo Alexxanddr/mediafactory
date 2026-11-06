@@ -6,7 +6,9 @@ application namespace. Admission injects the guard and the controller provisions
 that namespace's transport Secret on demand. The original `vpn-apps` namespace
 also remains available. Automatic enrollment excludes the gateway and system
 namespaces. Namespace Pod Security enforcement and existing NetworkPolicies
-still apply. Workloads that require inbound connections or elevated application
+still apply. The `extra-tools` namespace permits the VPN guard through its
+Pod Security enforcement profile. Audit and warnings use `restricted`.
+Workloads that require inbound connections or elevated application
 capabilities are outside the upstream guard contract.
 
 The gateway and its admission endpoint use internal ClusterIP Services. Uptime
