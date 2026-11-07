@@ -44,6 +44,9 @@ spec:
                 name: vpn-admission
                 namespace: vpn-gateway
                 annotations:
+                  keel.sh/policy: force
+                  keel.sh/trigger: poll
+                  keel.sh/matchTag: "true"
                   uptime-kuma.io/enabled: "true"
                   uptime-kuma.io/status-page: "true"
                   uptime-kuma.io/type: "tcp"
@@ -67,6 +70,9 @@ spec:
                 name: vpn-gateway
                 namespace: vpn-gateway
                 annotations:
+                  keel.sh/policy: force
+                  keel.sh/trigger: poll
+                  keel.sh/matchTag: "true"
                   uptime-kuma.io/enabled: "true"
                   uptime-kuma.io/status-page: "true"
                   uptime-kuma.io/type: "http"
