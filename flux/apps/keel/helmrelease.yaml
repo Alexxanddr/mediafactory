@@ -39,3 +39,19 @@ spec:
       repository: ghcr.io/keel-hq/keel
       tag: latest
       pullPolicy: Always
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+            patch: |-
+              apiVersion: apps/v1
+              kind: Deployment
+              metadata:
+                name: keel-workload-annotations
+                annotations:
+                  keel.sh/policy: force
+                  keel.sh/trigger: poll
+                  keel.sh/matchTag: "true"

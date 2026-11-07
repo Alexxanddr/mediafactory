@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: mergerfs
   namespace: mergerfs
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   strategy:

@@ -3,7 +3,11 @@ kind: Component
 metadata:
   name: falcosidekick
   namespace: system-addon
+  # The operator propagates CR labels to workload metadata; Keel accepts labels.
   labels:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
     app.kubernetes.io/managed-by: falco-operator
 spec:
   component:
@@ -62,7 +66,11 @@ kind: Component
 metadata:
   name: metacollector
   namespace: system-addon
+  # The operator propagates CR labels to workload metadata; Keel accepts labels.
   labels:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
     app.kubernetes.io/managed-by: falco-operator
 spec:
   component:
@@ -88,7 +96,11 @@ kind: Component
 metadata:
   name: falcosidekick-ui
   namespace: system-addon
+  # The operator propagates CR labels to workload metadata; Keel accepts labels.
   labels:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
     app.kubernetes.io/managed-by: falco-operator
 spec:
   component:

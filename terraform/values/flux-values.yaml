@@ -2,6 +2,11 @@ nameOverride: ""
 fullnameOverride: "flux"
 
 instance:
+  commonMetadata:
+    annotations:
+      keel.sh/policy: force
+      keel.sh/trigger: poll
+      keel.sh/matchTag: "true"
   components: # @schema item: string; uniqueItems: true; itemEnum: [source-controller,kustomize-controller,helm-controller,notification-controller,image-reflector-controller,image-automation-controller,source-watcher]
     - source-controller
     - kustomize-controller

@@ -1,8 +1,15 @@
 resource "helm_release" "flux_operator" {
-  name             = "flux-operator"
-  namespace        = "flux-system"
-  repository       = "oci://ghcr.io/controlplaneio-fluxcd/charts"
-  chart            = "flux-operator"
+  name       = "flux-operator"
+  namespace  = "flux-system"
+  repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
+  chart      = "flux-operator"
+  values = [yamlencode({
+    commonAnnotations = {
+      "keel.sh/policy"   = "force"
+      "keel.sh/trigger"  = "poll"
+      "keel.sh/matchTag" = "true"
+    }
+  })]
   create_namespace = true
 }
 

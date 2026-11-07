@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: snapshot-controller
   namespace: system-addon
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   replicas: 1
   selector:

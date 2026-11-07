@@ -12,6 +12,10 @@ spec:
     namespace: flux-system
 
   values:
+    commonAnnotations:
+      keel.sh/policy: force
+      keel.sh/trigger: poll
+      keel.sh/matchTag: "true"
     readonly: false
 
     rbac:

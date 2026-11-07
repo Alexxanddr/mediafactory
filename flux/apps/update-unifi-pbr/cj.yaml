@@ -3,6 +3,10 @@ kind: CronJob
 metadata:
   name: unifi-youtube-pbr-sync-router-x
   namespace: system-addon
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   # Every six hours, at minute 17, in the CronJob controller's timezone.
   schedule: "0 * * * *"
@@ -73,6 +77,10 @@ kind: CronJob
 metadata:
   name: unifi-youtube-pbr-sync-router-y
   namespace: system-addon
+  annotations:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
 spec:
   # Every six hours, at minute 17, in the CronJob controller's timezone.
   schedule: "0 * * * *"

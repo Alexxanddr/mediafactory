@@ -42,6 +42,10 @@ spec:
     # LAPI – Local API (cervello di CrowdSec, scrive/legge dal DB)
     # --------------------------------------------------------------------------
     lapi:
+      deployAnnotations:
+        keel.sh/policy: force
+        keel.sh/trigger: poll
+        keel.sh/matchTag: "true"
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/status-page: "true"
@@ -108,6 +112,10 @@ spec:
     # Agent – processo che legge i log dei pod e li invia alla LAPI
     # --------------------------------------------------------------------------
     agent:
+      daemonsetAnnotations:
+        keel.sh/policy: force
+        keel.sh/trigger: poll
+        keel.sh/matchTag: "true"
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/status-page: "true"

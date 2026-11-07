@@ -3,7 +3,11 @@ kind: Falco
 metadata:
   name: falco
   namespace: falco-system
+  # The operator propagates CR labels to workload metadata; Keel accepts labels.
   labels:
+    keel.sh/policy: force
+    keel.sh/trigger: poll
+    keel.sh/matchTag: "true"
     app.kubernetes.io/managed-by: falco-operator
 spec:
   version: 0.45.1-rc1

@@ -25,6 +25,10 @@ spec:
   releaseName: cert-manager
 
   values:
+    deploymentAnnotations:
+      keel.sh/policy: force
+      keel.sh/trigger: poll
+      keel.sh/matchTag: "true"
     podAnnotations:
       uptime-kuma.io/enabled: "true"
       uptime-kuma.io/status-page: "true"
@@ -37,6 +41,10 @@ spec:
       uptime-kuma.io/group: "Network & Connectivity"
 
     webhook:
+      deploymentAnnotations:
+        keel.sh/policy: force
+        keel.sh/trigger: poll
+        keel.sh/matchTag: "true"
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/status-page: "true"
@@ -49,6 +57,10 @@ spec:
         uptime-kuma.io/group: "Network & Connectivity"
 
     cainjector:
+      deploymentAnnotations:
+        keel.sh/policy: force
+        keel.sh/trigger: poll
+        keel.sh/matchTag: "true"
       podAnnotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/status-page: "true"
