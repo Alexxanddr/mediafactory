@@ -40,7 +40,7 @@ Tailscale grants are additive. A default allow-all rule would defeat this restri
 
 ## Activation
 
-1. Apply the reviewed tailnet policy and create separate preauthorized, tagged, non-ephemeral enrollment keys for the VPS and pod. Store them only in their respective SOPS files; never put keys in Terraform or shell command arguments. A single-use key is sufficient while identity state survives. Recreating the VPS without its old state requires a new key.
+1. Apply the reviewed tailnet policy through the official Tailscale Terraform provider in `vps-oci` and create separate preauthorized, tagged, non-ephemeral enrollment keys for the VPS and pod. Store them only in their respective SOPS files; never put keys in Terraform or shell command arguments. A single-use key is sufficient while identity state survives. Recreating the VPS without its old state requires a new key.
 2. Set `TS_AUTHKEY` in this directory's SOPS Secret, bump `plex-edge/config-revision` and publish the reviewed Git changes. The official Traefik chart rejects `latest`: its image remains `v3.7.17` with chart `42.3.1`. Tailscale uses the official `latest` image with `Always` pull policy and its own health readiness probe.
 3. Unsuspend the dedicated Kustomization in Git when enrollment is ready. Flux waits for the existing infrastructure/apps; the HelmRelease depends directly on Traefik CRDs, cert-manager and CrowdSec. Certificate/HelmRelease readiness is checked before declaring the new stack ready.
 4. Read the ingress node's stable Tailscale IPv4 from the admin console or `tailscale ip -4` in its sidecar. Supply it as `plex_tailscale_ip` to the VPS Ansible playbook. No static tunnel addresses or manual WireGuard keys remain.
@@ -81,3 +81,23 @@ References: [Tailscale container parameters](https://tailscale.com/docs/features
 The existing cert-manager and `letsencrypt-production` ClusterIssuer issue the explicit `plex-remote` Certificate. The dedicated Gateway references that Secret; HTTPRoute attaches only to its HTTPS listener. No second cert-manager or issuer is installed, and the Gateway has no competing certificate-shim annotation.
 
 The dedicated Traefik must not receive cluster-wide Secret access merely to enable Gateway API. Chart-generated RBAC is disabled; the custom Role grants namespaced reads and runtime-state updates, while a narrow ClusterRole allows GatewayClass/namespace discovery and updates only this class's status. The private controller is filtered before this new class is introduced.
+
+## Live validation (2026-11-09)
+
+The certificate and HelmRelease are Ready. Public DNS resolves to the OCI VPS;
+HTTPS returns 200 with normal certificate validation. HAProxy PROXY v2 preserves
+the real client IP. Tailscale ping confirms a direct peer connection.
+Authenticated media range requests returned 206 for an 8 MiB initial range and
+a 1 MiB seek range (approximately 34 and 18 Mbit/s in this short sample).
+A synthetic documentation IP returned 200, then 403 after a temporary CrowdSec
+decision, then 200 after removal. The dedicated bouncer polls LAPI successfully.
+
+Stream mode checks cached decisions at request admission; it does not inspect
+video chunks or require a synchronous LAPI request per segment. No captcha,
+AppSec inspection or rate-limit middleware is configured on this route.
+`updateMaxFailure: 0` deliberately fails closed when decision refresh fails:
+new playback/seek requests may then be blocked. Existing transfers and future
+segment requests have different admission points. This test does not establish
+native TV/mobile compatibility, transcoding, long-duration throughput or
+identity recovery after restart. Keep the old NodePort/router path until those
+acceptance checks pass.
