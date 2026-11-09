@@ -1,0 +1,12 @@
+apiVersion: traefik.io/v1alpha1
+kind: TraefikService
+metadata:
+  name: plex-backend
+  namespace: traefik-plex
+spec:
+  weighted:
+    services:
+    - name: plex-backend
+      port: 32400
+      scheme: https
+      serversTransport: plex

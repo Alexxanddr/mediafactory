@@ -188,9 +188,21 @@ spec:
       kubernetesIngress:
         enabled: false
       kubernetesGateway:
-        enabled: false
+        enabled: true
+        namespaces:
+        - traefik-plex
+        labelSelector: app.kubernetes.io/instance=traefik-plex-traefik-plex
+        gateways:
+        - name: traefik-plex-gateway
+          namespace: traefik-plex
+        crossProviderNamespaces:
+        - traefik-plex
+        statusAddress:
+          service:
+            enabled: false
     rbac:
-      namespaced: true
+      enabled: false
+      namespaced: false
     ports:
       web: null
       websecure:
@@ -207,6 +219,9 @@ spec:
             readTimeout: 60s
             writeTimeout: 0s
             idleTimeout: 180s
+        http:
+          tls:
+            options: traefik-plex-plex@kubernetescrd
       metrics: null
     metrics:
       prometheus: null
@@ -250,3 +265,5 @@ spec:
       seccompProfile:
         type: RuntimeDefault
       fsGroup: 65532
+    additionalArguments:
+    - --providers.kubernetescrd.disableClusterScopeResources=true

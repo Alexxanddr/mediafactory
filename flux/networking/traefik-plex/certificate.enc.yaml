@@ -6,7 +6,7 @@ metadata:
 spec:
     secretName: plex-remote-tls
     dnsNames:
-        - ENC[AES256_GCM,data:Z0Rhk3GEXPbFJbjaNOlPiA==,iv:6H9g/nYV+UxM86FK5lhUHpz8fpzm8IwfVr3pXdEM+IM=,tag:66+Za8Hj32jgNWJ55QjJtA==,type:str]
+        - ENC[AES256_GCM,data:bfJhJXAN8wFFoMklC3GJL5g=,iv:4IFRTfVjYfdZEAfSTxHp2kIsJWsGk8HkxMILtRSXCj0=,tag:+5WqU7pMbXvV03VJZm5QKg==,type:str]
     issuerRef:
         name: letsencrypt-production
         kind: ClusterIssuer
@@ -16,14 +16,14 @@ sops:
     age:
         - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1dXYrYXpLRDlCa3NLUit0
-            UXAxbEJmbVdvK2oxaU1Wdy9NV3BmbytUdWhRClk0dU94alJRQ3pLZmxWWHlsZ3ZE
-            c3QzRFJoTzQ2NnV6UDFaNEZCYXdZSGMKLS0tIHRFRVdqVldWbE9KeklpNFZ2RTRl
-            L2NiejFxYUQxb3doaVFVakpWYUdLZkUKUTTgqnWjkKpM2hBuKXWkTumvLGlNw0vM
-            RfoAa9cYWfYguSsJvBDu6tTXfHaQkOLPHHXLSFbEp5qgUZsCTCyghg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFTWxnV1ViaTYzdkJyUTU1
+            T1NjUVg4N3pCcUVvWnZMVC9RUVFGYnQySFJVCnhkWGc4c0tySFBvTkdoVk9RaFVy
+            U2dpY2M1MzJyRXVFRmJJOXNqTmpzTGMKLS0tIGtzMlplWDdpVzNsNEozcjFNV0NK
+            bUhldmJPcmZBZ3VHQ1BwTWhNaXlPUUEKFHRHKcAcpzcOSVUhpYqyYcNr+PgpiZwe
+            /bVdY3S4fCu8ncJnmorMn3veBSVaCh1d4241IMfnpUABmdFdkuJcqg==
             -----END AGE ENCRYPTED FILE-----
           recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
     encrypted_regex: ^(dnsNames)$
-    lastmodified: "2026-11-09T17:03:32Z"
-    mac: ENC[AES256_GCM,data:0DcakjomzAH4M9XUjHe5l0LHFaeg4MiUnCeY8zktGYisNEYCJ55BjK+RSQgFxb1XILcSmZNUsKmAVqa8xzhHB7Eh9XVPahA3808k4NS4Uq8D2U5mZ2CJXtXPB+xQ7EXh1XMgQvEB69OhdiDv+9HXgfPidUWpe4LwKTs+pc/6ItI=,iv:8JeA0DCox7CwAbXs+RMn/Bct9e2B7ixL8LanAv8JQPY=,tag:O2lkOlkNCEVvAYzav3trZA==,type:str]
+    lastmodified: "2026-11-09T18:17:50Z"
+    mac: ENC[AES256_GCM,data:OuAeKzizQisKii6mXy/7IKz1BW2hlQTv8IgQ8Q5rLT7UIkptb2eM4k60GAw2lz+JE/SshEY6l7n0mTlAPVpBGuKgYUyhjTReUyQs2mO1imgYkBKjmbHy2CWucB1RtnUNE2Oxe+2kdicJBVvzxsaqJYKMJcmIjTlTzrjHiU3H0l4=,iv:VEg/1BeHtKlidjYcp25X3J8z8g86NCE4UU7tYKm9vx0=,tag:FVvZACQ2n5AqjSyihostCw==,type:str]
     version: 3.13.3

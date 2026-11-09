@@ -71,3 +71,9 @@ The former SSH provisioning of an NFS server has been removed because Talos
 does not support installing host packages or managing systemd services. NFS
 exports that used to come from the K3s host need a Kubernetes-hosted NFS server
 or another existing NFS host.
+
+## Dedicated Plex relay DNS
+
+Plex no longer belongs in the `services` map used for Cloudflare Tunnel ingress/DNS. `plex-remote.tf` keeps its public record in this existing Cloudflare state and moves `cloudflare_dns_record.vault_homelab_tunnel["plex"]` to `cloudflare_dns_record.plex_remote`. Supply the OCI reserved IPv4 through the ignored local `plex_vps_ipv4` input. The new record is A, DNS-only, TTL 60. Changing CNAME to A requires provider replacement of that DNS record, not replacement of a VM or storage resource.
+
+Coordinate the DNS/tunnel cutover only after the dedicated Gateway/HTTPRoute has a valid cert-manager certificate and the VPS path is tested. Do not manage the same record from the OCI state. Review a scoped plan for the record and tunnel configuration; never apply unrelated Talos/storage changes as part of this migration.

@@ -1,0 +1,38 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+    name: traefik-plex-gateway
+    namespace: traefik-plex
+spec:
+    gatewayClassName: traefik-plex
+    listeners:
+        - name: https
+          hostname: ENC[AES256_GCM,data:t4xBhyWHXOfnaT0LunwXmZA=,iv:4TLOizPF5kZe+osnpSAyKNl6Ead8ZuOKeKoCyKgSB3I=,tag:Cm8pPRc0LGgP4Pq5TN7dhw==,type:str]
+          port: 8443
+          protocol: HTTPS
+          tls:
+            mode: Terminate
+            certificateRefs:
+                - group: ""
+                  kind: Secret
+                  name: plex-remote-tls
+          allowedRoutes:
+            namespaces:
+                from: Same
+            kinds:
+                - kind: HTTPRoute
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBheG5kMWZ2T3dsNy9DRkFJ
+            Z21SNWFEWlhDVkFUVmh4S25LS3o1c2xSQlNFCmhjNEdRT1F0cUcvWlhkVkhhUlRK
+            NEYwZEJHbnRNMEN6MUI3L0hlWTRiamsKLS0tIG9BWGxaOHBCRmhISTB1dmhRM2xq
+            c3Y4aC9JeUZldmxqYmd3UE1ZTVdEVkUKCPNwrwRFauI9G+pQrbq0olp0U6lwqc1q
+            p8tMe0nShCtZbcMeUupy0NFkc6CvvCEWi/dI9oWfy6CN3lcmEy36nQ==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(hostname)$
+    lastmodified: "2026-11-09T18:17:50Z"
+    mac: ENC[AES256_GCM,data:DKinlCbIDnm67V4Aw32JEpMem1zev0oxIVenBxBZ7WQ6eMe11eMKULmbW20HHPPbneoDrCBYAbT7GHorS6bE9CxEbHTRCmWKLaFACiITMA/EnaLip7b2Rp84qfTf2bD2B8H2XZSbilJcVUbKjf5MVOLYDs2OuJiHcekAT5E6Dk8=,iv:fAM917z7LWD20O7qnIUbhHEhjp9umKqNxv2c8LGw33E=,tag:vaU1LQc0qrd2sn1G9MZ4kg==,type:str]
+    version: 3.13.3

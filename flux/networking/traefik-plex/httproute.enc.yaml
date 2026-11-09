@@ -1,0 +1,41 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+    name: plex-remote
+    namespace: traefik-plex
+spec:
+    parentRefs:
+        - name: traefik-plex-gateway
+          sectionName: https
+    hostnames:
+        - ENC[AES256_GCM,data:mokArdEYyQdI8fwmzp1ektc=,iv:tgw+TxBgFRyBhvZidzdLBmkYS4EeDjq3laWRMH+MFUI=,tag:/H0+hVGir6eqq+Bgu2gD4w==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          filters:
+            - type: ExtensionRef
+              extensionRef:
+                group: traefik.io
+                kind: Middleware
+                name: crowdsec-bouncer
+          backendRefs:
+            - group: traefik.io
+              kind: TraefikService
+              name: plex-backend
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBzL093UEExN2kvcmV0b2xi
+            YTNDMVA1Z0lMRXJBbjZOY2pDbUVHUVZ4T3hrCktnS3VRNzMwY1JSZjZwSjg1NS9Q
+            ZEJDV3lhdkRXM1pBbDVjKzFvNWplQWMKLS0tIGVOTlZnWURNRklLaUVuTU1aRmth
+            T2UwT0Q3Zk1wWGcweERPR0l5ZGdtUzAK9eXVqi3APdPGuDzXZpC9RQVJpbb7xUPb
+            EptWlyxgEq7x4YP/JbwxCXXiEGTxn61H/23sWDkCa8SubOEqqN2s6g==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(hostnames)$
+    lastmodified: "2026-11-09T18:17:50Z"
+    mac: ENC[AES256_GCM,data:UvbNjooQJE49YbIbtR9wsFU0nUWOXe1judCPxrnwaSskNtp1pLc4B0ZHmtg/EfTJkC+JhK6otrX2yEzQDlXx2SNJ+sK8+FwNqrCeKcK9k1c2KA5HLireoV9iBVUjHFwjUzEWS9tSbKjE0DbEndBZmHolFHmMZYcrYbZ/I9Hpvhs=,iv:aqCvU5FuPHEKVFOnUkFAu8G9GNslw/hheVrdO8cqzFQ=,tag:a+e76AGoidhXx7Smi1SEvA==,type:str]
+    version: 3.13.3

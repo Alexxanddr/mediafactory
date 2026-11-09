@@ -22,3 +22,70 @@ rules:
   - get
   - create
   - patch
+- apiGroups:
+  - ''
+  resources:
+  - configmaps
+  - services
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - discovery.k8s.io
+  resources:
+  - endpointslices
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - traefik.io
+  resources:
+  - ingressroutes
+  - ingressroutetcps
+  - ingressrouteudps
+  - middlewares
+  - middlewaretcps
+  - tlsoptions
+  - tlsstores
+  - traefikservices
+  - serverstransports
+  - serverstransporttcps
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - backendtlspolicies
+  - gateways
+  - grpcroutes
+  - httproutes
+  - referencegrants
+  - tcproutes
+  - tlsroutes
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - gateway.networking.k8s.io
+  resources:
+  - backendtlspolicies/status
+  - gateways/status
+  - grpcroutes/status
+  - httproutes/status
+  - tcproutes/status
+  - tlsroutes/status
+  verbs:
+  - update
+  - patch

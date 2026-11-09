@@ -45,9 +45,12 @@ class PlexEdgeTests(unittest.TestCase):
         self.assertIn('--entrypoints.websecure.address=127.0.0.1:8443/tcp', arguments)
         self.assertIn('--providers.kubernetescrd.namespaces=traefik-plex', arguments)
         self.assertIn('--providers.kubernetescrd.disableclusterscoperesources=true', arguments)
+        self.assertIn('--providers.kubernetesgateway', arguments)
+        self.assertIn('--providers.kubernetesgateway.namespaces=traefik-plex', arguments)
+        self.assertIn('--providers.kubernetesgateway.labelselector=app.kubernetes.io/instance=traefik-plex-traefik-plex', arguments)
         self.assertIn('--entrypoints.websecure.proxyprotocol.trustedips=127.0.0.1/32', arguments)
         self.assertIn('--experimental.abortonpluginfailure=true', arguments)
-        self.assertFalse(any('kubernetesgateway' in a or 'kubernetesingress' in a or 'api.insecure' in a for a in arguments))
+        self.assertFalse(any('kubernetesingress' in a or 'api.insecure' in a for a in arguments))
         services = list(yaml.safe_load_all((EDGE / 'service.yaml').read_text()))
         health = next(d for d in services if d['metadata']['name'] == 'traefik-plex-health')
         self.assertTrue(all(deployment['spec']['template']['metadata']['labels'].get(k) == v for k, v in health['spec']['selector'].items()))
@@ -61,10 +64,13 @@ class PlexEdgeTests(unittest.TestCase):
         self.assertEqual(by_name['traefik-plex-bouncer']['BOUNCER_KEY_traefik_plex'], data(crowdsec)['BOUNCER_KEY_traefik_plex'])
         auth = by_name['traefik-plex-tailscale-auth']['TS_AUTHKEY']
         cert = decrypt(EDGE / 'certificate.enc.yaml')[0]
-        route = decrypt(EDGE / 'ingressroute.enc.yaml')[0]
-        self.assertEqual(route['spec']['routes'][0]['match'], 'Host(`' + cert['spec']['dnsNames'][0] + '`)')
+        route = decrypt(EDGE / 'httproute.enc.yaml')[0]
+        self.assertEqual(route['spec']['hostnames'], cert['spec']['dnsNames'])
+        gateway = decrypt(EDGE / 'gateway.enc.yaml')[0]
+        self.assertEqual(gateway['spec']['listeners'][0]['hostname'], cert['spec']['dnsNames'][0])
+        self.assertEqual(route['spec']['parentRefs'][0]['name'], gateway['metadata']['name'])
         self.assertNotIn('example.invalid', cert['spec']['dnsNames'][0])
-        self.assertEqual(route['metadata']['annotations']['kubernetes.io/ingress.class'], 'traefik-plex')
+        self.assertEqual(route['spec']['rules'][0]['backendRefs'][0]['kind'], 'TraefikService')
         transport = decrypt(EDGE / 'serverstransport.enc.yaml')[0]
         old = decrypt(ROOT / 'flux/apps/plex/backendtlspolicy.enc.yaml')[0]
         self.assertEqual(transport['spec']['serverName'], old['spec']['validation']['hostname'])
@@ -134,6 +140,11 @@ class PlexEdgeTests(unittest.TestCase):
         self.assertEqual(state['metadata']['annotations']['kustomize.toolkit.fluxcd.io/ssa'], 'IfNotPresent')
         role = yaml.safe_load((EDGE / 'role.yaml').read_text())
         self.assertEqual(role['rules'][0]['resourceNames'], ['traefik-plex-state'])
+        cluster = yaml.safe_load((EDGE / 'clusterrole.yaml').read_text())
+        self.assertFalse(any('secrets' in r['resources'] or 'services' in r['resources'] for r in cluster['rules']))
+        main = yaml.safe_load((ROOT / 'flux/infrastructure/traefik/helmrelease.yaml').read_text())
+        self.assertEqual(main['spec']['values']['providers']['kubernetesGateway']['gateways'], [{'name':'traefik-gateway','namespace':'system-addon'}])
+
 
 
 unittest.main(argv=['plex-edge.py'])
