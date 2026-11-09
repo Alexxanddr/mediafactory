@@ -1,4 +1,4 @@
-# Pod-local iptables is the active enforcement on Flannel. Revalidate these policies before changing CNI.
+# Flannel requires the pod-local firewall for enforcement.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -10,12 +10,9 @@ spec:
   - Ingress
   - Egress
   ingress:
-  - from:
-    - ipBlock:
-        cidr: 192.0.2.1/32
-    ports:
+  - ports:
     - protocol: UDP
-      port: 51820
+      port: 41641
   - from:
     - namespaceSelector:
         matchLabels:
@@ -26,6 +23,8 @@ spec:
     ports:
     - protocol: TCP
       port: 8080
+    - protocol: TCP
+      port: 9002
   egress:
   - to:
     - namespaceSelector:
@@ -80,12 +79,6 @@ spec:
       port: 6443
   - to:
     - ipBlock:
-        cidr: 192.0.2.1/32
-    ports:
-    - protocol: UDP
-      port: 51820
-  - to:
-    - ipBlock:
         cidr: 0.0.0.0/0
         except:
         - 0.0.0.0/8
@@ -101,6 +94,7 @@ spec:
     ports:
     - protocol: TCP
       port: 443
+    - protocol: UDP
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy

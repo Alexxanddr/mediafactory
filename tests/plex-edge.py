@@ -39,13 +39,13 @@ class PlexEdgeTests(unittest.TestCase):
         pod = deployment['spec']['template']['spec']
         main = pod['containers'][0]
         self.assertEqual(main['securityContext']['capabilities'], {'drop': ['ALL']})
-        self.assertNotIn('wireguard-key', [m['name'] for m in main['volumeMounts']])
+        self.assertNotIn('tailscale-runtime', [m['name'] for m in main['volumeMounts']])
         self.assertEqual(pod['initContainers'][0]['securityContext']['capabilities'], {'drop': ['ALL'], 'add': ['NET_ADMIN']})
         arguments = [a.lower() for a in main['args']]
-        self.assertIn('--entrypoints.websecure.address=10.10.0.2:8443/tcp', arguments)
+        self.assertIn('--entrypoints.websecure.address=127.0.0.1:8443/tcp', arguments)
         self.assertIn('--providers.kubernetescrd.namespaces=traefik-plex', arguments)
         self.assertIn('--providers.kubernetescrd.disableclusterscoperesources=true', arguments)
-        self.assertIn('--entrypoints.websecure.proxyprotocol.trustedips=10.10.0.1/32', arguments)
+        self.assertIn('--entrypoints.websecure.proxyprotocol.trustedips=127.0.0.1/32', arguments)
         self.assertIn('--experimental.abortonpluginfailure=true', arguments)
         self.assertFalse(any('kubernetesgateway' in a or 'kubernetesingress' in a or 'api.insecure' in a for a in arguments))
         services = list(yaml.safe_load_all((EDGE / 'service.yaml').read_text()))
@@ -55,13 +55,11 @@ class PlexEdgeTests(unittest.TestCase):
     def test_encrypted_contract(self):
         secret_docs = decrypt(EDGE / 'secret.enc.yaml')
         def data(d):
-            return d.get('stringData') or {k: base64.b64decode(v).decode() for k, v in d['data'].items()}
+            return d.get('stringData') or {k: base64.b64decode(v).decode() for k, v in d.get('data', {}).items()}
         by_name = {d['metadata']['name']: data(d) for d in secret_docs}
         crowdsec = next(d for d in decrypt(ROOT / 'flux/apps/crowdsec/secret.enc.yaml') if d['metadata']['name'] == 'crowdsec-keys')
         self.assertEqual(by_name['traefik-plex-bouncer']['BOUNCER_KEY_traefik_plex'], data(crowdsec)['BOUNCER_KEY_traefik_plex'])
-        wg = by_name['traefik-plex-wireguard']
-        self.assertEqual(len(base64.b64decode(wg['private-key'])), 32)
-        self.assertEqual(len(base64.b64decode(wg['public-key'])), 32)
+        auth = by_name['traefik-plex-tailscale-auth']['TS_AUTHKEY']
         cert = decrypt(EDGE / 'certificate.enc.yaml')[0]
         route = decrypt(EDGE / 'ingressroute.enc.yaml')[0]
         self.assertEqual(route['spec']['routes'][0]['match'], 'Host(`' + cert['spec']['dnsNames'][0] + '`)')
@@ -72,16 +70,16 @@ class PlexEdgeTests(unittest.TestCase):
         self.assertEqual(transport['spec']['serverName'], old['spec']['validation']['hostname'])
         self.assertFalse(transport['spec']['insecureSkipVerify'])
         ks = yaml.safe_load((ROOT / 'flux/clusters/home/traefik-plex.yaml').read_text())
-        if wg['VPS_PUBLIC_KEY'].startswith('REPLACE_') or wg['VPS_ENDPOINT'].startswith('192.0.2.'):
-            self.assertTrue(ks['spec']['suspend'], 'Incomplete peer configuration must remain suspended')
+        if auth.startswith('REPLACE_'):
+            self.assertTrue(ks['spec']['suspend'], 'Enrollment must remain suspended until configured')
         for path in EDGE.glob('*.enc.yaml'):
             raw = path.read_text()
             self.assertIn('sops:', raw)
             self.assertNotIn(cert['spec']['dnsNames'][0], raw)
-            self.assertNotIn(wg['private-key'], raw)
+            self.assertNotIn('tskey-auth-', raw)
 
-    def run_firewall(self, endpoint, key='fixture-public-key'):
-        script = yaml.safe_load((EDGE / 'configmap.yaml').read_text())['data']['setup.sh']
+    def run_firewall(self, api='10.96.0.1'):
+        script = yaml.safe_load((EDGE / 'configmap.yaml').read_text())['data']['firewall.sh']
         with tempfile.TemporaryDirectory() as directory:
             scratch = Path(directory)
             for tool in ['ip', 'wg', 'getent', 'cat', 'iptables-restore', 'ip6tables-restore']:
@@ -98,32 +96,44 @@ class PlexEdgeTests(unittest.TestCase):
                 executable.write_text(code)
                 executable.chmod(0o700)
             env = {'PATH': str(scratch) + ':/usr/bin:/bin', 'HOME': directory, 'CHECK_DIR': directory,
-                   'VPS_ENDPOINT': endpoint, 'VPS_PUBLIC_KEY': key, 'KUBERNETES_SERVICE_HOST': '10.96.0.1'}
+                   'KUBERNETES_SERVICE_HOST': api, 'PLEX_SERVICE_IP':'10.97.203.150', 'LAPI_SERVICE_IP':'10.104.125.29'}
             result = subprocess.run(['/bin/sh', '-s'], input=script, text=True, env=env, capture_output=True, timeout=10)
             rules = (scratch / 'iptables-restore.rules').read_text() if (scratch / 'iptables-restore.rules').exists() else ''
             mutations = (scratch / 'mutations').read_text() if (scratch / 'mutations').exists() else ''
             return result.returncode, rules, mutations
 
     def test_firewall_rules(self):
-        code, rules, mutations = self.run_firewall('8.8.8.8:51820')
+        code, rules, mutations = self.run_firewall()
         self.assertEqual(code, 0)
         for chain in ['INPUT', 'OUTPUT', 'FORWARD']:
             self.assertIn(':' + chain + ' DROP', rules)
-        self.assertIn('-A INPUT -i wg0 -s 10.10.0.1/32 -p tcp --dport 8443 -j ACCEPT', rules)
-        self.assertIn('-A INPUT -i wg0 -j DROP', rules)
+        self.assertNotIn('wg0', rules)
+        self.assertNotIn('--dport 8443', rules, 'The application must not be accepted on the ordinary pod interface')
         self.assertIn('-A OUTPUT -d 10.97.203.150/32 -p tcp --dport 32400 -j ACCEPT', rules)
-        self.assertLess(rules.index('-A OUTPUT -d 192.168.0.0/16 -j REJECT'), rules.index('-A OUTPUT -p tcp --dport 443 -j ACCEPT'))
-        self.assertIn('allowed-ips 10.10.0.1/32', mutations)
-        self.assertIn('link set wg0 mtu 1370 up', mutations)
-        self.assertNotIn('0.0.0.0/0', mutations)
+        self.assertLess(rules.index('-A OUTPUT -d 192.168.0.0/16 -j REJECT'), rules.index('-A OUTPUT -p udp -j ACCEPT'))
+        self.assertEqual(mutations, '', 'Userspace Tailscale must not create interfaces, routes or WireGuard keys')
 
-    def test_incomplete_or_invalid_peer_fails_before_network_changes(self):
-        for endpoint, key in [('192.0.2.1:51820', 'fixture'), ('8.8.8.8:51820', 'REPLACE_WITH_KEY'), ('8.8.8.8;false:51820', 'fixture')]:
-            with self.subTest(endpoint=endpoint):
-                code, rules, mutations = self.run_firewall(endpoint, key)
-                self.assertNotEqual(code, 0)
-                self.assertEqual(rules, '')
-                self.assertEqual(mutations, '')
+
+    def test_invalid_api_address_fails_before_firewall_changes(self):
+        code, rules, mutations = self.run_firewall('invalid;false')
+        self.assertNotEqual(code, 0)
+        self.assertEqual(rules, '')
+        self.assertEqual(mutations, '')
+
+    def test_userspace_serve_and_runtime_state(self):
+        hr = yaml.safe_load((EDGE / 'helmrelease.yaml').read_text())
+        sidecar = hr['spec']['values']['deployment']['additionalContainers'][0]
+        env = {e['name']: e.get('value') for e in sidecar['env']}
+        self.assertEqual(env['TS_USERSPACE'], 'true')
+        self.assertEqual(env['TS_AUTH_ONCE'], 'true')
+        self.assertEqual(env['TS_KUBE_SECRET'], 'traefik-plex-state')
+        self.assertEqual(sidecar['securityContext']['capabilities'], {'drop': ['ALL']})
+        config = yaml.safe_load((EDGE / 'configmap.yaml').read_text())
+        self.assertEqual(json.loads(config['data']['serve.json']), {'TCP': {'8443': {'TCPForward': '127.0.0.1:8443'}}})
+        state = next(d for d in decrypt(EDGE / 'secret.enc.yaml') if d['metadata']['name'] == 'traefik-plex-state')
+        self.assertEqual(state['metadata']['annotations']['kustomize.toolkit.fluxcd.io/ssa'], 'IfNotPresent')
+        role = yaml.safe_load((EDGE / 'role.yaml').read_text())
+        self.assertEqual(role['rules'][0]['resourceNames'], ['traefik-plex-state'])
 
 
 unittest.main(argv=['plex-edge.py'])

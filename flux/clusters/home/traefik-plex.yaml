@@ -1,11 +1,11 @@
-# Suspended until OCI peer details and the encrypted public hostname are configured.
+# Tailnet policy and enrollment configured; the public OCI relay is enabled separately.
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
   name: traefik-plex
   namespace: flux-system
 spec:
-  suspend: true
+  suspend: false
   dependsOn:
   - name: infrastructure
   - name: apps

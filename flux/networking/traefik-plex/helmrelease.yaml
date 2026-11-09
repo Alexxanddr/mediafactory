@@ -50,14 +50,14 @@ spec:
         uptime-kuma.io/retries: '3'
         uptime-kuma.io/notifications: Monitoring Bot
         uptime-kuma.io/group: Network & Connectivity
-        plex-edge/config-revision: '1'
+        plex-edge/config-revision: '2'
       initContainers:
-      - name: wireguard
-        image: lscr.io/linuxserver/wireguard:latest
+      - name: firewall
+        image: ghcr.io/tailscale/tailscale:latest
         imagePullPolicy: Always
         command:
         - /bin/sh
-        - /scripts/setup.sh
+        - /scripts/firewall.sh
         securityContext:
           runAsUser: 0
           runAsGroup: 0
@@ -76,34 +76,90 @@ spec:
             cpu: 250m
             memory: 128Mi
         volumeMounts:
-        - name: wireguard-setup
+        - name: tailscale-config
           mountPath: /scripts
           readOnly: true
-        - name: wireguard-key
-          mountPath: /wireguard
-          readOnly: true
         env:
-        - name: VPS_ENDPOINT
+        - name: PLEX_SERVICE_IP
           valueFrom:
-            secretKeyRef:
-              name: traefik-plex-wireguard
-              key: VPS_ENDPOINT
-        - name: VPS_PUBLIC_KEY
+            configMapKeyRef:
+              name: traefik-plex-tailscale
+              key: PLEX_SERVICE_IP
+        - name: LAPI_SERVICE_IP
           valueFrom:
-            secretKeyRef:
-              name: traefik-plex-wireguard
-              key: VPS_PUBLIC_KEY
+            configMapKeyRef:
+              name: traefik-plex-tailscale
+              key: LAPI_SERVICE_IP
       additionalVolumes:
-      - name: wireguard-setup
+      - name: tailscale-config
         configMap:
-          name: traefik-plex-wireguard
-      - name: wireguard-key
-        secret:
-          secretName: traefik-plex-wireguard
-          defaultMode: 256
-          items:
-          - key: private-key
-            path: private-key
+          name: traefik-plex-tailscale
+      - name: tailscale-runtime
+        emptyDir: {}
+      additionalContainers:
+      - name: tailscale
+        image: ghcr.io/tailscale/tailscale:latest
+        imagePullPolicy: Always
+        env:
+        - name: TS_USERSPACE
+          value: 'true'
+        - name: TS_AUTH_ONCE
+          value: 'true'
+        - name: TS_ACCEPT_DNS
+          value: 'false'
+        - name: TS_HOSTNAME
+          value: plex-ingress
+        - name: TS_KUBE_SECRET
+          value: traefik-plex-state
+        - name: TS_STATE_DIR
+          value: /var/run/tailscale
+        - name: TS_SOCKET
+          value: /var/run/tailscale/tailscaled.sock
+        - name: TS_SERVE_CONFIG
+          value: /config/serve.json
+        - name: TS_EXTRA_ARGS
+          value: --advertise-tags=tag:plex-ingress --accept-routes=false
+        - name: TS_TAILSCALED_EXTRA_ARGS
+          value: --port=41641
+        - name: TS_ENABLE_HEALTH_CHECK
+          value: 'true'
+        - name: TS_LOCAL_ADDR_PORT
+          value: 0.0.0.0:9002
+        - name: TS_AUTHKEY
+          valueFrom:
+            secretKeyRef:
+              name: traefik-plex-tailscale-auth
+              key: TS_AUTHKEY
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 65532
+          runAsGroup: 65532
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tailscale-config
+          mountPath: /config
+          readOnly: true
+        - name: tailscale-runtime
+          mountPath: /var/run/tailscale
+        - name: tmp
+          mountPath: /tmp
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 9002
+          periodSeconds: 10
+          failureThreshold: 6
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 1000m
+            memory: 256Mi
     updateStrategy:
       type: Recreate
     service:
@@ -138,13 +194,13 @@ spec:
     ports:
       web: null
       websecure:
-        hostIP: 10.10.0.2
+        hostIP: 127.0.0.1
         port: 8443
         expose:
           default: false
         proxyProtocol:
           trustedIPs:
-          - 10.10.0.1/32
+          - 127.0.0.1/32
           insecure: false
         transport:
           respondingTimeouts:
@@ -193,3 +249,4 @@ spec:
       runAsGroup: 65532
       seccompProfile:
         type: RuntimeDefault
+      fsGroup: 65532
