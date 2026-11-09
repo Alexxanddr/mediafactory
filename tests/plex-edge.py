@@ -75,9 +75,8 @@ class PlexEdgeTests(unittest.TestCase):
         old = decrypt(ROOT / 'flux/apps/plex/backendtlspolicy.enc.yaml')[0]
         self.assertEqual(transport['spec']['serverName'], old['spec']['validation']['hostname'])
         self.assertFalse(transport['spec']['insecureSkipVerify'])
-        ks = yaml.safe_load((ROOT / 'flux/clusters/home/traefik-plex.yaml').read_text())
-        if auth.startswith('REPLACE_'):
-            self.assertTrue(ks['spec']['suspend'], 'Enrollment must remain suspended until configured')
+        self.assertTrue(auth.startswith('tskey-client-'))
+        self.assertTrue(auth.endswith('?ephemeral=false&preauthorized=true'))
         for path in EDGE.glob('*.enc.yaml'):
             raw = path.read_text()
             self.assertIn('sops:', raw)

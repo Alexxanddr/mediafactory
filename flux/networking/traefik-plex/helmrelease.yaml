@@ -50,7 +50,7 @@ spec:
         uptime-kuma.io/retries: '3'
         uptime-kuma.io/notifications: Monitoring Bot
         uptime-kuma.io/group: Network & Connectivity
-        plex-edge/config-revision: '2'
+        plex-edge/config-revision: '3'
       initContainers:
       - name: firewall
         image: ghcr.io/tailscale/tailscale:latest
