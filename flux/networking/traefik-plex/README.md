@@ -101,3 +101,17 @@ segment requests have different admission points. This test does not establish
 native TV/mobile compatibility, transcoding, long-duration throughput or
 identity recovery after restart. Keep the old NodePort/router path until those
 acceptance checks pass.
+
+OAuth bootstrap was also validated by deleting the old ingress device and its
+runtime identity Secret while the dedicated workload was stopped. Flux restored
+the empty Secret, the sidecar enrolled automatically, and public HTTPS recovered.
+The independent relay's identity was recreated too. Both obtained new tailnet
+addresses; MagicDNS updated the relay backend without any address changes in Git.
+The sole bootstrap credential exchange is initial OAuth delivery to SOPS; no
+cross-repository module, remote-state read or enrollment script remains.
+
+After both cold enrollments, authenticated 8 MiB and 1 MiB seek samples returned
+206 (approximately 25 and 15 Mbit/s on the final run). The temporary synthetic
+CrowdSec decision again produced 200 → 403 → 200 and was removed. Both Terraform
+roots reported no changes after apply. Short sample throughput varied; this is
+not a sustained-capacity or native-client acceptance test.
