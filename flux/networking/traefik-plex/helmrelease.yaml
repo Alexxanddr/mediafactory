@@ -1,0 +1,195 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik-plex
+  namespace: traefik-plex
+spec:
+  releaseName: traefik-plex
+  interval: 5m
+  dependsOn:
+  - name: traefik
+    namespace: system-addon
+  - name: cert-manager
+    namespace: cert-manager
+  - name: crowdsec
+    namespace: crowdsec-system
+  chart:
+    spec:
+      chart: traefik
+      version: 42.3.1
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+        namespace: flux-system
+  install:
+    crds: Skip
+    remediation:
+      retries: 3
+  upgrade:
+    crds: Skip
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: traefik-plex
+    image:
+      tag: v3.7.17
+      pullPolicy: Always
+    deployment:
+      replicas: 1
+      annotations:
+        keel.sh/policy: force
+        keel.sh/trigger: poll
+        keel.sh/matchTag: 'true'
+      podAnnotations:
+        uptime-kuma.io/enabled: 'true'
+        uptime-kuma.io/status-page: 'true'
+        uptime-kuma.io/type: http
+        uptime-kuma.io/url: http://traefik-plex-health.traefik-plex.svc:8080/ping
+        uptime-kuma.io/name: traefik-plex
+        uptime-kuma.io/interval: '60'
+        uptime-kuma.io/retries: '3'
+        uptime-kuma.io/notifications: Monitoring Bot
+        uptime-kuma.io/group: Network & Connectivity
+        plex-edge/config-revision: '1'
+      initContainers:
+      - name: wireguard
+        image: lscr.io/linuxserver/wireguard:latest
+        imagePullPolicy: Always
+        command:
+        - /bin/sh
+        - /scripts/setup.sh
+        securityContext:
+          runAsUser: 0
+          runAsGroup: 0
+          runAsNonRoot: false
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+            add:
+            - NET_ADMIN
+        resources:
+          requests:
+            cpu: 25m
+            memory: 32Mi
+          limits:
+            cpu: 250m
+            memory: 128Mi
+        volumeMounts:
+        - name: wireguard-setup
+          mountPath: /scripts
+          readOnly: true
+        - name: wireguard-key
+          mountPath: /wireguard
+          readOnly: true
+        env:
+        - name: VPS_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: traefik-plex-wireguard
+              key: VPS_ENDPOINT
+        - name: VPS_PUBLIC_KEY
+          valueFrom:
+            secretKeyRef:
+              name: traefik-plex-wireguard
+              key: VPS_PUBLIC_KEY
+      additionalVolumes:
+      - name: wireguard-setup
+        configMap:
+          name: traefik-plex-wireguard
+      - name: wireguard-key
+        secret:
+          secretName: traefik-plex-wireguard
+          defaultMode: 256
+          items:
+          - key: private-key
+            path: private-key
+    updateStrategy:
+      type: Recreate
+    service:
+      enabled: false
+    ingressClass:
+      enabled: false
+    gateway:
+      enabled: false
+    gatewayClass:
+      enabled: false
+    ingressRoute:
+      dashboard:
+        enabled: false
+      healthcheck:
+        enabled: false
+    api:
+      dashboard: false
+    providers:
+      kubernetesCRD:
+        enabled: true
+        ingressClass: traefik-plex
+        namespaces:
+        - traefik-plex
+        allowCrossNamespace: false
+        allowExternalNameServices: true
+      kubernetesIngress:
+        enabled: false
+      kubernetesGateway:
+        enabled: false
+    rbac:
+      namespaced: true
+    ports:
+      web: null
+      websecure:
+        hostIP: 10.10.0.2
+        port: 8443
+        expose:
+          default: false
+        proxyProtocol:
+          trustedIPs:
+          - 10.10.0.1/32
+          insecure: false
+        transport:
+          respondingTimeouts:
+            readTimeout: 60s
+            writeTimeout: 0s
+            idleTimeout: 180s
+      metrics: null
+    metrics:
+      prometheus: null
+    experimental:
+      abortOnPluginFailure: true
+      plugins:
+        bouncer:
+          moduleName: github.com/maxlerebourg/crowdsec-bouncer-traefik-plugin
+          version: v1.4.5
+    volumes:
+    - name: traefik-plex-bouncer
+      mountPath: /etc/traefik/crowdsec
+      type: secret
+    accessLog:
+      enabled: true
+      format: json
+      fields:
+        headers:
+          defaultMode: drop
+        names:
+          RequestLine: drop
+        queryParameters:
+          defaultMode: drop
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 1000m
+        memory: 512Mi
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      readOnlyRootFilesystem: true
+    podSecurityContext:
+      runAsNonRoot: true
+      runAsUser: 65532
+      runAsGroup: 65532
+      seccompProfile:
+        type: RuntimeDefault

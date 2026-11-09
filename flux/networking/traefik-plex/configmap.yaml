@@ -1,0 +1,98 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-plex-wireguard
+  namespace: traefik-plex
+data:
+  setup.sh: |
+    #!/bin/sh
+    set -eu
+
+    # Never run the image's VPN server entrypoint or expose private keys in logs.
+    for tool in ip wg iptables-restore ip6tables-restore getent awk; do
+        command -v "$tool" >/dev/null
+    done
+    case "${VPS_PUBLIC_KEY:-}" in
+        ''|REPLACE_*) echo 'Configure the OCI WireGuard public key before enabling this release.' >&2; exit 1 ;;
+    esac
+    case "${VPS_ENDPOINT:-}" in
+        ''|192.0.2.*|198.51.100.*|203.0.113.*) echo 'Configure the reserved OCI endpoint before enabling this release.' >&2; exit 1 ;;
+    esac
+
+    # Resolve stable ClusterIPs before applying the pod-local egress firewall.
+    resolve_ipv4() {
+        getent hosts "$1" | awk '$1 ~ /^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$/ { print $1; exit }'
+    }
+    plex_ip=$(resolve_ipv4 plex-media-server.multimedia-factory.svc.cluster.local)
+    lapi_ip=$(resolve_ipv4 crowdsec-service.crowdsec-system.svc.cluster.local)
+    dns_ip=$(awk '$1 == "nameserver" && $2 !~ /:/ { print $2; exit }' /etc/resolv.conf)
+    api_ip=${KUBERNETES_SERVICE_HOST:?Missing Kubernetes service address}
+    api_port=${KUBERNETES_SERVICE_PORT_HTTPS:-443}
+    endpoint_ip=${VPS_ENDPOINT%:*}
+    endpoint_port=${VPS_ENDPOINT##*:}
+    for address in "$plex_ip" "$lapi_ip" "$dns_ip" "$api_ip" "$endpoint_ip"; do
+        # IPv4 literals only: no hostname re-resolution or shell evaluation in firewall rules.
+        printf '%s\n' "$address" | awk -F. 'NF != 4 { exit 1 } { for (i=1;i<=4;i++) if ($i !~ /^[0-9]+$/ || $i > 255) exit 1 }'
+    done
+    case "$endpoint_port" in ''|*[!0-9]*) exit 1 ;; esac
+    [ "$endpoint_port" -ge 1 ] && [ "$endpoint_port" -le 65535 ]
+
+    if ip link show wg0 >/dev/null 2>&1; then
+        ip link delete wg0
+    fi
+    ip link add wg0 type wireguard
+    ip address add 10.10.0.2/32 dev wg0
+    wg set wg0 private-key /wireguard/private-key listen-port 51820 \
+        peer "$VPS_PUBLIC_KEY" allowed-ips 10.10.0.1/32 \
+        endpoint "$VPS_ENDPOINT" persistent-keepalive 25
+    mtu=$(( $(cat /sys/class/net/eth0/mtu) - 80 ))
+    [ "$mtu" -le 1420 ] || mtu=1420
+    [ "$mtu" -ge 1280 ] || { echo 'Underlay MTU is too small; inspect the network path.' >&2; exit 1; }
+    ip link set wg0 mtu "$mtu" up
+    ip route add 10.10.0.1/32 dev wg0
+
+    # Flannel does not enforce NetworkPolicy: protect this network namespace directly.
+    iptables-restore <<RULES
+    *filter
+    :INPUT DROP [0:0]
+    :FORWARD DROP [0:0]
+    :OUTPUT DROP [0:0]
+    -A INPUT -i lo -j ACCEPT
+    -A INPUT -m conntrack --ctstate INVALID -j DROP
+    -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    -A INPUT -i wg0 -s 10.10.0.1/32 -p tcp --dport 8443 -j ACCEPT
+    -A INPUT -i wg0 -j DROP
+    -A INPUT -i eth0 -s $endpoint_ip/32 -p udp --sport $endpoint_port --dport 51820 -j ACCEPT
+    -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
+    -A OUTPUT -o lo -j ACCEPT
+    -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+    -A OUTPUT -d $endpoint_ip/32 -p udp --dport $endpoint_port -j ACCEPT
+    -A OUTPUT -d $dns_ip/32 -p udp --dport 53 -j ACCEPT
+    -A OUTPUT -d $dns_ip/32 -p tcp --dport 53 -j ACCEPT
+    -A OUTPUT -d $api_ip/32 -p tcp --dport $api_port -j ACCEPT
+    -A OUTPUT -d $plex_ip/32 -p tcp --dport 32400 -j ACCEPT
+    -A OUTPUT -d $lapi_ip/32 -p tcp --dport 8080 -j ACCEPT
+    -A OUTPUT -o wg0 -j REJECT
+    -A OUTPUT -d 0.0.0.0/8 -j REJECT
+    -A OUTPUT -d 10.0.0.0/8 -j REJECT
+    -A OUTPUT -d 100.64.0.0/10 -j REJECT
+    -A OUTPUT -d 127.0.0.0/8 -j REJECT
+    -A OUTPUT -d 169.254.0.0/16 -j REJECT
+    -A OUTPUT -d 172.16.0.0/12 -j REJECT
+    -A OUTPUT -d 192.168.0.0/16 -j REJECT
+    -A OUTPUT -d 198.18.0.0/15 -j REJECT
+    -A OUTPUT -d 224.0.0.0/4 -j REJECT
+    -A OUTPUT -d 240.0.0.0/4 -j REJECT
+    # Required by Traefik's remote plugin loader; private destinations remain blocked.
+    -A OUTPUT -p tcp --dport 443 -j ACCEPT
+    COMMIT
+    RULES
+    ip6tables-restore <<'RULES'
+    *filter
+    :INPUT DROP [0:0]
+    :FORWARD DROP [0:0]
+    :OUTPUT DROP [0:0]
+    -A INPUT -i lo -j ACCEPT
+    -A OUTPUT -o lo -j ACCEPT
+    COMMIT
+    RULES

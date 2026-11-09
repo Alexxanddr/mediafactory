@@ -1,0 +1,23 @@
+apiVersion: traefik.io/v1alpha1
+kind: ServersTransport
+metadata:
+    name: plex
+    namespace: traefik-plex
+spec:
+    serverName: ENC[AES256_GCM,data:wyzD/HyKE8Ta7saN2ahKpnH4I2PDPKfUFGjhRFbhnHquhIaSDNrZx84X5RCA67Hjew==,iv:RnPF2ZAFqR0y3rOftc+d/Nxf38O62u5UyV15BPWdWIk=,tag:erxMsgEjFQPR19RzlELOaA==,type:str]
+    insecureSkipVerify: false
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBlejFRWXNrM1lWQ1JjTGZz
+            UHdaR3dnL1UrMEJySzBtd2NtS2lhakhoVXhrClU3Y212akhhenRMTnlVRVlnUlF2
+            ZkVGTVgzTzFaWFp2VzRwdiszYkcwUWsKLS0tIE40djRPdlozRVFWaWZzdlpJZ2t3
+            ZWRmL0hkNmpFQjI0eHZhNDJsQisreW8KFLNIBDtRCG3I8qtLHlnVF87Uma0VoP85
+            xz6H4Of22oHRqmv1bOW6kcQB2fa9ZEg+yvxiDB5Dtv1qXvy8RzXMng==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: ^(serverName)$
+    lastmodified: "2026-11-09T17:01:04Z"
+    mac: ENC[AES256_GCM,data:BW6GCKc0NxGSNVe2DsUnXBc1KsmgJ2kBsRJ6j0KkShapsWehTGL1+1pMxUh6MG1lORooc2VmIINQKmBK6VnPUWrzkIl7Fqpa6FvF889dXOUwL3U6VQV1TnvCf2DXj+5wobNdPPSd18KkP1f7PfLEk0hUjA6D7NDnSII8iY67oAI=,iv:ImQjzSTnCtELZvsI+oxQJKWbY1Ds/ixQ+5acBCEdTU8=,tag:r6dQ5UfomS3dIqOEDheopw==,type:str]
+    version: 3.13.3

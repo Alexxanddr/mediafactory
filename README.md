@@ -17,6 +17,7 @@ This repository demonstrates a complete infrastructure-as-code implementation fo
 - **DAS - JBOD (MergerFS) Storage**: Centralized persistent storage for media and application data
 - **MetalLB**: Bare-metal load balancer for service exposure
 - **Traefik**: Cloud-native ingress controller with automatic HTTPS
+- **Plex remote ingress**: [Dedicated Traefik/WireGuard stack](flux/networking/traefik-plex/README.md), staged pending OCI setup; private ingress remains separate.
 
 ### GitOps Layer
 - **FluxCD**: Continuous delivery and automated deployments

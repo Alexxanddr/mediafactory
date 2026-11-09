@@ -1,0 +1,150 @@
+# Pod-local iptables is the active enforcement on Flannel. Revalidate these policies before changing CNI.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: traefik-plex
+  namespace: traefik-plex
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - ipBlock:
+        cidr: 192.0.2.1/32
+    ports:
+    - protocol: UDP
+      port: 51820
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: extra-tools
+      podSelector:
+        matchLabels:
+          app: uptime-kuma
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: multimedia-factory
+      podSelector:
+        matchLabels:
+          app: plex-media-server
+    - ipBlock:
+        cidr: 10.97.203.150/32
+    ports:
+    - protocol: TCP
+      port: 32400
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: crowdsec-system
+      podSelector:
+        matchLabels:
+          k8s-app: crowdsec
+          type: lapi
+    - ipBlock:
+        cidr: 10.104.125.29/32
+    ports:
+    - protocol: TCP
+      port: 8080
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    - ipBlock:
+        cidr: 10.96.0.10/32
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: 10.96.0.1/32
+    ports:
+    - protocol: TCP
+      port: 443
+  - to:
+    - ipBlock:
+        cidr: 192.168.20.3/32
+    ports:
+    - protocol: TCP
+      port: 6443
+  - to:
+    - ipBlock:
+        cidr: 192.0.2.1/32
+    ports:
+    - protocol: UDP
+      port: 51820
+  - to:
+    - ipBlock:
+        cidr: 0.0.0.0/0
+        except:
+        - 0.0.0.0/8
+        - 10.0.0.0/8
+        - 100.64.0.0/10
+        - 127.0.0.0/8
+        - 169.254.0.0/16
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+        - 198.18.0.0/15
+        - 224.0.0.0/4
+        - 240.0.0.0/4
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: plex-remote-ingress
+  namespace: multimedia-factory
+spec:
+  podSelector:
+    matchLabels:
+      app: plex-media-server
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: traefik-plex
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: traefik
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: system-addon
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: traefik
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: multimedia-factory
+      podSelector:
+        matchLabels:
+          app.kubernetes.io/name: homepage
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: multimedia-factory
+      podSelector:
+        matchLabels:
+          app: tracearr
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: extra-tools
+      podSelector:
+        matchLabels:
+          app: uptime-kuma
+    ports:
+    - protocol: TCP
+      port: 32400

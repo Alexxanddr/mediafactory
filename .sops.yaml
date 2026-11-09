@@ -1,4 +1,13 @@
 creation_rules:
+  - path_regex: flux/networking/traefik-plex/certificate\.enc\.yaml$
+    encrypted_regex: '^(dnsNames)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+  - path_regex: flux/networking/traefik-plex/ingressroute\.enc\.yaml$
+    encrypted_regex: '^(match)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+  - path_regex: flux/networking/traefik-plex/serverstransport\.enc\.yaml$
+    encrypted_regex: '^(serverName)$'
+    age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
   - path_regex: .*\.enc\.ya?ml$
     encrypted_regex: '^(data|stringData)$'
     age: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a

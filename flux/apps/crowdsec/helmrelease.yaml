@@ -102,6 +102,12 @@ spec:
               name: crowdsec-keys
               key: BOUNCER_KEY_traefik
 
+        - name: BOUNCER_KEY_traefik_plex
+          valueFrom:
+            secretKeyRef:
+              name: crowdsec-keys
+              key: BOUNCER_KEY_traefik_plex
+
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -138,8 +144,12 @@ spec:
       # Acquisizione log dai pod del cluster
       # Aggiungi qui tutti i workload che vuoi monitorare
       acquisition:
-        - namespace: crowdsec-system
+        - namespace: system-addon
           podName: traefik-*
+          program: traefik
+
+        - namespace: traefik-plex
+          podName: traefik-plex-*
           program: traefik
 
         # Esempio aggiuntivo per ingress-nginx:

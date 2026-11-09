@@ -1,0 +1,18 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: crowdsec-bouncer
+  namespace: traefik-plex
+spec:
+  plugin:
+    bouncer:
+      enabled: true
+      crowdsecMode: stream
+      crowdsecLapiScheme: http
+      crowdsecLapiHost: crowdsec-service.crowdsec-system.svc.cluster.local:8080
+      crowdsecLapiPath: /
+      crowdsecLapiKeyFile: /etc/traefik/crowdsec/BOUNCER_KEY_traefik_plex
+      updateIntervalSeconds: 15
+      updateMaxFailure: 0
+      forwardedHeadersTrustedIPs: []
+      clientTrustedIPs: []
