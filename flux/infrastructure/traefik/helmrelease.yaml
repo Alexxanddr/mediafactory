@@ -59,6 +59,10 @@ spec:
         enabled: true
       kubernetesGateway:
         enabled: true
+        labelSelector: app.kubernetes.io/instance=traefik-system-addon
+        gateways:
+          - name: traefik-gateway
+            namespace: system-addon
     gateway:
       namespacePolicy: All
     ports:
