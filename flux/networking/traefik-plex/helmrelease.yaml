@@ -50,10 +50,10 @@ spec:
         uptime-kuma.io/retries: '3'
         uptime-kuma.io/notifications: Monitoring Bot
         uptime-kuma.io/group: Network & Connectivity
-        plex-edge/config-revision: '3'
+        plex-edge/config-revision: '4'
       initContainers:
       - name: firewall
-        image: ghcr.io/tailscale/tailscale:latest
+        image: docker.io/nicolaka/netshoot:latest
         imagePullPolicy: Always
         command:
         - /bin/sh
@@ -76,90 +76,24 @@ spec:
             cpu: 250m
             memory: 128Mi
         volumeMounts:
-        - name: tailscale-config
+        - name: plex-firewall
           mountPath: /scripts
           readOnly: true
         env:
         - name: PLEX_SERVICE_IP
           valueFrom:
             configMapKeyRef:
-              name: traefik-plex-tailscale
+              name: traefik-plex-firewall
               key: PLEX_SERVICE_IP
         - name: LAPI_SERVICE_IP
           valueFrom:
             configMapKeyRef:
-              name: traefik-plex-tailscale
+              name: traefik-plex-firewall
               key: LAPI_SERVICE_IP
       additionalVolumes:
-      - name: tailscale-config
+      - name: plex-firewall
         configMap:
-          name: traefik-plex-tailscale
-      - name: tailscale-runtime
-        emptyDir: {}
-      additionalContainers:
-      - name: tailscale
-        image: ghcr.io/tailscale/tailscale:latest
-        imagePullPolicy: Always
-        env:
-        - name: TS_USERSPACE
-          value: 'true'
-        - name: TS_AUTH_ONCE
-          value: 'true'
-        - name: TS_ACCEPT_DNS
-          value: 'false'
-        - name: TS_HOSTNAME
-          value: plex-ingress
-        - name: TS_KUBE_SECRET
-          value: traefik-plex-state
-        - name: TS_STATE_DIR
-          value: /var/run/tailscale
-        - name: TS_SOCKET
-          value: /var/run/tailscale/tailscaled.sock
-        - name: TS_SERVE_CONFIG
-          value: /config/serve.json
-        - name: TS_EXTRA_ARGS
-          value: --advertise-tags=tag:plex-ingress --accept-routes=false
-        - name: TS_TAILSCALED_EXTRA_ARGS
-          value: --port=41641
-        - name: TS_ENABLE_HEALTH_CHECK
-          value: 'true'
-        - name: TS_LOCAL_ADDR_PORT
-          value: 0.0.0.0:9002
-        - name: TS_AUTHKEY
-          valueFrom:
-            secretKeyRef:
-              name: traefik-plex-tailscale-auth
-              key: TS_AUTHKEY
-        securityContext:
-          runAsNonRoot: true
-          runAsUser: 65532
-          runAsGroup: 65532
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          capabilities:
-            drop:
-            - ALL
-        volumeMounts:
-        - name: tailscale-config
-          mountPath: /config
-          readOnly: true
-        - name: tailscale-runtime
-          mountPath: /var/run/tailscale
-        - name: tmp
-          mountPath: /tmp
-        readinessProbe:
-          httpGet:
-            path: /healthz
-            port: 9002
-          periodSeconds: 10
-          failureThreshold: 6
-        resources:
-          requests:
-            cpu: 50m
-            memory: 64Mi
-          limits:
-            cpu: 1000m
-            memory: 256Mi
+          name: traefik-plex-firewall
     updateStrategy:
       type: Recreate
     service:
@@ -206,14 +140,9 @@ spec:
     ports:
       web: null
       websecure:
-        hostIP: 127.0.0.1
         port: 8443
         expose:
           default: false
-        proxyProtocol:
-          trustedIPs:
-          - 127.0.0.1/32
-          insecure: false
         transport:
           respondingTimeouts:
             readTimeout: 60s

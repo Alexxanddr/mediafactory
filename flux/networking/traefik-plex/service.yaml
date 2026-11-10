@@ -26,3 +26,21 @@ spec:
     port: 8080
     targetPort: traefik
     protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-plex-public
+  namespace: traefik-plex
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  selector:
+    app.kubernetes.io/name: traefik
+    app.kubernetes.io/instance: traefik-plex-traefik-plex
+  ports:
+  - name: https
+    port: 443
+    targetPort: websecure
+    nodePort: 30443
+    protocol: TCP

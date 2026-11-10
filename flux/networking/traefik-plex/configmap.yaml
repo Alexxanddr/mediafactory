@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: traefik-plex-tailscale
+  name: traefik-plex-firewall
   namespace: traefik-plex
 data:
   firewall.sh: |
@@ -26,8 +26,7 @@ data:
     -A INPUT -m conntrack --ctstate INVALID -j DROP
     -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     -A INPUT -i eth0 -p tcp --dport 8080 -j ACCEPT
-    -A INPUT -i eth0 -p tcp --dport 9002 -j ACCEPT
-    -A INPUT -i eth0 -p udp --dport 41641 -j ACCEPT
+    -A INPUT -i eth0 -p tcp --dport 8443 -j ACCEPT
     -A OUTPUT -o lo -j ACCEPT
     -A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
     -A OUTPUT -d $dns_ip/32 -p udp --dport 53 -j ACCEPT
@@ -45,9 +44,8 @@ data:
     -A OUTPUT -d 198.18.0.0/15 -j REJECT
     -A OUTPUT -d 224.0.0.0/4 -j REJECT
     -A OUTPUT -d 240.0.0.0/4 -j REJECT
-    # Control/DERP/plugin HTTPS and direct peer/STUN UDP; private destinations stay blocked.
+    # Plugin downloads use public HTTPS; private destinations stay blocked.
     -A OUTPUT -p tcp --dport 443 -j ACCEPT
-    -A OUTPUT -p udp -j ACCEPT
     COMMIT
     RULES
     ip6tables-restore <<'RULES'
@@ -59,13 +57,5 @@ data:
     -A OUTPUT -o lo -j ACCEPT
     COMMIT
     RULES
-  serve.json: |
-    {
-      "TCP": {
-        "8443": {
-          "TCPForward": "127.0.0.1:8443"
-        }
-      }
-    }
   PLEX_SERVICE_IP: 10.97.203.150
   LAPI_SERVICE_IP: 10.104.125.29

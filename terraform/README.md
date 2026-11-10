@@ -72,8 +72,15 @@ does not support installing host packages or managing systemd services. NFS
 exports that used to come from the K3s host need a Kubernetes-hosted NFS server
 or another existing NFS host.
 
-## Dedicated Plex relay DNS
+## Dedicated Plex ingress DNS
 
-Plex no longer belongs in the `services` map used for Cloudflare Tunnel ingress/DNS. `plex-remote.tf` keeps its public record in this existing Cloudflare state and moves `cloudflare_dns_record.vault_homelab_tunnel["plex"]` to `cloudflare_dns_record.plex_remote`. Supply the OCI reserved IPv4 through the ignored local `plex_vps_ipv4` input. The new record is A, DNS-only, TTL 60. Changing CNAME to A requires provider replacement of that DNS record, not replacement of a VM or storage resource.
+Plex stays outside the `services` map for Cloudflare Tunnel. `plex-remote.tf`
+owns its DNS-only A record in this workspace. Set `plex_public_ipv4` in ignored
+local variables to the home router's current public IPv4. The router forwards
+TCP/443 to the Kubernetes node TCP/30443, reaching only the dedicated ingress.
+Update this value after an ISP address change; no dynamic DNS is introduced.
 
-Coordinate the DNS/tunnel cutover only after the dedicated Gateway/HTTPRoute has a valid cert-manager certificate and the VPS path is tested. Do not manage the same record from the OCI state. Review a scoped plan for the record and tunnel configuration; never apply unrelated Talos/storage changes as part of this migration.
+Review a plan scoped to `cloudflare_dns_record.plex_remote`; do not apply
+unrelated Talos, storage or Cloudflare changes during this cutover. TLS and
+CrowdSec remain in the dedicated Flux stack. OCI and Tailscale are no longer
+part of the public request path.

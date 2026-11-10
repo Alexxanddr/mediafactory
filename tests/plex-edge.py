@@ -39,16 +39,17 @@ class PlexEdgeTests(unittest.TestCase):
         pod = deployment['spec']['template']['spec']
         main = pod['containers'][0]
         self.assertEqual(main['securityContext']['capabilities'], {'drop': ['ALL']})
+        self.assertEqual([c['name'] for c in pod['containers']], ['traefik-plex'])
         self.assertNotIn('tailscale-runtime', [m['name'] for m in main['volumeMounts']])
         self.assertEqual(pod['initContainers'][0]['securityContext']['capabilities'], {'drop': ['ALL'], 'add': ['NET_ADMIN']})
         arguments = [a.lower() for a in main['args']]
-        self.assertIn('--entrypoints.websecure.address=127.0.0.1:8443/tcp', arguments)
+        self.assertIn('--entrypoints.websecure.address=:8443/tcp', arguments)
         self.assertIn('--providers.kubernetescrd.namespaces=traefik-plex', arguments)
         self.assertIn('--providers.kubernetescrd.disableclusterscoperesources=true', arguments)
         self.assertIn('--providers.kubernetesgateway', arguments)
         self.assertIn('--providers.kubernetesgateway.namespaces=traefik-plex', arguments)
         self.assertIn('--providers.kubernetesgateway.labelselector=app.kubernetes.io/instance=traefik-plex-traefik-plex', arguments)
-        self.assertIn('--entrypoints.websecure.proxyprotocol.trustedips=127.0.0.1/32', arguments)
+        self.assertFalse(any('proxyprotocol' in a for a in arguments))
         self.assertIn('--experimental.abortonpluginfailure=true', arguments)
         self.assertFalse(any('kubernetesingress' in a or 'api.insecure' in a for a in arguments))
         services = list(yaml.safe_load_all((EDGE / 'service.yaml').read_text()))
@@ -62,7 +63,7 @@ class PlexEdgeTests(unittest.TestCase):
         by_name = {d['metadata']['name']: data(d) for d in secret_docs}
         crowdsec = next(d for d in decrypt(ROOT / 'flux/apps/crowdsec/secret.enc.yaml') if d['metadata']['name'] == 'crowdsec-keys')
         self.assertEqual(by_name['traefik-plex-bouncer']['BOUNCER_KEY_traefik_plex'], data(crowdsec)['BOUNCER_KEY_traefik_plex'])
-        auth = by_name['traefik-plex-tailscale-auth']['TS_AUTHKEY']
+        self.assertEqual(set(by_name), {'traefik-plex-bouncer'})
         cert = decrypt(EDGE / 'certificate.enc.yaml')[0]
         route = decrypt(EDGE / 'httproute.enc.yaml')[0]
         self.assertEqual(route['spec']['hostnames'], cert['spec']['dnsNames'])
@@ -75,8 +76,6 @@ class PlexEdgeTests(unittest.TestCase):
         old = decrypt(ROOT / 'flux/apps/plex/backendtlspolicy.enc.yaml')[0]
         self.assertEqual(transport['spec']['serverName'], old['spec']['validation']['hostname'])
         self.assertFalse(transport['spec']['insecureSkipVerify'])
-        self.assertTrue(auth.startswith('tskey-client-'))
-        self.assertTrue(auth.endswith('?ephemeral=false&preauthorized=true'))
         for path in EDGE.glob('*.enc.yaml'):
             raw = path.read_text()
             self.assertIn('sops:', raw)
@@ -113,10 +112,13 @@ class PlexEdgeTests(unittest.TestCase):
         for chain in ['INPUT', 'OUTPUT', 'FORWARD']:
             self.assertIn(':' + chain + ' DROP', rules)
         self.assertNotIn('wg0', rules)
-        self.assertNotIn('--dport 8443', rules, 'The application must not be accepted on the ordinary pod interface')
+        self.assertIn('-A INPUT -i eth0 -p tcp --dport 8443 -j ACCEPT', rules)
+        self.assertNotIn('--dport 41641', rules)
+        self.assertNotIn('--dport 9002', rules)
+        self.assertNotIn('-A OUTPUT -p udp -j ACCEPT', rules)
         self.assertIn('-A OUTPUT -d 10.97.203.150/32 -p tcp --dport 32400 -j ACCEPT', rules)
-        self.assertLess(rules.index('-A OUTPUT -d 192.168.0.0/16 -j REJECT'), rules.index('-A OUTPUT -p udp -j ACCEPT'))
-        self.assertEqual(mutations, '', 'Userspace Tailscale must not create interfaces, routes or WireGuard keys')
+        self.assertLess(rules.index('-A OUTPUT -d 192.168.0.0/16 -j REJECT'), rules.index('-A OUTPUT -p tcp --dport 443 -j ACCEPT'))
+        self.assertEqual(mutations, '', 'The firewall must not create interfaces or routes')
 
 
     def test_invalid_api_address_fails_before_firewall_changes(self):
@@ -125,20 +127,15 @@ class PlexEdgeTests(unittest.TestCase):
         self.assertEqual(rules, '')
         self.assertEqual(mutations, '')
 
-    def test_userspace_serve_and_runtime_state(self):
-        hr = yaml.safe_load((EDGE / 'helmrelease.yaml').read_text())
-        sidecar = hr['spec']['values']['deployment']['additionalContainers'][0]
-        env = {e['name']: e.get('value') for e in sidecar['env']}
-        self.assertEqual(env['TS_USERSPACE'], 'true')
-        self.assertEqual(env['TS_AUTH_ONCE'], 'true')
-        self.assertEqual(env['TS_KUBE_SECRET'], 'traefik-plex-state')
-        self.assertEqual(sidecar['securityContext']['capabilities'], {'drop': ['ALL']})
-        config = yaml.safe_load((EDGE / 'configmap.yaml').read_text())
-        self.assertEqual(json.loads(config['data']['serve.json']), {'TCP': {'8443': {'TCPForward': '127.0.0.1:8443'}}})
-        state = next(d for d in decrypt(EDGE / 'secret.enc.yaml') if d['metadata']['name'] == 'traefik-plex-state')
-        self.assertEqual(state['metadata']['annotations']['kustomize.toolkit.fluxcd.io/ssa'], 'IfNotPresent')
+    def test_router_ingress_and_minimal_rbac(self):
+        services = list(yaml.safe_load_all((EDGE / 'service.yaml').read_text()))
+        public = next(d for d in services if d['metadata']['name'] == 'traefik-plex-public')
+        self.assertEqual(public['spec']['type'], 'NodePort')
+        self.assertEqual(public['spec']['externalTrafficPolicy'], 'Local')
+        self.assertEqual(public['spec']['ports'], [{'name': 'https', 'port': 443, 'targetPort': 'websecure', 'nodePort': 30443, 'protocol': 'TCP'}])
         role = yaml.safe_load((EDGE / 'role.yaml').read_text())
-        self.assertEqual(role['rules'][0]['resourceNames'], ['traefik-plex-state'])
+        self.assertFalse(any('resourceNames' in r and 'traefik-plex-state' in r['resourceNames'] for r in role['rules']))
+        self.assertFalse(any('secrets' in r['resources'] and {'update', 'patch', 'create'} & set(r['verbs']) for r in role['rules']))
         cluster = yaml.safe_load((EDGE / 'clusterrole.yaml').read_text())
         self.assertFalse(any('secrets' in r['resources'] or 'services' in r['resources'] for r in cluster['rules']))
         main = yaml.safe_load((ROOT / 'flux/infrastructure/traefik/helmrelease.yaml').read_text())

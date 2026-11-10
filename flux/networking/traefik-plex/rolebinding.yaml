@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: traefik-plex-tailscale-state
+  name: traefik-plex
   namespace: traefik-plex
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: traefik-plex-tailscale-state
+  name: traefik-plex
 subjects:
 - kind: ServiceAccount
   name: traefik-plex
