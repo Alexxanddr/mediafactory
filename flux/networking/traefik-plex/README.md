@@ -19,10 +19,11 @@ the router must preserve them too. Forward to a node running the ingress pod.
 Do not forward to the main Traefik, health port, API/dashboard or Plex port 32400.
 No UDP forwarding or public HTTP/80 is required: certificates use DNS-01.
 
-`terraform/plex-remote.tf` owns the DNS-only public A record in the existing
-Cloudflare state. Set `plex_public_ipv4` in ignored local variables to the home
-router's current public IPv4. Update it when the ISP address changes; this change
-does not introduce dynamic DNS. Keep Plex out of the Cloudflare Tunnel `services`
+`terraform/plex-remote.tf` owns the DNS-only public CNAME to the existing `router`
+hostname in the same Cloudflare zone. UniFi keeps that target updated through its
+existing dynamic DNS configuration; Plex follows it automatically. No static
+public-IP input or second dynamic DNS updater is needed. Terraform does not
+manage the router record. Keep Plex out of the Cloudflare Tunnel `services`
 map. Custom server access URLs in Plex must contain the public HTTPS URL on port
 443 so native applications discover this path.
 

@@ -75,10 +75,11 @@ or another existing NFS host.
 ## Dedicated Plex ingress DNS
 
 Plex stays outside the `services` map for Cloudflare Tunnel. `plex-remote.tf`
-owns its DNS-only A record in this workspace. Set `plex_public_ipv4` in ignored
-local variables to the home router's current public IPv4. The router forwards
-TCP/443 to the Kubernetes node TCP/30443, reaching only the dedicated ingress.
-Update this value after an ISP address change; no dynamic DNS is introduced.
+owns its DNS-only CNAME to the existing `router` hostname in the same zone.
+UniFi updates that router record through its existing dynamic DNS configuration,
+so Plex follows ISP address changes without a separate IP variable. Terraform
+does not manage or overwrite the router record. The router forwards TCP/443 to
+the Kubernetes node TCP/30443, reaching only the dedicated ingress.
 
 Review a plan scoped to `cloudflare_dns_record.plex_remote`; do not apply
 unrelated Talos, storage or Cloudflare changes during this cutover. TLS and
