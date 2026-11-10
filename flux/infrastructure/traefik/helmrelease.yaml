@@ -99,8 +99,3 @@ spec:
     accessLog:
       enabled: true
       format:  "json"
-      fields:
-        headers:
-          defaultMode: drop
-          names:
-            Cf-Connecting-Ip: keep

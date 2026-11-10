@@ -12,14 +12,13 @@ Talos node's pod subnet (`10.244.0.0/24`), where the Cloudflare Tunnel connector
 run. Direct clients retain their connection IP. The bouncer uses Traefik's
 sanitized `X-Forwarded-For`; do not switch it to an unsanitized custom header.
 
-Traefik logs only `Cf-Connecting-Ip` among request headers. The local
-`aa-cloudflare-client-ip` parser accepts that header only from the trusted pod
-subnet, validates IPv4/IPv6, and restores `source_ip` before GeoIP enrichment
-and private-address whitelisting. The dedicated Plex ingress has no trusted
-forwarding proxies and uses the connection IP.
+Traefik records the resolved client in `ClientHost`, which the standard
+CrowdSec Traefik parser uses as `source_ip`. No custom parser or request-header
+logging is needed. The dedicated Plex ingress has no trusted forwarding proxies
+and uses the connection IP.
 
-The pod subnet is a trust boundary: workloads in it must be trusted. Review all
-three locations (Traefik entrypoint, middleware, parser) when changing the
+The pod subnet is a trust boundary: workloads in it must be trusted. Review both
+locations (Traefik entrypoint and middleware) when changing the
 cluster network or introducing untrusted workloads.
 
 Acquisition matches only the Traefik containers, excluding sidecars, and enables
@@ -30,13 +29,15 @@ Acquisition matches only the Traefik containers, excluding sidecars, and enables
 ```sh
 KUBECONFIG=~/.kube/talos kubectl -n crowdsec-system exec deploy/crowdsec-lapi -- cscli bouncers list
 KUBECONFIG=~/.kube/talos kubectl -n crowdsec-system exec deploy/crowdsec-lapi -- cscli metrics
-python3 flux/apps/crowdsec/test_client_ip.py
 ```
 
-The parser test uses `cscli explain` with synthetic logs; it creates no alerts or
-decisions. It covers IPv4, IPv6, untrusted peers, missing headers and invalid IPs.
+Check that HTTPS access logs contain the actual client in `ClientHost` and that
+the agent acquisition metrics include only the two Traefik containers.
 Validate actual blocking with a temporary decision on a reserved documentation
-IP and remove it afterwards; never ban the engine's public IP for a test.
+IP forwarded through a trusted test connection, then confirm HTTP 403 while the
+decision is active and normal access after removal or expiry. Never ban the
+engine's public IP for a test. Requests from untrusted peers must not be able to
+change their identity by supplying `X-Forwarded-For`.
 
 Old agent registrations with no heartbeat can remain when their heartbeat is
 NULL or historical alerts still refer to them. Inspect them before removal.
