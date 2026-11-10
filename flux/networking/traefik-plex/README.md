@@ -26,9 +26,10 @@ does not introduce dynamic DNS. Keep Plex out of the Cloudflare Tunnel `services
 map. Custom server access URLs in Plex must contain the public HTTPS URL on port
 443 so native applications discover this path.
 
-The old Plex NodePort/router mapping is a separate legacy path. Remove that
-mapping after validating native playback through this ingress. This migration
-does not change Plex storage, GPU, private routes or the main ingress.
+The existing Plex NodePort remains for compatibility, but the router no longer
+forwards directly to port 32400. Its Plex rule forwards only WAN TCP/443 to
+node TCP/30443. Do not restore direct Plex forwarding. Storage, GPU, private
+routes and the main ingress are unchanged.
 
 ## Security
 
@@ -66,3 +67,22 @@ The deployment remains one replica with Recreate: upgrades interrupt streams.
 The Tailscale runtime Secret was protected from pruning; remove that specific
 orphan explicitly after the sidecar has stopped. Never delete the TLS or bouncer
 Secrets as part of that cleanup.
+
+## Cutover verification — 2026-11-10
+
+Flux reconciled the direct-ingress configuration; the pod is Ready with only
+Traefik and the completed firewall init container. Public HTTPS through the
+home router returns 200 with a valid certificate; unauthenticated library
+access returns 401. Access logs show the real external client IP. Router
+configuration was read back as WAN TCP/443 to node TCP/30443.
+
+The OCI VM, boot volume, public IP and dedicated network were removed. Both
+Plex OAuth clients, devices, enrollment keys and tag/grant references were
+removed from Tailscale. The old runtime Secret and state-write RBAC are gone.
+Both retired relay Terraform workspaces have empty state and no-change plans;
+account-wide Tailscale settings remain unmanaged without project references.
+
+The five offline tests, Flux render, server-side Deployment/Service dry run,
+SOPS and Gitleaks checks passed. Native playback and sustained streaming on
+the new direct path still require user validation; no synthetic ban was added
+during this cutover.
