@@ -144,3 +144,19 @@ resource "cloudflare_dns_record" "vault_homelab_tunnel_internal" {
   ttl     = 1
   type    = "A"
 }
+
+resource "cloudflare_ruleset" "zone_custom_firewall" {
+  zone_id     = data.cloudflare_zone.cfzone.id
+  name        = "Zone custom firewall"
+  description = "Geographic access restriction for proxied HTTP traffic"
+  kind        = "zone"
+  phase       = "http_request_firewall_custom"
+
+  rules = [{
+    ref         = "block_outside_it_pl"
+    description = "Block requests outside Italy and Poland"
+    expression  = "not (ip.src.country in {\"IT\" \"PL\"})"
+    action      = "block"
+    enabled     = true
+  }]
+}
