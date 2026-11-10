@@ -23,6 +23,13 @@ metadata:
     app.kubernetes.io/managed-by: falco-operator
 spec:
   inlineRules:
+    # Operator 0.5 enforces compatibility metadata before installing local rules.
+    - required_engine_version: 0.65.0
+    - required_plugin_versions:
+        - name: container
+          version: 0.7.6
+        - name: k8smeta
+          version: 0.4.2
     - macro: known_drop_and_execute_activities
       condition: >
         or (
