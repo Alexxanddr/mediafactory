@@ -141,21 +141,18 @@ spec:
           cpu: 500m
           memory: 256Mi
 
-      # Acquisizione log dai pod del cluster
-      # Aggiungi qui tutti i workload che vuoi monitorare
-      acquisition:
-        - namespace: system-addon
-          podName: traefik-*
-          program: traefik
-
-        - namespace: traefik-plex
-          podName: traefik-plex-*
-          program: traefik
-
-        # Esempio aggiuntivo per ingress-nginx:
-        # - namespace: ingress-nginx
-        #   podName: ingress-nginx-controller-*
-        #   program: nginx
+      # Poll symlink targets so kubelet log rotation is detected.
+      acquisition: []
+      additionalAcquisition:
+        - source: file
+          filenames:
+            - /var/log/containers/traefik-*_system-addon_traefik-*.log
+            - /var/log/containers/traefik-plex-*_traefik-plex_traefik-plex-*.log
+          force_inotify: true
+          poll_without_inotify: true
+          labels:
+            type: containerd
+            program: traefik
 
       env:
         # Collections da caricare sull'agent
@@ -175,6 +172,19 @@ spec:
 
       parsers:
         s02-enrich:
+          # Only the trusted tunnel subnet may supply Cloudflare client headers.
+          aa-cloudflare-client-ip.yaml: |
+            name: local/cloudflare-client-ip
+            description: Restore Cloudflare client IP before private-address whitelisting
+            filter: >-
+              evt.Meta.log_type == 'http_access-log' &&
+              IpInRange(evt.Meta.source_ip, '10.244.0.0/24') &&
+              evt.Unmarshaled.traefik['request_Cf-Connecting-Ip'] != nil &&
+              (IpInRange(evt.Unmarshaled.traefik['request_Cf-Connecting-Ip'], '0.0.0.0/0') ||
+               IpInRange(evt.Unmarshaled.traefik['request_Cf-Connecting-Ip'], '::/0'))
+            statics:
+              - meta: source_ip
+                expression: evt.Unmarshaled.traefik['request_Cf-Connecting-Ip']
           # Il prefisso zz garantisce che la whitelist venga valutata dopo i
           # parser HTTP standard che popolano evt.Meta.*.
           zz-homepage-kubernetes-status-whitelist.yaml: |

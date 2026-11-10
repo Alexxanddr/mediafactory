@@ -93,9 +93,14 @@ spec:
       websecure:
         forwardedHeaders:
           trustedIPs:
-            - 10.42.0.0/16
+            - 10.244.0.0/24
     api:
       dashboard: true
     accessLog:
       enabled: true
       format:  "json"
+      fields:
+        headers:
+          defaultMode: drop
+          names:
+            Cf-Connecting-Ip: keep
