@@ -27,10 +27,9 @@ manage the router record. Keep Plex out of the Cloudflare Tunnel `services`
 map. Custom server access URLs in Plex must contain the public HTTPS URL on port
 443 so native applications discover this path.
 
-The existing Plex NodePort remains for compatibility, but the router no longer
-forwards directly to port 32400. Its Plex rule forwards only WAN TCP/443 to
-node TCP/30443. Do not restore direct Plex forwarding. Storage, GPU, private
-routes and the main ingress are unchanged.
+Plex uses a ClusterIP Service on TCP/32400. The router forwards WAN TCP/443
+to the dedicated Traefik NodePort on TCP/30443. Plex mounts its media volume
+read-only.
 
 ## Security
 

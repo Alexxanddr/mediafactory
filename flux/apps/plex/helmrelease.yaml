@@ -71,13 +71,12 @@ spec:
     nodeSelector:
       kubernetes.io/hostname: p53-talos
     service:
-      type: NodePort
+      type: ClusterIP
       port: 32400
-      nodePort: 32400
-      externalTrafficPolicy: Local
     extraVolumeMounts:
     - name: plex-media
       mountPath: /mnt/md0/MediaFactory/media
+      readOnly: true
     extraVolumes:
     - name: plex-media
       persistentVolumeClaim:
