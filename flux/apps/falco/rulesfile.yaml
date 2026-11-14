@@ -44,6 +44,7 @@ spec:
               proc.name = "upsc"
               and proc.exepath = "/usr/bin/upsc"
               and proc.cmdline in (
+                "upsc ups",
                 "upsc ups@127.0.0.1",
                 "upsc ups@localhost",
                 "upsc ups@localhost ups.status"
