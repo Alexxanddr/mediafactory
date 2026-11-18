@@ -21,7 +21,10 @@ metadata:
     uptime-kuma.io/group: "Storage & Databases"
 spec:
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   replicas: 1
   selector:
     matchLabels:

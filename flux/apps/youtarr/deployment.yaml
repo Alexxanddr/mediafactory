@@ -18,7 +18,10 @@ metadata:
     uptime-kuma.io/group: "Media Acquisition"
 spec:
   strategy:
-    type: Recreate
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
   replicas: 1
   selector:
     matchLabels:
