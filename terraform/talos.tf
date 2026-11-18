@@ -81,6 +81,13 @@ data "talos_image_factory_urls" "thinkpad" {
 
 resource "talos_machine_secrets" "this" {}
 
+data "talos_image_factory_urls" "thinkpad_upgrade" {
+  talos_version = "v1.14.6"
+  schematic_id  = talos_image_factory_schematic.thinkpad.id
+  architecture  = "amd64"
+  platform      = "metal"
+}
+
 data "talos_machine_configuration" "controlplane" {
   cluster_name     = var.cluster_name
   machine_type     = "controlplane"
@@ -162,7 +169,7 @@ resource "talos_machine" "this" {
   node                  = var.master_server_list[0]
   client_configuration  = talos_machine_secrets.this.client_configuration
   machine_configuration = data.talos_machine_configuration.controlplane.machine_configuration
-  image                 = data.talos_image_factory_urls.thinkpad.urls.installer
+  image                 = data.talos_image_factory_urls.thinkpad_upgrade.urls.installer
   drain_on_upgrade      = false
 }
 
