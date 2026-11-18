@@ -32,6 +32,8 @@ spec:
       enabled: true
 
     operator:
+      nodeSelector: &p53Node
+        kubernetes.io/hostname: p53-talos
       annotations:
         uptime-kuma.io/enabled: "true"
         uptime-kuma.io/status-page: "true"
@@ -43,6 +45,16 @@ spec:
         uptime-kuma.io/notifications: "Monitoring Bot"
         uptime-kuma.io/status-codes: "404"
         uptime-kuma.io/group: "Monitoring & Observability"
+
+    node-feature-discovery:
+      master:
+        nodeSelector: *p53Node
+      worker:
+        nodeSelector: *p53Node
+      gc:
+        nodeSelector: *p53Node
+      topologyUpdater:
+        nodeSelector: *p53Node
 
     toolkit:
       enabled: false
