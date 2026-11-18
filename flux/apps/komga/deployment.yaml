@@ -18,10 +18,7 @@ metadata:
     uptime-kuma.io/group: "Media & Streaming"
 spec:
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
