@@ -18,6 +18,8 @@ metadata:
     uptime-kuma.io/group: "Media & Streaming"
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: grimmory

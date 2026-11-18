@@ -18,6 +18,8 @@ metadata:
     uptime-kuma.io/group: "Media Acquisition"
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: anibridge
