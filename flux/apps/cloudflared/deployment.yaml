@@ -20,6 +20,11 @@ metadata:
     uptime-kuma.io/group: "Network & Connectivity"
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app: cloudflared
@@ -28,6 +33,13 @@ spec:
       labels:
         app: cloudflared
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: cloudflared
+              topologyKey: kubernetes.io/hostname
       securityContext:
         sysctls:
           # Permette traffico ICMP (ping, traceroute) verso le risorse dietro cloudflared.
@@ -50,6 +62,10 @@ spec:
             - --protocol
             - http2
             - run
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
           livenessProbe:
             httpGet:
               # Cloudflared espone /ready che risponde 200 solo se ha una connessione attiva
