@@ -85,3 +85,24 @@ Review a plan scoped to `cloudflare_dns_record.plex_remote`; do not apply
 unrelated Talos, storage or Cloudflare changes during this cutover. TLS and
 CrowdSec remain in the dedicated Flux stack. OCI and Tailscale are no longer
 part of the public request path.
+
+## Talos OS upgrades
+
+Update the Image Factory version in `data.talos_image_factory_urls.thinkpad_upgrade`.
+Keep the configuration-generation version and unattended installer image pinned.
+After taking an etcd snapshot, save and review a Terraform plan. The plan must
+contain only an in-place image update to `talos_machine.this`. Run the following
+from this directory with the same Terraform credentials and version used for
+planning:
+
+```sh
+./apply-talos-upgrade.sh /absolute/path/to/upgrade.tfplan
+```
+
+The script cordons the P53 and gracefully deletes pods that mount its own NFS
+exports. Their controllers recreate them. It waits for kubelet to remove the
+mounts while Ganesha is still serving and aborts if they remain. This prevents
+Talos from reaching shutdown with a local NFS client waiting on a server that
+is being stopped on the same node. Media clients lose service before the reboot.
+If the Terraform apply starts and fails, the node stays cordoned. Verify the
+running Talos version and Kubernetes health before uncordoning it manually.
