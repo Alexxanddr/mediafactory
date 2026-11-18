@@ -27,6 +27,13 @@ spec:
         app: grimmory
     spec:
       enableServiceLinks: false
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: shelfmark
+              topologyKey: kubernetes.io/hostname
       containers:
         - name: grimmory
           image: grimmory/grimmory:latest

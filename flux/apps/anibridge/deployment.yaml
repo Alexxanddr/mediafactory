@@ -26,6 +26,17 @@ spec:
       labels:
         app: anibridge
     spec:
+      initContainers:
+        - name: wait-for-plex
+          image: ghcr.io/anibridge/anibridge:latest
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -ec
+            - |
+              until python -c 'import ssl, urllib.request; urllib.request.urlopen("https://plex-media-server:32400/identity", context=ssl._create_unverified_context(), timeout=5).close()'; do
+                sleep 5
+              done
       containers:
         - name: anibridge
           image: ghcr.io/anibridge/anibridge:latest
