@@ -19,6 +19,8 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:

@@ -18,6 +18,8 @@ metadata:
     uptime-kuma.io/notifications: "Monitoring Bot"
     uptime-kuma.io/group: "Network & Connectivity"
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:

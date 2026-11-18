@@ -18,6 +18,8 @@ metadata:
     uptime-kuma.io/status-codes: "404"
     uptime-kuma.io/group: "Media & Streaming"
 spec:
+  strategy:
+    type: Recreate
   replicas: 1
   selector:
     matchLabels:
