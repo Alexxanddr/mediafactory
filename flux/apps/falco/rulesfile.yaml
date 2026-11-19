@@ -75,6 +75,38 @@ spec:
           and (
             proc.sname in ("start.sh", "crond")
             or (
+              k8s.ns.name = "pihole"
+              and user.uid = 1000
+              and proc.sname = "civetweb-worker"
+              and proc.pname = "bash"
+              and proc.aname[2] in ("bash", "civetweb-worker")
+              and (proc.cmdline in (
+                "pihole-FTL --config -q dns.blocking.mode",
+                "pihole-FTL --config -q files.gravity",
+                "pihole-FTL --config -q files.gravity_tmp",
+                "pihole-FTL gravity parseList /etc/pihole/listsCache/list.1.raw.githubusercontent.com.domains /etc/pihole/gravity.db_temp 1 https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts",
+                "pihole-FTL gravity parseList /etc/pihole/listsCache/list.2.raw.githubusercontent.com.domains /etc/pihole/gravity.db_temp 2 https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/ultimate.txt",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db SELECT \"value\" FROM \"info\" WHERE \"property\" = 'version';",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db SELECT address FROM vw_adlist;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db SELECT id FROM vw_adlist;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db SELECT type FROM vw_adlist;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp CREATE INDEX idx_antigravity ON antigravity (domain, adlist_id);",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp CREATE INDEX idx_gravity ON gravity (domain, adlist_id);",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp PRAGMA analysis_limit=1000; ANALYZE",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM (SELECT DISTINCT domain FROM antigravity);",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM (SELECT DISTINCT domain FROM gravity);",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM antigravity;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM domainlist WHERE type = 0 AND enabled = 1;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM domainlist WHERE type = 1 AND enabled = 1;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM domainlist WHERE type = 2 AND enabled = 1;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM domainlist WHERE type = 3 AND enabled = 1;",
+                "pihole-FTL sqlite3 -ni /etc/pihole/gravity.db_temp SELECT COUNT(*) FROM gravity;"
+              )
+              or proc.cmdline regex "^pihole-FTL sqlite3 -ni /etc/pihole/gravity[.]db_temp INSERT OR REPLACE INTO info [(]property,value[)] VALUES [(]'(anti)?gravity_count',[0-9]+[)];$")
+            )
+            or (
               proc.sname = ""
               and proc.pname = "bash"
               and proc.aname[2] = "bash"
@@ -94,6 +126,23 @@ spec:
           and proc.cwd in ("/", "/root/")
           and proc.cmdline startswith "pihole-FTL "
           and proc.tty = 0
+        )
+        or (
+          container.image.repository = "docker.io/pihole/pihole"
+          and container.image.tag = "latest"
+          and container.name = "pihole"
+          and k8s.ns.name = "pihole"
+          and k8s.pod.name startswith "pihole-secondary-"
+          and user.uid = 1000
+          and proc.name = "pihole-FTL"
+          and proc.exe = "/usr/bin/pihole-FTL"
+          and proc.exepath = "/usr/bin/pihole-FTL"
+          and proc.cmdline = "pihole-FTL no-daemon"
+          and proc.pname = "containerd-shim"
+          and proc.sname = ""
+          and proc.cwd = "/"
+          and proc.tty = 0
+          and evt.type = "execve"
         )
         or (
           (
@@ -221,6 +270,7 @@ spec:
               and (
                 (fd.lport in (8501, 8502) and fd.cnet = "10.244.0.0/16")
                 or (fd.lport = 8502 and fd.cip = "::1")
+                or (fd.lport in (8500, 8501, 8503) and fd.name startswith "::1:" and fd.name contains "->::1:")
                 or (fd.rport >= 10000 and fd.rport <= 30000 and fd.rnet = "10.244.0.0/16")
               )
             )
@@ -230,6 +280,28 @@ spec:
         condition: append
     - macro: user_known_contact_k8s_api_server_activities
       condition: >
+        or (
+          container.image.repository = "ghcr.io/alexxanddr/k8s-vpn-gateway"
+          and container.image.tag = "36babddb556c9a4ac97dd67c162d8ad0f327c4dd9e6e110ae845defeb5d9443d"
+          and container.name = "admission"
+          and k8s.ns.name = "vpn-gateway"
+          and user.uid = 10001
+          and proc.exepath = "/usr/local/bin/gateway"
+          and proc.cmdline = "gateway admission"
+          and proc.tty = 0
+          and fd.name endswith "->10.96.0.1:443"
+        )
+        or (
+          container.image.repository = "docker.io/library/traefik"
+          and container.image.tag = "v3.7.19"
+          and container.name = "traefik"
+          and k8s.ns.name = "system-addon"
+          and user.uid = 65532
+          and proc.exepath = "/usr/local/bin/traefik"
+          and proc.cmdline startswith "traefik traefik "
+          and proc.tty = 0
+          and fd.name endswith "->10.96.0.1:443"
+        )
         or (
           (
             container.image.repository = "ghcr.io/gethomepage/homepage"
@@ -312,7 +384,10 @@ spec:
           container.image.repository = "docker.io/revenz/fileflows"
           and container.image.tag = "latest"
           and container.name in ("fileflows", "fileflows-node")
-          and k8s.ns.name = "multimedia-factory"
+          and (
+            k8s.ns.name = "multimedia-factory"
+            or (k8s.ns.name = "fileflows-node" and container.name = "fileflows-node")
+          )
           and user.uid = 0
           and proc.name = "fontconfig.post"
           and proc.exepath = "/usr/bin/dash"
