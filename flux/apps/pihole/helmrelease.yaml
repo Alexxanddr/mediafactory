@@ -128,7 +128,7 @@ spec:
       - name: PRIMARY
         value: http://pihole-web.pihole.svc|$(PIHOLE_PASSWORD)
       - name: REPLICAS
-        value: http://pihole-secondary-web.pihole.svc|$(PIHOLE_PASSWORD)
+        value: http://127.0.0.1:80|$(PIHOLE_PASSWORD)
       - name: FULL_SYNC
         value: 'false'
       - name: RUN_GRAVITY
