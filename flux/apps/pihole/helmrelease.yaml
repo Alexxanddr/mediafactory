@@ -53,3 +53,124 @@ spec:
     persistentVolumeClaim:
       enabled: true
       existingClaim: pihole-config-longhorn
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: pihole-secondary
+  namespace: pihole
+spec:
+  releaseName: pihole-secondary
+  interval: 5m
+  chart:
+    spec:
+      chart: pihole
+      sourceRef:
+        kind: HelmRepository
+        name: pihole
+        namespace: flux-system
+      version: 2.39.0
+  values:
+    deploymentAnnotations:
+      keel.sh/policy: force
+      keel.sh/trigger: poll
+      keel.sh/matchTag: 'true'
+    podAnnotations:
+      uptime-kuma.io/enabled: 'true'
+      uptime-kuma.io/status-page: 'true'
+      uptime-kuma.io/type: http
+      uptime-kuma.io/url: http://pihole-secondary-web.pihole.svc:80/api/info/login
+      uptime-kuma.io/name: pihole-secondary
+      uptime-kuma.io/interval: '60'
+      uptime-kuma.io/retries: '3'
+      uptime-kuma.io/notifications: Monitoring Bot
+      uptime-kuma.io/status-codes: '200'
+      uptime-kuma.io/group: Network & Connectivity
+    image:
+      tag: latest
+      pullPolicy: Always
+    replicaCount: 1
+    ingress:
+      enabled: false
+    serviceWeb:
+      type: ClusterIP
+    serviceDhcp:
+      enabled: false
+    dnsHostPort:
+      enabled: true
+      port: 53
+    admin:
+      enabled: true
+      existingSecret: pihole-credentials
+    doh:
+      enabled: true
+      pullPolicy: Always
+      envVars:
+        DOH_UPSTREAM: https://1.1.1.1/dns-query
+    persistentVolumeClaim:
+      enabled: true
+      existingClaim: pihole-secondary-config-longhorn
+    strategyType: Recreate
+    nodeSelector:
+      kubernetes.io/hostname: thinkcentre-talos
+    extraContainers:
+    - name: nebula-sync
+      image: ghcr.io/lovelaze/nebula-sync:latest
+      imagePullPolicy: Always
+      env:
+      - name: PIHOLE_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: pihole-credentials
+            key: password
+      - name: PRIMARY
+        value: http://pihole-web.pihole.svc|$(PIHOLE_PASSWORD)
+      - name: REPLICAS
+        value: http://pihole-secondary-web.pihole.svc|$(PIHOLE_PASSWORD)
+      - name: FULL_SYNC
+        value: 'false'
+      - name: RUN_GRAVITY
+        value: 'true'
+      - name: CRON
+        value: '*/5 * * * *'
+      - name: SYNC_CONFIG_DNS
+        value: 'true'
+      - name: SYNC_CONFIG_DNS_INCLUDE
+        value: hosts,cnameRecords,revServers
+      - name: SYNC_GRAVITY_GROUP
+        value: 'true'
+      - name: SYNC_GRAVITY_AD_LIST
+        value: 'true'
+      - name: SYNC_GRAVITY_AD_LIST_BY_GROUP
+        value: 'true'
+      - name: SYNC_GRAVITY_DOMAIN_LIST
+        value: 'true'
+      - name: SYNC_GRAVITY_DOMAIN_LIST_BY_GROUP
+        value: 'true'
+      - name: SYNC_GRAVITY_CLIENT
+        value: 'true'
+      - name: SYNC_GRAVITY_CLIENT_BY_GROUP
+        value: 'true'
+      resources:
+        requests:
+          cpu: 10m
+          memory: 32Mi
+        limits:
+          memory: 128Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        capabilities:
+          drop:
+          - ALL
+        seccompProfile:
+          type: RuntimeDefault
+      volumeMounts:
+      - name: nebula-sync-tmp
+        mountPath: /tmp
+    extraVolumes:
+      nebula-sync-tmp:
+        emptyDir: {}

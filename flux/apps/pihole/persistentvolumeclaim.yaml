@@ -5,10 +5,25 @@ metadata:
   namespace: pihole
 spec:
   accessModes:
-    - ReadWriteOnce
+  - ReadWriteOnce
   resources:
     requests:
       storage: 2Gi
   storageClassName: longhorn-static
   volumeMode: Filesystem
   volumeName: pihole-config-pihole
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pihole-secondary-config-longhorn
+  namespace: pihole
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  volumeName: pihole-secondary-config-pihole

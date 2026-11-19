@@ -8,7 +8,7 @@ spec:
         - name: traefik-gateway
           namespace: system-addon
     hostnames:
-        - ENC[AES256_GCM,data:dkli1EqulXB6Q8ZJTnVJ1beIH3R//K588aW1ng==,iv:gYQ2Ydt6iZPrXBjsHCwaOy9SVq6jfHk9kO0gtW6ONWo=,tag:h4h7LTerpl80+9RPeYlaXg==,type:str]
+        - ENC[AES256_GCM,data:OHCMQ6UTyPfgYRt/+VFrAI36C3of4hKsLFDLpA==,iv:n6lVXAKuui046Nnr0gEMK+FSMicAGQmI8v09tJFEOZw=,tag:tSO/fAWE/qGu8Jpy0+YMYQ==,type:str]
     rules:
         - matches:
             - path:
@@ -21,14 +21,49 @@ sops:
     age:
         - enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA4cTdZK0Zha3llTng1aXY3
-            dzQzZEU1Y0xlRENuMDE3bjRwWTRtRkdYMWxzCnZncCswa01OR29tVm42cUlmZFht
-            SlpJM0tzdzBJR1dmdVRBeVNwd2pYSlEKLS0tIHltZ1dXV0F5TVVsbEFuQWFEd2Vr
-            YTltTlRjODdrZ0RLdnJURGJ2WEdvVDQKsnmwc2QoQUfB0fTTEbpJUiWzvNqDWOli
-            gif0zXuzRKGVCWKpA4s09PFSiVHNNlpWh5+Ad9QIga6Q3CUzlQja3w==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5Vk5JZzFGdnVWM3VTZXFG
+            NDJkaTVUM0Y1OFMzV3JBaTNaMkdQc3dML1JRCkxmeUJ2QUJ0V3VrY2FkTXRzbG1s
+            c016eHI5K3IwN2NHUzA1WDA0RnAzQjAKLS0tIFNwZVdFcmRlRVlubUs0WUZBWlNB
+            ZEk1YmcwZGpqblYxRm1PbXZ1cFZWVjAKdakn8H9BOKY3/eWlOXDvo+S8TjsX9iqm
+            WlukEOqmhVy9wcFgdLtaBOk64AEwJRmMLHhJZq2eSE9TrYbNlt0D1g==
             -----END AGE ENCRYPTED FILE-----
           recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
-    encrypted_regex: hostnames|0
-    lastmodified: "2026-10-29T12:56:20Z"
-    mac: ENC[AES256_GCM,data:WbNPsqhZk3vkRQ1CUbZRh2lOpSbjYX13T5ml0YzTn+ZJ4ovvyFJC13XzcF10iAakmNofY2AyIt8UDoss7epvSi1pRgRwOptovh0FcwQkQL/QvWVKxSw3UxMzc7NDTQKJJrLxoZaBQAW5dEE9ASU6i9HpEjk+T6w09ezcKorGr28=,iv:PISnNzl/nLlPe7j5vvtBmX7WsVTDEsJJKrVLWed2F/0=,tag:Cc0ToNeHKlTj2NUOo0nAbQ==,type:str]
-    version: 3.11.0
+    encrypted_regex: hostnames
+    lastmodified: "2026-11-19T21:09:26Z"
+    mac: ENC[AES256_GCM,data:iOD/l6YGpHb2Xl5j4thbYmk3AIGNUE+3CYedOP65plVZDjYcPrcZZdXbH7SbA/a5ZMbpP7PninDXzVpuWxN9xWGEeZyG0qWJZPUxVOm1/b7pI+YH2Lya7PgZGJIoW0S7iYOuNr1GHg962faJMf74TdxGCx6naf2d20ThyKCcXnI=,iv:y/tbWCJsXeONqkDpOxEu/yZXJqGSaim6G0qVxzujrVU=,tag:5SGboaDiA+xW/fkueZ3bjg==,type:str]
+    version: 3.13.3
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+    name: pihole-secondary
+    namespace: pihole
+spec:
+    parentRefs:
+        - name: traefik-gateway
+          namespace: system-addon
+    hostnames:
+        - ENC[AES256_GCM,data:A0SghvxnzwizKMCuYSa63I2PO/9UejaK4SbGTpWqauPYvXkiTZM=,iv:SidSy1qy7LWtBdTvcZ7Nf5X2X4EDiIfAETMFRTdX0Gc=,tag:piPG/Q+Dy1KZfc9ygwjKhw==,type:str]
+    rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: pihole-secondary-web
+              port: 80
+sops:
+    age:
+        - enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB5Vk5JZzFGdnVWM3VTZXFG
+            NDJkaTVUM0Y1OFMzV3JBaTNaMkdQc3dML1JRCkxmeUJ2QUJ0V3VrY2FkTXRzbG1s
+            c016eHI5K3IwN2NHUzA1WDA0RnAzQjAKLS0tIFNwZVdFcmRlRVlubUs0WUZBWlNB
+            ZEk1YmcwZGpqblYxRm1PbXZ1cFZWVjAKdakn8H9BOKY3/eWlOXDvo+S8TjsX9iqm
+            WlukEOqmhVy9wcFgdLtaBOk64AEwJRmMLHhJZq2eSE9TrYbNlt0D1g==
+            -----END AGE ENCRYPTED FILE-----
+          recipient: age15kgnnd0nlu5vxerhfcrzh5y77x7efudnk74sk4d6z3zn29yltc5q25r54a
+    encrypted_regex: hostnames
+    lastmodified: "2026-11-19T21:09:26Z"
+    mac: ENC[AES256_GCM,data:iOD/l6YGpHb2Xl5j4thbYmk3AIGNUE+3CYedOP65plVZDjYcPrcZZdXbH7SbA/a5ZMbpP7PninDXzVpuWxN9xWGEeZyG0qWJZPUxVOm1/b7pI+YH2Lya7PgZGJIoW0S7iYOuNr1GHg962faJMf74TdxGCx6naf2d20ThyKCcXnI=,iv:y/tbWCJsXeONqkDpOxEu/yZXJqGSaim6G0qVxzujrVU=,tag:5SGboaDiA+xW/fkueZ3bjg==,type:str]
+    version: 3.13.3

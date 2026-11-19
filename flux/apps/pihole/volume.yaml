@@ -8,7 +8,7 @@ metadata:
     recurring-job-group.longhorn.io/default: enabled
 spec:
   accessMode: rwo
-  backupBlockSize: "2097152"
+  backupBlockSize: '2097152'
   backupCompressionMethod: lz4
   backupTargetName: default
   dataEngine: v1
@@ -16,5 +16,26 @@ spec:
   frontend: blockdev
   numberOfReplicas: 1
   revisionCounterDisabled: true
-  size: "2147483648"
+  size: '2147483648'
+  staleReplicaTimeout: 2880
+---
+apiVersion: longhorn.io/v1beta2
+kind: Volume
+metadata:
+  name: pihole-secondary-config
+  namespace: longhorn-system
+  labels:
+    backup-target: default
+    recurring-job-group.longhorn.io/default: enabled
+spec:
+  accessMode: rwo
+  backupBlockSize: '2097152'
+  backupCompressionMethod: lz4
+  backupTargetName: default
+  dataEngine: v1
+  dataLocality: strict-local
+  frontend: blockdev
+  numberOfReplicas: 1
+  revisionCounterDisabled: true
+  size: '2147483648'
   staleReplicaTimeout: 2880

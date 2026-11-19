@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: 2Gi
   accessModes:
-    - ReadWriteOnce
+  - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: longhorn-static
   volumeMode: Filesystem
@@ -17,6 +17,37 @@ spec:
       dataEngine: v1
       dataLocality: disabled
       fsType: ext4
-      numberOfReplicas: "1"
-      staleReplicaTimeout: "2880"
+      numberOfReplicas: '1'
+      staleReplicaTimeout: '2880'
     volumeHandle: pihole-config
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pihole-secondary-config-pihole
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: longhorn-static
+  volumeMode: Filesystem
+  csi:
+    driver: driver.longhorn.io
+    fsType: ext4
+    volumeAttributes:
+      dataEngine: v1
+      dataLocality: strict-local
+      fsType: ext4
+      numberOfReplicas: '1'
+      staleReplicaTimeout: '2880'
+    volumeHandle: pihole-secondary-config
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - thinkcentre-talos
