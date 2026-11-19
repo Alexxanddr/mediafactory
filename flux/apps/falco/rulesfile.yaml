@@ -78,6 +78,7 @@ spec:
               k8s.ns.name = "pihole"
               and user.uid = 1000
               and proc.sname = "civetweb-worker"
+              and proc.cwd in ("/", "./")
               and proc.pname = "bash"
               and proc.aname[2] in ("bash", "civetweb-worker")
               and (proc.cmdline in (
@@ -123,7 +124,7 @@ spec:
             )
           )
           and proc.pname in ("bash", "start.sh")
-          and proc.cwd in ("/", "/root/")
+          and (proc.cwd in ("/", "/root/") or (proc.cwd = "./" and proc.sname = "civetweb-worker"))
           and proc.cmdline startswith "pihole-FTL "
           and proc.tty = 0
         )
@@ -138,9 +139,11 @@ spec:
           and proc.exe = "/usr/bin/pihole-FTL"
           and proc.exepath = "/usr/bin/pihole-FTL"
           and proc.cmdline = "pihole-FTL no-daemon"
-          and proc.pname = "containerd-shim"
           and proc.sname = ""
-          and proc.cwd = "/"
+          and (
+            (proc.pname = "containerd-shim" and proc.cwd = "/")
+            or (not proc.pname exists and proc.cwd = "")
+          )
           and proc.tty = 0
           and evt.type = "execve"
         )
