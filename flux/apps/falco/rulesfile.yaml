@@ -78,7 +78,6 @@ spec:
               k8s.ns.name = "pihole"
               and user.uid = 1000
               and proc.sname = "civetweb-worker"
-              and proc.cwd in ("/", "./")
               and proc.pname = "bash"
               and proc.aname[2] in ("bash", "civetweb-worker")
               and (proc.cmdline in (
@@ -124,7 +123,7 @@ spec:
             )
           )
           and proc.pname in ("bash", "start.sh")
-          and (proc.cwd in ("/", "/root/") or (proc.cwd = "./" and proc.sname = "civetweb-worker"))
+          and (proc.cwd in ("/", "/root/") or (proc.cwd in ("", "./") and proc.sname = "civetweb-worker"))
           and proc.cmdline startswith "pihole-FTL "
           and proc.tty = 0
         )
