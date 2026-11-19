@@ -139,10 +139,8 @@ spec:
           and proc.exepath = "/usr/bin/pihole-FTL"
           and proc.cmdline = "pihole-FTL no-daemon"
           and proc.sname = ""
-          and (
-            (proc.pname = "containerd-shim" and proc.cwd = "/")
-            or (not proc.pname exists and proc.cwd = "")
-          )
+          and (proc.pname = "containerd-shim" or not proc.pname exists)
+          and proc.cwd in ("", "/", "./")
           and proc.tty = 0
           and evt.type = "execve"
         )
