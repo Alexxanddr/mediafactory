@@ -9,6 +9,7 @@ spec:
   chart:
     spec:
       chart: pihole
+      version: 2.39.0
       sourceRef:
         kind: HelmRepository
         name: pihole
@@ -33,6 +34,9 @@ spec:
       tag: "latest"
       pullPolicy: Always
     replicaCount: 1
+    strategyType: Recreate
+    nodeSelector:
+      kubernetes.io/hostname: p53-talos
     ingress:
       enabled: false
     serviceWeb:
