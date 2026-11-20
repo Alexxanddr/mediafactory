@@ -646,6 +646,18 @@ data:
               url: http://pihole-web.pihole.svc
               version: 6
               key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
+        - Pi-hole Secondary:
+            icon: https://upload.wikimedia.org/wikipedia/commons/0/00/Pi-hole_Logo.png
+            href: https://pihole-secondary.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/admin
+            showStats: false
+            app: pihole-secondary
+            namespace: pihole
+            podSelector: release in ( pihole-secondary )
+            widget:
+              type: pihole
+              url: http://pihole-secondary-web.pihole.svc
+              version: 6
+              key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
         - Autobrr:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/autobrr.png
             href: https://autobrr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
