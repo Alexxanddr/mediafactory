@@ -24,3 +24,7 @@ output "talos_disk_image" {
 output "talos_schematic_id" {
   value = talos_image_factory_schematic.thinkpad.id
 }
+
+output "thinkcentre_iso" {
+  value = data.talos_image_factory_urls.thinkcentre.urls.iso
+}
