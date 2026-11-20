@@ -657,7 +657,7 @@ data:
               type: pihole
               url: http://pihole-secondary-web.pihole.svc
               version: 6
-              key: {{HOMEPAGE_VAR_PIHOLE_PASSWORD}}
+              key: {{HOMEPAGE_VAR_PIHOLE_SECONDARY_PASSWORD}}
         - Autobrr:
             icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/autobrr.png
             href: https://autobrr.{{HOMEPAGE_VAR_INTERNAL_DOMAIN}}/
